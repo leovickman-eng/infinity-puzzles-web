@@ -1,0 +1,100 @@
+{
+  "nav": {
+    "home": "Home",
+    "characters": "Characters",
+    "about": "About",
+    "cart": "Cart"
+  },
+  "hero": {
+    "tagline": "19 pieces. Infinite worlds."
+  },
+  "formation": {
+    "title": "Infinity Puzzles Wild",
+    "tagline": "Every formation tells a different story.",
+    "scrollHint": "Scroll to explore"
+  },
+  "physical": {
+    "title": "Crafted in Wood.",
+    "subtitle": "Held in your hands.",
+    "description": "Precision-cut from premium wood. Each piece a character. Together, a universe."
+  },
+  "characters": {
+    "title": "Meet the Characters",
+    "subtitle": "19 unique pieces. 19 unique personalities.",
+    "viewAll": "View all characters"
+  },
+  "digitalPromise": {
+    "eyebrow": "The Digital Layer",
+    "title": "Photograph your formation.\nGet your unique signature.",
+    "description": "Every arrangement you create is one-of-a-kind. Scan your formation, unlock your universe.",
+    "cta": "Learn more"
+  },
+  "shop": {
+    "title": "Get Yours",
+    "addToCart": "Add to Cart",
+    "soldOut": "Sold Out",
+    "checkout": "Checkout",
+    "cartEmpty": "Your cart is empty",
+    "price": "Price",
+    "quantity": "Quantity",
+    "remove": "Remove",
+    "loading": "Loading..."
+  },
+  "story": {
+    "eyebrow": "The Story",
+    "title": "8 Years in the Making",
+    "chapter1": {
+      "number": "01",
+      "title": "Stockholm to Portugal on a Gut Feeling",
+      "period": "2017",
+      "text": "I had no plan. I had an intention — something in my gut that said go. So I decided to cycle from Stockholm to Portugal. No destination, no deadline. Just the road and whatever it had to teach me. Somewhere in Denmark, a woodworker offered me his home for as long as I wanted to stay. He handed me two packs of cigarettes and the key to his workshop. I made my first puzzle there — oak, hand-colored with pencils, rough and alive. I carried it with me the rest of the way south, pulling it out to show strangers in cafés and squares, watching their hands reach for the pieces without being asked. By the time I reached Portugal, the characters had started drawing themselves."
+    },
+    "chapter2": {
+      "number": "02",
+      "title": "One Puzzle Wasn't Enough",
+      "period": "2018–2021",
+      "text": "One puzzle became three. Then the universe started filling itself in. I took the puzzles everywhere — therapy groups, research labs, kids, adults, corporate team building sessions where people forgot they were supposed to be productive. Something kept happening in those rooms. People got quiet in a different way. Focused. Present. I couldn't explain it scientifically and I didn't try. I just kept making more puzzles. Each one premium — thick pine, digital print, handmade boxes with screen print. Each one a little more ambitious than the last. Each one trying to say something the previous one hadn't figured out yet."
+    },
+    "chapter3": {
+      "number": "03",
+      "title": "They Flew Me to New York",
+      "period": "2023–2024",
+      "text": "I won a spot at Formex Design Talents. Got written up in a few places. And then, in the middle of all of it, my body staged a full rebellion — TBE and Borrelia, the kind of sick where you start doing the math on your situation and the math isn't great. I spent a long time not knowing how it was going to go. It went fine. Mostly. And then I got an invitation to Puzzle Parley in Rochester, New York — as an international guest. You don't say no to that. A stage. A hundred and sixty-five puzzle obsessives who had flown in from everywhere. A presentation and a workshop I had been building toward without knowing it. On the flight home, somewhere over the Atlantic, I wrote four words in my notes: the best time of my life. I meant it."
+    },
+    "chapter4": {
+      "number": "04",
+      "title": "Wild. And It's Just Getting Started",
+      "period": "2025→",
+      "text": "I packed and shipped the last premium puzzles. Wrote the last handmade label. Closed a chapter that had taken eight years to write. Then Oscar and Erik showed up, and the whole thing got bigger. Wild is nineteen characters with their own logic, their own connections, their own stories waiting to be unlocked. It's not a universe that someone else built and handed to you. It's one that grows every time someone sits down with it, every time a new formation appears that has never existed before and never will again. I don't own it anymore. We do. You're holding the beginning of it."
+    }
+  },
+  "catalog": {
+    "title": "Wild is Chapter One.",
+    "subtitle": "The universe is just getting started.",
+    "year": "2024",
+    "collection": "Wild Collection",
+    "description": "The first chapter of the Infinity Puzzles universe. 19 characters, countless formations, one extraordinary object.",
+    "comingSoon": "More chapters coming"
+  },
+  "characters_page": {
+    "title": "All 19 Characters",
+    "subtitle": "Each piece is a world. Each world is a story.",
+    "backToHome": "Back to home"
+  },
+  "about": {
+    "title": "About Infinity Puzzles",
+    "subtitle": "A universe in your hands.",
+    "story": "Infinity Puzzles was born from a simple question: what if a puzzle was never finished? Wild is our first answer — 19 characters that can form thousands of unique configurations, each with its own story.",
+    "mission": "We believe play should be limitless. Every formation you discover is yours alone.",
+    "contact": "Get in touch"
+  },
+  "footer": {
+    "tagline": "Infinite formations. One universe.",
+    "links": {
+      "privacy": "Privacy",
+      "terms": "Terms",
+      "contact": "Contact"
+    },
+    "copyright": "© {year} Infinity Puzzles. All rights reserved."
+  }
+}
