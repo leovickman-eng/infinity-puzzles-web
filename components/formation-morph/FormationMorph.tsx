@@ -33,7 +33,7 @@ export default function FormationMorph() {
       scrollTrigger: {
         trigger: section,
         start: 'top top',
-        end: '+=100%',
+        end: '+=70%',
         pin: true,
         scrub: true,
         invalidateOnRefresh: true,
@@ -71,6 +71,7 @@ export default function FormationMorph() {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
+        marginTop: '-100vh',
       }}
     >
       <div style={{ width: CANVAS_SIZE * scale, height: CANVAS_SIZE * scale, position: 'relative', flexShrink: 0 }}>

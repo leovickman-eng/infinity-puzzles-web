@@ -65,6 +65,7 @@ export default function HomePage() {
       <LottieScrollSection
         src="/lottie/test.json"
         className="w-full max-w-[900px]"
+        scrollLength={1}
       />
 
       {/* ── S2: Formation morph (scroll-driven) ── */}

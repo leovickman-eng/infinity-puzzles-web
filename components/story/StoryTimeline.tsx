@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { gsap } from 'gsap';
@@ -12,6 +12,9 @@ export default function StoryTimeline() {
   const t = useTranslations('story');
   const sectionRef = useRef<HTMLElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
+  const touchStartX = useRef(0);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
 
   const chapters = [
     {
@@ -41,6 +44,14 @@ export default function StoryTimeline() {
   ];
 
   useEffect(() => {
+    const mq = window.matchMedia('(max-width: 767px)');
+    setIsMobile(mq.matches);
+    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, []);
+
+  useEffect(() => {
     const section = sectionRef.current;
     const track = trackRef.current;
     if (!section || !track) return;
@@ -49,12 +60,11 @@ export default function StoryTimeline() {
       const mm = gsap.matchMedia();
 
       mm.add('(min-width: 768px)', () => {
-        // Horizontal layout
         track.style.flexDirection = 'row';
         track.style.width = `${chapters.length * 100}vw`;
 
-        // Per-panel desktop styles
         track.querySelectorAll<HTMLElement>('.chapter-panel').forEach((panel, i) => {
+          panel.style.display = 'flex';
           panel.style.width = '100vw';
           panel.style.minHeight = '';
           panel.style.height = '100%';
@@ -78,8 +88,6 @@ export default function StoryTimeline() {
           }
         });
 
-        const totalTravel = track.scrollWidth - window.innerWidth;
-
         gsap.to(track, {
           x: () => -(track.scrollWidth - window.innerWidth),
           ease: 'none',
@@ -99,10 +107,10 @@ export default function StoryTimeline() {
         });
 
         return () => {
-          // Reset all desktop styles on breakpoint exit
           track.style.flexDirection = '';
           track.style.width = '';
           track.querySelectorAll<HTMLElement>('.chapter-panel').forEach((panel) => {
+            panel.style.display = '';
             panel.style.width = '';
             panel.style.minHeight = '';
             panel.style.height = '';
@@ -131,8 +139,24 @@ export default function StoryTimeline() {
     return () => ctx.revert();
   }, [chapters.length]);
 
+  const goTo = (index: number) => {
+    setActiveIndex(Math.max(0, Math.min(chapters.length - 1, index)));
+  };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    const delta = e.changedTouches[0].clientX - touchStartX.current;
+    if (Math.abs(delta) > 50) goTo(activeIndex + (delta < 0 ? 1 : -1));
+  };
+
+  const trykker: React.CSSProperties = { fontFamily: 'var(--font-trykker, Georgia, serif)' };
+  const trykkerBold: React.CSSProperties = { fontFamily: 'var(--font-trykker, Georgia, serif)', fontWeight: 700 };
+
   return (
-    <div style={{ fontFamily: 'var(--font-trykker, Georgia, serif)' }}>
+    <div style={trykker}>
 
       {/* Section header — normal scroll, not pinned */}
       <section className="py-20 px-6 bg-background">
@@ -144,8 +168,8 @@ export default function StoryTimeline() {
             {t('eyebrow')}
           </p>
           <h2
-            className="font-bold text-foreground leading-tight"
-            style={{ fontSize: '22px' }}
+            className="text-foreground leading-tight"
+            style={{ ...trykkerBold, fontSize: 'clamp(26px, 4vw, 40px)' }}
           >
             {t('title')}
           </h2>
@@ -153,13 +177,14 @@ export default function StoryTimeline() {
         </div>
       </section>
 
-      {/* Horizontal scroll section — pinned on desktop */}
+      {/* Horizontal scroll section — pinned on desktop, carousel on mobile */}
       <section
         ref={sectionRef}
         className="relative overflow-hidden bg-background"
         style={{ height: '100svh' }}
+        onTouchStart={isMobile ? handleTouchStart : undefined}
+        onTouchEnd={isMobile ? handleTouchEnd : undefined}
       >
-        {/* Track: flex-col on mobile, flex-row on desktop (set by matchMedia) */}
         <div ref={trackRef} className="flex flex-col h-full">
           {chapters.map((ch, i) => (
             <div
@@ -168,7 +193,9 @@ export default function StoryTimeline() {
               style={{
                 minHeight: '100svh',
                 padding: 'clamp(2rem, 5vw, 5rem)',
+                paddingBottom: isMobile ? '7rem' : undefined,
                 gap: 'clamp(1.5rem, 3vw, 3rem)',
+                ...(isMobile && activeIndex !== i ? { display: 'none' } : {}),
               }}
             >
               {/* Image */}
@@ -187,14 +214,20 @@ export default function StoryTimeline() {
               {/* Text */}
               <div className="chapter-text">
                 <p
-                  className="font-bold text-foreground uppercase tracking-widest mb-2"
-                  style={{ fontSize: '13px' }}
+                  className="uppercase tracking-widest text-foreground mb-3"
+                  style={{
+                    ...trykkerBold,
+                    fontSize: isMobile ? '17px' : '13px',
+                  }}
                 >
                   {ch.period}
                 </p>
                 <h3
-                  className="font-bold text-foreground leading-snug mb-4"
-                  style={{ fontSize: '19px' }}
+                  className="text-foreground leading-snug mb-4"
+                  style={{
+                    ...trykkerBold,
+                    fontSize: isMobile ? 'clamp(22px, 5vw, 26px)' : '19px',
+                  }}
                 >
                   {ch.title}
                 </h3>
@@ -208,6 +241,83 @@ export default function StoryTimeline() {
             </div>
           ))}
         </div>
+
+        {/* Mobile carousel navigation */}
+        {isMobile && (
+          <div
+            className="absolute bottom-0 left-0 right-0 flex flex-col items-center gap-3 bg-background/90 backdrop-blur-sm"
+            style={{ paddingTop: '1rem', paddingBottom: 'env(safe-area-inset-bottom, 1.5rem)' }}
+          >
+            {/* Dots */}
+            <div className="flex items-center gap-2">
+              {chapters.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => goTo(i)}
+                  aria-label={`Kapitel ${i + 1}`}
+                  style={{
+                    width: i === activeIndex ? '24px' : '8px',
+                    height: '8px',
+                    borderRadius: '4px',
+                    background: i === activeIndex ? '#1C1917' : 'rgba(28,25,23,0.2)',
+                    border: 'none',
+                    cursor: 'pointer',
+                    transition: 'width 0.2s ease, background 0.2s ease',
+                    padding: 0,
+                  }}
+                />
+              ))}
+            </div>
+
+            {/* Prev / Next arrows */}
+            <div className="flex gap-3" style={{ paddingBottom: '1rem' }}>
+              <button
+                onClick={() => goTo(activeIndex - 1)}
+                disabled={activeIndex === 0}
+                aria-label="Föregående kapitel"
+                style={{
+                  width: '40px',
+                  height: '40px',
+                  borderRadius: '50%',
+                  border: '1px solid rgba(28,25,23,0.2)',
+                  background: 'transparent',
+                  cursor: activeIndex === 0 ? 'not-allowed' : 'pointer',
+                  opacity: activeIndex === 0 ? 0.3 : 1,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  transition: 'opacity 0.2s ease',
+                }}
+              >
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M10 4L6 8l4 4" stroke="#1C1917" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </button>
+              <button
+                onClick={() => goTo(activeIndex + 1)}
+                disabled={activeIndex === chapters.length - 1}
+                aria-label="Nästa kapitel"
+                style={{
+                  width: '40px',
+                  height: '40px',
+                  borderRadius: '50%',
+                  border: '1px solid rgba(28,25,23,0.2)',
+                  background: 'transparent',
+                  cursor: activeIndex === chapters.length - 1 ? 'not-allowed' : 'pointer',
+                  opacity: activeIndex === chapters.length - 1 ? 0.3 : 1,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  transition: 'opacity 0.2s ease',
+                }}
+              >
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M6 4l4 4-4 4" stroke="#1C1917" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        )}
       </section>
     </div>
   );

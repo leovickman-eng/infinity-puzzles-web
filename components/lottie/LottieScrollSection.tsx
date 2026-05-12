@@ -17,7 +17,7 @@ interface LottieScrollSectionProps {
 export default function LottieScrollSection({
   src,
   className,
-  scrollLength = 1.5,
+  scrollLength = 0.3,
 }: LottieScrollSectionProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
