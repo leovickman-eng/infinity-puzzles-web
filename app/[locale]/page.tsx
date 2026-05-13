@@ -63,7 +63,8 @@ export default function HomePage() {
     <>
       {/* ── S1: Lottie hero — scroll-driven, pins until animation completes ── */}
       <LottieScrollSection
-        src="/lottie/test.json"
+        idleSrc="/lottie/test.json"
+        src="/lottie/test2.json"
         className="w-full max-w-[900px]"
         scrollLength={1}
       />

@@ -1,91 +1,90 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import lottie from 'lottie-web';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-gsap.registerPlugin(ScrollTrigger);
+import lottie, { AnimationItem } from 'lottie-web';
 
 interface LottieScrollSectionProps {
+  idleSrc: string;
   src: string;
   className?: string;
-  // How many viewport-heights of scroll to consume while pinned
   scrollLength?: number;
 }
 
 export default function LottieScrollSection({
+  idleSrc,
   src,
   className,
-  scrollLength = 0.3,
 }: LottieScrollSectionProps) {
-  const sectionRef = useRef<HTMLElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const switched = useRef(false);
+  const idleAnimRef = useRef<AnimationItem | null>(null);
+  const scrollAnimRef = useRef<AnimationItem | null>(null);
 
   useEffect(() => {
-    if (!containerRef.current || !sectionRef.current) return;
+    if (!containerRef.current) return;
 
-    // Populated asynchronously once Lottie has parsed the JSON.
-    // The ST is registered synchronously so GSAP knows about the pin
-    // before sibling triggers calculate their positions.
-    const totalFrames = { current: 0 };
-
-    const anim = lottie.loadAnimation({
+    // Fas 1 — idle loop
+    containerRef.current.innerHTML = '';
+    idleAnimRef.current = lottie.loadAnimation({
       container: containerRef.current,
       renderer: 'svg',
-      loop: false,
-      autoplay: false,
-      path: src,
-      rendererSettings: {
-        preserveAspectRatio: 'xMidYMid meet',
-      },
+      loop: true,
+      autoplay: true,
+      path: idleSrc,
     });
 
-    anim.addEventListener('DOMLoaded', () => {
-      const svg = containerRef.current?.querySelector('svg');
-      if (svg) {
-        svg.style.width = '100%';
-        svg.style.height = 'auto';
+    function loadIdle() {
+      if (!containerRef.current) return;
+      containerRef.current.innerHTML = '';
+      idleAnimRef.current = lottie.loadAnimation({
+        container: containerRef.current,
+        renderer: 'svg',
+        loop: true,
+        autoplay: true,
+        path: idleSrc,
+      });
+    }
+
+    // Fas 2 — byt animation beroende på scroll-position
+    function onScroll() {
+      if (!containerRef.current) return;
+
+      if (!switched.current && window.scrollY > 10) {
+        switched.current = true;
+
+        idleAnimRef.current?.destroy();
+        containerRef.current.innerHTML = '';
+
+        scrollAnimRef.current = lottie.loadAnimation({
+          container: containerRef.current,
+          renderer: 'svg',
+          loop: false,
+          autoplay: true,
+          path: src,
+        });
+      } else if (switched.current && window.scrollY <= 10) {
+        switched.current = false;
+
+        scrollAnimRef.current?.destroy();
+        loadIdle();
       }
-      totalFrames.current = anim.totalFrames;
-    });
+    }
 
-    // Create the ScrollTrigger synchronously so it is registered before
-    // sibling effects (FormationMorph) run and before ScrollTrigger.refresh().
-    const st = ScrollTrigger.create({
-      trigger: sectionRef.current,
-      start: 'top top',
-      end: `+=${window.innerHeight * scrollLength}`,
-      pin: true,
-      scrub: 0.5,
-      invalidateOnRefresh: true,
-      onUpdate: (self) => {
-        if (totalFrames.current === 0) return;
-        anim.goToAndStop(self.progress * (totalFrames.current - 1), true);
-      },
-      // scrub: 0.5 lags slightly — force the last frame when scroll reaches the end
-      onLeave: () => {
-        if (totalFrames.current > 0) {
-          anim.goToAndStop(totalFrames.current - 1, true);
-        }
-      },
-    });
+    window.addEventListener('scroll', onScroll, { passive: true });
 
     return () => {
-      anim.destroy();
-      st.kill();
+      window.removeEventListener('scroll', onScroll);
+      idleAnimRef.current?.destroy();
+      scrollAnimRef.current?.destroy();
     };
-  }, [src, scrollLength]);
+  }, [idleSrc, src]);
 
   return (
-    <section
-      ref={sectionRef}
-      className="flex justify-center items-center bg-transparent h-screen"
-    >
+    <section className="flex justify-center items-center h-screen">
       <div
         ref={containerRef}
         className={className}
-        style={{ width: '100vw', marginLeft: 'calc(-50vw + 50%)' }}
+        style={{ width: '100vw', height: '100vh' }}
       />
     </section>
   );
