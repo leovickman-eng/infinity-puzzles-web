@@ -71,7 +71,7 @@ export default function FormationMorph() {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        marginTop: '-100vh',
+        marginTop: '-75vh',
       }}
     >
       <div style={{ width: CANVAS_SIZE * scale, height: CANVAS_SIZE * scale, position: 'relative', flexShrink: 0 }}>
