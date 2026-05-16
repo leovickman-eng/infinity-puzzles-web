@@ -2,90 +2,136 @@
 
 import { useEffect, useRef } from 'react';
 import lottie, { AnimationItem } from 'lottie-web';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 interface LottieScrollSectionProps {
   idleSrc: string;
   src: string;
   className?: string;
   scrollLength?: number;
+  children?: React.ReactNode;
 }
 
 export default function LottieScrollSection({
   idleSrc,
   src,
-  className,
+  children,
 }: LottieScrollSectionProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const switched = useRef(false);
-  const idleAnimRef = useRef<AnimationItem | null>(null);
-  const scrollAnimRef = useRef<AnimationItem | null>(null);
+  const sectionRef     = useRef<HTMLElement>(null);
+  const idleRef        = useRef<HTMLDivElement>(null);
+  const scrollRef      = useRef<HTMLDivElement>(null);
+  const childrenRef    = useRef<HTMLDivElement>(null);
+  const scrollAnimRef  = useRef<AnimationItem | null>(null);
+  const crossfadedRef  = useRef(false);
 
   useEffect(() => {
-    if (!containerRef.current) return;
+    const section    = sectionRef.current;
+    const idleEl     = idleRef.current;
+    const scrollEl   = scrollRef.current;
+    const childrenEl = childrenRef.current;
+    if (!section || !idleEl || !scrollEl || !childrenEl) return;
 
-    // Fas 1 — idle loop
-    containerRef.current.innerHTML = '';
-    idleAnimRef.current = lottie.loadAnimation({
-      container: containerRef.current,
+    // ── Safe-overestimate so S2's trigger is placed AFTER S1's pin from the start.
+    // Updated to the real value once Lottie reports totalFrames.
+    let scrollDist = window.innerHeight * 1.5;
+
+    // Create the ScrollTrigger synchronously — the spacer div is injected into the
+    // DOM immediately, so FormationMorph's useEffect (which runs right after) will
+    // calculate its start position with S1's pin already accounted for.
+    const st = ScrollTrigger.create({
+      trigger: section,
+      start: 'top top',
+      // Function form: re-evaluated on every refresh() call
+      end: () => `+=${scrollDist}`,
+      pin: true,
+      scrub: 1,
+      invalidateOnRefresh: true,
+      onUpdate: (self) => {
+        const anim = scrollAnimRef.current;
+        // Guard: totalFrames is 0 until DOMLoaded fires
+        if (!anim || !anim.totalFrames) return;
+
+        if (!crossfadedRef.current && self.progress > 0.005) {
+          crossfadedRef.current = true;
+          gsap.to(idleEl,   { opacity: 0, duration: 0.45, ease: 'power1.inOut' });
+          gsap.to(scrollEl, { opacity: 1, duration: 0.45, ease: 'power1.inOut' });
+        }
+
+        // Fade hero text out early so it's gone well before S2
+        const p = self.progress;
+        const textAlpha = p < 0.20 ? 1 : p > 0.45 ? 0 : 1 - (p - 0.20) / 0.25;
+        gsap.set(childrenEl, { opacity: textAlpha });
+
+        const frame = Math.round(self.progress * (anim.totalFrames - 1));
+        anim.goToAndStop(frame, true);
+      },
+      onLeaveBack: () => {
+        crossfadedRef.current = false;
+        const anim = scrollAnimRef.current;
+        if (anim?.totalFrames) anim.goToAndStop(0, true);
+        gsap.to(scrollEl,   { opacity: 0, duration: 0.3 });
+        gsap.to(idleEl,     { opacity: 1, duration: 0.3 });
+        gsap.to(childrenEl, { opacity: 1, duration: 0.3 });
+      },
+    });
+
+    // Idle loop
+    const idleAnim = lottie.loadAnimation({
+      container: idleEl,
       renderer: 'svg',
       loop: true,
       autoplay: true,
       path: idleSrc,
     });
 
-    function loadIdle() {
-      if (!containerRef.current) return;
-      containerRef.current.innerHTML = '';
-      idleAnimRef.current = lottie.loadAnimation({
-        container: containerRef.current,
-        renderer: 'svg',
-        loop: true,
-        autoplay: true,
-        path: idleSrc,
-      });
-    }
+    // Scroll animation (hidden until crossfade)
+    const scrollAnim = lottie.loadAnimation({
+      container: scrollEl,
+      renderer: 'svg',
+      loop: false,
+      autoplay: false,
+      path: src,
+    });
+    scrollAnimRef.current = scrollAnim;
 
-    // Fas 2 — byt animation beroende på scroll-position
-    function onScroll() {
-      if (!containerRef.current) return;
-
-      if (!switched.current && window.scrollY > 10) {
-        switched.current = true;
-
-        idleAnimRef.current?.destroy();
-        containerRef.current.innerHTML = '';
-
-        scrollAnimRef.current = lottie.loadAnimation({
-          container: containerRef.current,
-          renderer: 'svg',
-          loop: false,
-          autoplay: true,
-          path: src,
-        });
-      } else if (switched.current && window.scrollY <= 10) {
-        switched.current = false;
-
-        scrollAnimRef.current?.destroy();
-        loadIdle();
-      }
-    }
-
-    window.addEventListener('scroll', onScroll, { passive: true });
+    scrollAnim.addEventListener('DOMLoaded', () => {
+      // Replace overestimate with exact frame-based distance, then refresh
+      // so S2 (FormationMorph) updates to the precise position.
+      scrollDist = Math.max(scrollAnim.totalFrames * 14, window.innerHeight);
+      ScrollTrigger.refresh();
+    });
 
     return () => {
-      window.removeEventListener('scroll', onScroll);
-      idleAnimRef.current?.destroy();
-      scrollAnimRef.current?.destroy();
+      st.kill();
+      idleAnim.destroy();
+      scrollAnim.destroy();
+      scrollAnimRef.current = null;
     };
   }, [idleSrc, src]);
 
   return (
-    <section className="flex justify-center items-center h-screen">
+    <section
+      ref={sectionRef}
+      className="relative flex justify-center items-center"
+      style={{ height: '100svh' }}
+    >
+      <div ref={idleRef}   style={{ position: 'absolute', inset: 0, zIndex: 0 }} />
+      <div ref={scrollRef} style={{ position: 'absolute', inset: 0, zIndex: 0, opacity: 0 }} />
       <div
-        ref={containerRef}
-        className={className}
-        style={{ width: '100vw', height: '100vh' }}
+        style={{
+          position: 'absolute',
+          inset: 0,
+          background: 'rgba(255,251,245,0.5)',
+          zIndex: 1,
+          pointerEvents: 'none',
+        }}
       />
+      <div ref={childrenRef} style={{ position: 'absolute', inset: 0, zIndex: 2 }}>
+        {children}
+      </div>
     </section>
   );
 }

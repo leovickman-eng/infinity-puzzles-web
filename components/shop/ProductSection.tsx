@@ -8,7 +8,7 @@ import { useTranslations } from 'next-intl';
 // Placeholder product shown when Shopify is not yet configured
 const PLACEHOLDER_PRODUCT: ShopifyProduct = {
   id: 'placeholder',
-  handle: 'infinity-puzzles-wild',
+  handle: 'infinity-puzzles-wild-19-characters-infinite-formations',
   title: 'Infinity Puzzles Wild',
   description:
     'The first chapter. 19 unique wooden characters with infinite formation possibilities. Precision-crafted from premium wood. Includes the Infinity app for formation recognition.',
@@ -41,7 +41,7 @@ export default function ProductSection() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('/api/products?handle=infinity-puzzles-wild')
+    fetch('/api/products?handle=infinity-puzzles-wild-19-characters-infinite-formations')
       .then((r) => r.json())
       .then((data) => setProduct(data.product ?? PLACEHOLDER_PRODUCT))
       .catch(() => setProduct(PLACEHOLDER_PRODUCT))

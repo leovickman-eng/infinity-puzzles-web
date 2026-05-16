@@ -10,7 +10,7 @@ import {
 } from './queries';
 
 const domain = process.env.SHOPIFY_STORE_DOMAIN!;
-const token = process.env.SHOPIFY_STOREFRONT_TOKEN!;
+const token = (process.env.SHOPIFY_STOREFRONT_TOKEN ?? process.env.NEXT_PUBLIC_SHOPIFY_STOREFRONT_TOKEN)!;
 const endpoint = `https://${domain}/api/2024-01/graphql.json`;
 
 async function storefront<T>(

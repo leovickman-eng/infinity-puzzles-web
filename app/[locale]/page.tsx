@@ -4,6 +4,7 @@ import { getTranslations } from 'next-intl/server';
 import Image from 'next/image';
 import type { Metadata } from 'next';
 import CharacterCard from '@/components/character-card/CharacterCard';
+import HeroText from '@/components/HeroText';
 
 // SSR-free dynamic imports for heavy client components
 const FormationMorph = dynamic(() => import('@/components/formation-morph/FormationMorph'), {
@@ -67,13 +68,18 @@ export default function HomePage() {
         src="/lottie/test2.json"
         className="w-full max-w-[900px]"
         scrollLength={1}
-      />
+      >
+        <HeroText />
+      </LottieScrollSection>
 
       {/* ── S2: Formation morph (scroll-driven) ── */}
       <FormationMorph />
 
-      {/* Recalculates all ScrollTrigger positions after S1 + S2 have both registered their pins */}
-      <ScrollCoordinator />
+{/* Recalculates all ScrollTrigger positions after S1 + S2 have both registered their pins */}
+<ScrollCoordinator />
+
+      {/* All sections after S2 sit above FormationMorph's sticky canvas. */}
+      <div style={{ position: 'relative', zIndex: 10 }}>
 
       {/* ── S3: The physical object ── */}
       <section className="py-24 px-6 bg-background">
@@ -90,22 +96,38 @@ export default function HomePage() {
               </p>
             </div>
 
-            {/* Placeholder image grid */}
+            {/* Image grid */}
             <div className="order-1 md:order-2 grid grid-cols-2 gap-3">
-              <div className="aspect-square rounded-2xl overflow-hidden bg-stone-100 col-span-2">
-                <div className="w-full h-full bg-gradient-to-br from-stone-100 via-amber-50 to-stone-200 flex items-center justify-center">
-                  <span className="font-display text-stone-300 text-sm">Hero image</span>
-                </div>
+              <div className="aspect-square rounded-2xl overflow-hidden bg-stone-100 col-span-2 relative">
+                <Image
+                  src="/images/hero/DSC05470.JPG"
+                  alt="Infinity Puzzles Wild"
+                  fill
+
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  priority
+                />
               </div>
-              <div className="aspect-square rounded-2xl overflow-hidden bg-stone-100">
-                <div className="w-full h-full bg-gradient-to-br from-amber-50 to-stone-100 flex items-center justify-center">
-                  <span className="font-display text-stone-300 text-xs">Detail</span>
-                </div>
+              <div className="aspect-square rounded-2xl overflow-hidden bg-stone-100 relative">
+                <Image
+                  src="/images/hero/DSC05471.JPG"
+                  alt="Infinity Puzzles detail"
+                  fill
+
+                  className="object-cover"
+                  sizes="(max-width: 768px) 50vw, 25vw"
+                />
               </div>
-              <div className="aspect-square rounded-2xl overflow-hidden bg-stone-100">
-                <div className="w-full h-full bg-gradient-to-br from-stone-200 to-amber-50 flex items-center justify-center">
-                  <span className="font-display text-stone-300 text-xs">Detail</span>
-                </div>
+              <div className="aspect-square rounded-2xl overflow-hidden bg-stone-100 relative">
+                <Image
+                  src="/images/hero/DSC05477.JPG"
+                  alt="Infinity Puzzles detail"
+                  fill
+
+                  className="object-cover"
+                  sizes="(max-width: 768px) 50vw, 25vw"
+                />
               </div>
             </div>
           </div>
@@ -150,39 +172,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── S5: Digital promise ── */}
-      <section className="py-32 px-6 bg-canvas-dark text-white relative overflow-hidden">
-        {/* Background accent */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(123,47,190,0.3)_0%,_transparent_70%)] pointer-events-none" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_80%_20%,_rgba(14,199,180,0.15)_0%,_transparent_50%)] pointer-events-none" />
-
-        <div className="relative max-w-4xl mx-auto text-center">
-          <p className="font-body text-sm uppercase tracking-widest text-accent-teal mb-6">
-            {t('digitalPromise.eyebrow')}
-          </p>
-          <h2 className="font-display text-4xl md:text-6xl font-bold leading-tight text-balance whitespace-pre-line">
-            {t('digitalPromise.title')}
-          </h2>
-          <p className="font-body text-lg text-white/50 mt-8 max-w-xl mx-auto leading-relaxed">
-            {t('digitalPromise.description')}
-          </p>
-
-          {/* Visual accent: scan frame UI */}
-          <div className="mt-16 mx-auto w-48 h-48 relative">
-            <div className="absolute inset-0 rounded-2xl border-2 border-accent-teal/30" />
-            <div className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-accent-teal rounded-tl-xl" />
-            <div className="absolute top-0 right-0 w-8 h-8 border-t-2 border-r-2 border-accent-teal rounded-tr-xl" />
-            <div className="absolute bottom-0 left-0 w-8 h-8 border-b-2 border-l-2 border-accent-teal rounded-bl-xl" />
-            <div className="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-accent-teal rounded-br-xl" />
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-24 h-24 rounded-xl bg-gradient-to-br from-secondary/40 to-accent-teal/20 animate-pulse-glow" />
-            </div>
-            {/* Scan line */}
-            <div className="absolute inset-x-0 top-1/2 h-px bg-accent-teal/60 animate-float" />
-          </div>
-        </div>
-      </section>
-
       {/* ── S6: Shop ── */}
       <section className="py-24 px-6 bg-background">
         <div className="max-w-6xl mx-auto">
@@ -197,6 +186,8 @@ export default function HomePage() {
 
       {/* ── S7: Story timeline ── */}
       <StoryTimeline />
+
+      </div>{/* end z-index:10 wrapper */}
     </>
   );
 }
