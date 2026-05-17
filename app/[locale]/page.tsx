@@ -100,10 +100,9 @@ export default function HomePage() {
             <div className="order-1 md:order-2 grid grid-cols-2 gap-3">
               <div className="aspect-square rounded-2xl overflow-hidden bg-stone-100 col-span-2 relative">
                 <Image
-                  src="/images/hero/DSC05470.JPG"
+                  src="/images/hero/hero-1.png"
                   alt="Infinity Puzzles Wild"
                   fill
-
                   className="object-cover"
                   sizes="(max-width: 768px) 100vw, 50vw"
                   priority
@@ -111,20 +110,18 @@ export default function HomePage() {
               </div>
               <div className="aspect-square rounded-2xl overflow-hidden bg-stone-100 relative">
                 <Image
-                  src="/images/hero/DSC05471.JPG"
+                  src="/images/hero/hero-2.png"
                   alt="Infinity Puzzles detail"
                   fill
-
                   className="object-cover"
                   sizes="(max-width: 768px) 50vw, 25vw"
                 />
               </div>
               <div className="aspect-square rounded-2xl overflow-hidden bg-stone-100 relative">
                 <Image
-                  src="/images/hero/DSC05477.JPG"
+                  src="/images/hero/hero-3.png"
                   alt="Infinity Puzzles detail"
                   fill
-
                   className="object-cover"
                   sizes="(max-width: 768px) 50vw, 25vw"
                 />
