@@ -10,7 +10,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 const CHARACTER_COLORS = [
-  '#FF6B35', '#7B2FBE', '#0EC7B4', '#FFD23F', '#FF4B8B',
+  '#ae84ea', '#7B2FBE', '#0EC7B4', '#FFD23F', '#FF4B8B',
   '#4BBAFF', '#FF8C42', '#A8EB12', '#F7B731', '#2BCADD',
   '#FF6B6B', '#845EC2', '#00C9A7', '#FFC75F', '#F9F871',
   '#D65DB1', '#FF9671', '#4FFBDF', '#FF8066',
@@ -40,11 +40,11 @@ export default function CharactersPage() {
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="text-center mb-20">
-          <p className="font-body text-sm uppercase tracking-widest text-primary mb-4">Wild Collection</p>
+          <p className="font-display text-sm uppercase tracking-widest text-primary mb-4">Wild Collection</p>
           <h1 className="font-display text-5xl md:text-7xl font-bold text-foreground leading-tight text-balance">
             {t('title')}
           </h1>
-          <p className="font-body text-lg text-foreground/50 mt-6 max-w-xl mx-auto leading-relaxed">
+          <p className="font-display text-lg text-foreground/50 mt-6 max-w-xl mx-auto leading-relaxed">
             {t('subtitle')}
           </p>
         </div>

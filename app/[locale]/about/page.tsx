@@ -13,7 +13,7 @@ export default function AboutPage() {
   return (
     <div className="min-h-screen bg-background pt-32 pb-24 px-6">
       <div className="max-w-3xl mx-auto">
-        <p className="font-body text-sm uppercase tracking-widest text-primary mb-6">
+        <p className="font-display text-sm uppercase tracking-widest text-primary mb-6">
           Our story
         </p>
         <h1 className="font-display text-5xl md:text-6xl font-bold text-foreground leading-tight text-balance">
@@ -24,10 +24,10 @@ export default function AboutPage() {
         </p>
 
         <div className="mt-16 space-y-8">
-          <p className="font-body text-lg text-foreground/70 leading-relaxed">
+          <p className="font-display text-lg text-foreground/70 leading-relaxed">
             {t('story')}
           </p>
-          <p className="font-body text-lg text-foreground/70 leading-relaxed">
+          <p className="font-display text-lg text-foreground/70 leading-relaxed">
             {t('mission')}
           </p>
         </div>

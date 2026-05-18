@@ -42,7 +42,7 @@ export default function CartDrawer() {
         {/* Items */}
         <div className="flex-1 overflow-y-auto p-6">
           {!cart || cart.lines.nodes.length === 0 ? (
-            <p className="font-body text-foreground/50 text-center mt-12">{t('cartEmpty')}</p>
+            <p className="font-display text-foreground/50 text-center mt-12">{t('cartEmpty')}</p>
           ) : (
             <ul className="flex flex-col gap-6">
               {cart.lines.nodes.map((line) => (
@@ -62,7 +62,7 @@ export default function CartDrawer() {
                     <p className="font-display font-semibold text-foreground text-sm truncate">
                       {line.merchandise.product.title}
                     </p>
-                    <p className="font-body text-foreground/50 text-xs mt-0.5">
+                    <p className="font-display text-foreground/50 text-xs mt-0.5">
                       {formatMoney(line.cost.totalAmount.amount, line.cost.totalAmount.currencyCode)}
                     </p>
                     <div className="flex items-center gap-3 mt-2">
@@ -71,7 +71,7 @@ export default function CartDrawer() {
                         className="w-6 h-6 rounded-full border border-foreground/20 flex items-center justify-center text-sm hover:bg-foreground/5"
                         disabled={isLoading}
                       >−</button>
-                      <span className="font-body text-sm w-4 text-center">{line.quantity}</span>
+                      <span className="font-display text-sm w-4 text-center">{line.quantity}</span>
                       <button
                         onClick={() => updateItem(line.id, line.quantity + 1)}
                         className="w-6 h-6 rounded-full border border-foreground/20 flex items-center justify-center text-sm hover:bg-foreground/5"
@@ -79,7 +79,7 @@ export default function CartDrawer() {
                       >+</button>
                       <button
                         onClick={() => removeItem(line.id)}
-                        className="ml-auto text-foreground/30 hover:text-foreground/70 transition-colors text-xs font-body"
+                        className="ml-auto text-foreground/30 hover:text-foreground/70 transition-colors text-xs font-display"
                         disabled={isLoading}
                       >
                         {t('remove')}

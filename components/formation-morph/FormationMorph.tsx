@@ -8,14 +8,14 @@ const CANVAS_H   = 1265;
 const BASE       = '/formations/GASP/F1';
 const BREAKPOINT = 768;
 
-const PX_PER_F1    = 90;
-const F1_PAUSE     = 450;
+const PX_PER_F1    = 25;   // px of scroll per F1 piece (18 pieces × 25 = 450px build)
+const F1_PAUSE     = 150;  // px pause after all F1 pieces before F2 starts
 const PX_PER_F2    = 120;
-const POST_F2_HOLD = 800;  // canvas stays visible after all swaps
-const POST_F2_FADE = 300;  // canvas fades out over this distance
+const POST_F2_HOLD = 800;
+const POST_F2_FADE = 300;
 
-const F1_SCROLL = 18 * PX_PER_F1 + F1_PAUSE; // 2070
-const F2_SCROLL = 19 * PX_PER_F2;            // 2280
+const F1_SCROLL = 18 * PX_PER_F1 + F1_PAUSE; // 600px  (was 2070 — too far for f2Marker)
+const F2_SCROLL = 19 * PX_PER_F2;            // 2280px
 
 const F1_SRCS = Array.from({ length: 19 }, (_, i) => `${BASE}/1_${i + 1}.png`);
 
@@ -131,7 +131,6 @@ export default function FormationMorph() {
         prevF1.current = 1;
         prevF2.current = -1;
       }
-      // Re-evaluate overlay visibility now that images are ready
       window.dispatchEvent(new Event('scroll'));
     };
 
@@ -271,13 +270,15 @@ export default function FormationMorph() {
 
   const cueText: React.CSSProperties = {
     fontFamily: 'var(--font-trykker, Georgia, serif)',
-    fontSize: 'clamp(13px, 1.8vw, 16px)',
+    fontSize: 'clamp(1.2rem, 2vw, 1.5rem)',
     color: '#4a464b',
     lineHeight: 1.45,
   };
 
   return (
-    <div style={{ position: 'relative', marginTop: '-250svh' }}>
+    // Desktop: md:-mt-[250svh] overlaps with S1's pin zone.
+    // Mobile: no margin — wrapper starts flush at S1's bottom (100svh, no pin spacer).
+    <div className="relative md:-mt-[250svh]">
 
       {/* Scroll markers — invisible, used only for position tracking */}
       <div ref={f1MarkerRef} />

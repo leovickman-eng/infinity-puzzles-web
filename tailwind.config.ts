@@ -11,9 +11,9 @@ const config: Config = {
         background: '#FFFBF5',
         foreground: '#1C1917',
         primary: {
-          DEFAULT: '#FF6B35',
-          light: '#FF8C59',
-          dark: '#D94F1E',
+          DEFAULT: '#ae84ea',
+          light: '#c4a3f0',
+          dark: '#8e5ed0',
         },
         secondary: {
           DEFAULT: '#7B2FBE',
@@ -32,7 +32,7 @@ const config: Config = {
         },
       },
       fontFamily: {
-        display: ['var(--font-syne)', 'sans-serif'],
+        display: ['var(--font-trykker)', 'Georgia', 'serif'],
         body: ['var(--font-dm-sans)', 'sans-serif'],
         serif: ['var(--font-playfair)', 'Georgia', 'serif'],
       },

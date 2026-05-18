@@ -34,49 +34,60 @@ export default function LottieScrollSection({
     const childrenEl = childrenRef.current;
     if (!section || !idleEl || !scrollEl || !childrenEl) return;
 
-    // ── Safe-overestimate so S2's trigger is placed AFTER S1's pin from the start.
-    // Updated to the real value once Lottie reports totalFrames.
+    const mobile = window.innerWidth < 768;
+
+    // Shared animation handlers used by both mobile and desktop ScrollTriggers
+    const handleUpdate = (self: ScrollTrigger) => {
+      const anim = scrollAnimRef.current;
+      if (!anim || !anim.totalFrames) return;
+
+      if (!crossfadedRef.current && self.progress > 0.005) {
+        crossfadedRef.current = true;
+        gsap.to(idleEl,   { opacity: 0, duration: 0.45, ease: 'power1.inOut' });
+        gsap.to(scrollEl, { opacity: 1, duration: 0.45, ease: 'power1.inOut' });
+      }
+
+      const p = self.progress;
+      const textAlpha = p < 0.20 ? 1 : p > 0.45 ? 0 : 1 - (p - 0.20) / 0.25;
+      gsap.set(childrenEl, { opacity: textAlpha });
+
+      const frame = Math.round(self.progress * (anim.totalFrames - 1));
+      anim.goToAndStop(frame, true);
+    };
+
+    const handleLeaveBack = () => {
+      crossfadedRef.current = false;
+      const anim = scrollAnimRef.current;
+      if (anim?.totalFrames) anim.goToAndStop(0, true);
+      gsap.to(scrollEl,   { opacity: 0, duration: 0.3 });
+      gsap.to(idleEl,     { opacity: 1, duration: 0.3 });
+      gsap.to(childrenEl, { opacity: 1, duration: 0.3 });
+    };
+
+    // Desktop: pin section; animation plays over scrollDist px of scroll.
+    // Mobile: no pin — section scrolls naturally; animation plays over section height.
     let scrollDist = window.innerHeight * 1.5;
 
-    // Create the ScrollTrigger synchronously — the spacer div is injected into the
-    // DOM immediately, so FormationMorph's useEffect (which runs right after) will
-    // calculate its start position with S1's pin already accounted for.
-    const st = ScrollTrigger.create({
-      trigger: section,
-      start: 'top top',
-      // Function form: re-evaluated on every refresh() call
-      end: () => `+=${scrollDist}`,
-      pin: true,
-      scrub: 1,
-      invalidateOnRefresh: true,
-      onUpdate: (self) => {
-        const anim = scrollAnimRef.current;
-        // Guard: totalFrames is 0 until DOMLoaded fires
-        if (!anim || !anim.totalFrames) return;
-
-        if (!crossfadedRef.current && self.progress > 0.005) {
-          crossfadedRef.current = true;
-          gsap.to(idleEl,   { opacity: 0, duration: 0.45, ease: 'power1.inOut' });
-          gsap.to(scrollEl, { opacity: 1, duration: 0.45, ease: 'power1.inOut' });
-        }
-
-        // Fade hero text out early so it's gone well before S2
-        const p = self.progress;
-        const textAlpha = p < 0.20 ? 1 : p > 0.45 ? 0 : 1 - (p - 0.20) / 0.25;
-        gsap.set(childrenEl, { opacity: textAlpha });
-
-        const frame = Math.round(self.progress * (anim.totalFrames - 1));
-        anim.goToAndStop(frame, true);
-      },
-      onLeaveBack: () => {
-        crossfadedRef.current = false;
-        const anim = scrollAnimRef.current;
-        if (anim?.totalFrames) anim.goToAndStop(0, true);
-        gsap.to(scrollEl,   { opacity: 0, duration: 0.3 });
-        gsap.to(idleEl,     { opacity: 1, duration: 0.3 });
-        gsap.to(childrenEl, { opacity: 1, duration: 0.3 });
-      },
-    });
+    const st = mobile
+      ? ScrollTrigger.create({
+          trigger: section,
+          start: 'top top',
+          end: 'bottom top',   // section height = 100svh of scroll, no pin spacer
+          scrub: 1,
+          invalidateOnRefresh: true,
+          onUpdate: handleUpdate,
+          onLeaveBack: handleLeaveBack,
+        })
+      : ScrollTrigger.create({
+          trigger: section,
+          start: 'top top',
+          end: () => `+=${scrollDist}`,
+          pin: true,
+          scrub: 1,
+          invalidateOnRefresh: true,
+          onUpdate: handleUpdate,
+          onLeaveBack: handleLeaveBack,
+        });
 
     // Idle loop
     const idleAnim = lottie.loadAnimation({
@@ -98,9 +109,11 @@ export default function LottieScrollSection({
     scrollAnimRef.current = scrollAnim;
 
     scrollAnim.addEventListener('DOMLoaded', () => {
-      // Replace overestimate with exact frame-based distance, then refresh
-      // so S2 (FormationMorph) updates to the precise position.
-      scrollDist = Math.max(scrollAnim.totalFrames * 14, window.innerHeight);
+      if (!mobile) {
+        // Replace overestimate with exact frame-based distance, then refresh
+        // so S2 (FormationMorph) updates to the precise pin spacer position.
+        scrollDist = Math.max(scrollAnim.totalFrames * 14, window.innerHeight);
+      }
       ScrollTrigger.refresh();
     });
 
@@ -115,6 +128,7 @@ export default function LottieScrollSection({
   return (
     <section
       ref={sectionRef}
+      id="lottie-s1"
       className="relative flex justify-center items-center"
       style={{ height: '100svh' }}
     >

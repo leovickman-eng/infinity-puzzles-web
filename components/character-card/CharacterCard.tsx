@@ -70,7 +70,7 @@ export default function CharacterCard({ character, size = 'md' }: Props) {
           {character.name}
         </h3>
         {character.description && (
-          <p className="font-body text-xs md:text-sm text-foreground/50 mt-0.5 max-w-[160px]">
+          <p className="font-display text-xs md:text-sm text-foreground/50 mt-0.5 max-w-[160px]">
             {character.description}
           </p>
         )}

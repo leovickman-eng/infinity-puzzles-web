@@ -50,7 +50,7 @@ export default function ProductSection() {
 
   if (loading) {
     return (
-      <div className="text-center py-16 font-body text-foreground/30 text-sm">
+      <div className="text-center py-16 font-display text-foreground/30 text-sm">
         {t('loading')}
       </div>
     );

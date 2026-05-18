@@ -53,7 +53,7 @@ export default function ProductCard({ product }: Props) {
       {/* Info */}
       <div className="w-full md:w-1/2 flex flex-col gap-6">
         <div>
-          <p className="font-body text-sm uppercase tracking-widest text-primary mb-2">
+          <p className="font-display text-sm uppercase tracking-widest text-primary mb-2">
             Wild Collection
           </p>
           <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground leading-tight">
@@ -67,7 +67,7 @@ export default function ProductCard({ product }: Props) {
           </p>
         )}
 
-        <p className="font-body text-foreground/60 leading-relaxed">
+        <p className="font-display text-foreground/60 leading-relaxed">
           {product.description}
         </p>
 

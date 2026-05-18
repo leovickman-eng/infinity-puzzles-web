@@ -31,7 +31,7 @@ const PLACEHOLDER_CHARACTERS = [
     id: 1,
     name: 'The Wanderer',
     description: 'Never stays in one place',
-    color: '#FF6B35',
+    color: '#ae84ea',
     imageUrl: 'https://res.cloudinary.com/dk3ftfygx/image/upload/v1776889732/infinitypuzzles/karaktarer/karaktar_1.png',
   },
   {
@@ -72,6 +72,9 @@ export default function HomePage() {
         <HeroText />
       </LottieScrollSection>
 
+      {/* Sentinel: FormationMorph uses this on mobile to wait until S1 has fully scrolled away */}
+      <div id="formation-morph-guard" />
+
       {/* ── S2: Formation morph (scroll-driven) ── */}
       <FormationMorph />
 
@@ -86,12 +89,12 @@ export default function HomePage() {
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
             <div className="flex flex-col gap-6 order-2 md:order-1">
-              <p className="font-body text-sm uppercase tracking-widest text-primary">Wild Collection</p>
+              <p className="font-display text-sm uppercase tracking-widest text-primary">Wild Collection</p>
               <h2 className="font-display text-4xl md:text-5xl font-bold text-foreground leading-tight text-balance">
                 {t('physical.title')} <br />
                 <span className="text-foreground/40">{t('physical.subtitle')}</span>
               </h2>
-              <p className="font-body text-lg text-foreground/60 leading-relaxed max-w-md">
+              <p className="font-display text-lg text-foreground/60 leading-relaxed max-w-md">
                 {t('physical.description')}
               </p>
             </div>
@@ -135,13 +138,13 @@ export default function HomePage() {
       <section className="py-24 px-6 bg-background">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
-            <p className="font-body text-sm uppercase tracking-widest text-primary mb-3">
+            <p className="font-display text-sm uppercase tracking-widest text-primary mb-3">
               The Cast
             </p>
             <h2 className="font-display text-4xl md:text-5xl font-bold text-foreground text-balance">
               {t('characters.title')}
             </h2>
-            <p className="font-body text-lg text-foreground/50 mt-4 max-w-xl mx-auto">
+            <p className="font-display text-lg text-foreground/50 mt-4 max-w-xl mx-auto">
               {t('characters.subtitle')}
             </p>
           </div>
@@ -152,12 +155,24 @@ export default function HomePage() {
             ))}
           </div>
 
-          <div className="text-center mt-12">
+          <div className="text-center mt-12 flex flex-col sm:flex-row items-center justify-center gap-6">
             <a
               href="characters"
-              className="inline-flex items-center gap-2 font-body text-sm text-foreground/50 hover:text-foreground transition-colors group"
+              className="inline-flex items-center gap-2 font-display text-sm text-foreground/50 hover:text-foreground transition-colors group"
             >
               {t('characters.viewAll')}
+              <svg
+                width="16" height="16" viewBox="0 0 16 16" fill="none"
+                className="transition-transform group-hover:translate-x-1"
+              >
+                <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </a>
+            <a
+              href="WILD_NETWORK"
+              className="inline-flex items-center gap-2 font-display text-sm text-foreground/50 hover:text-foreground transition-colors group"
+            >
+              Wild Network
               <svg
                 width="16" height="16" viewBox="0 0 16 16" fill="none"
                 className="transition-transform group-hover:translate-x-1"
