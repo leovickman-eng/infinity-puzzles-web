@@ -1,24 +1,15 @@
-import dynamic from 'next/dynamic';
 import { useTranslations } from 'next-intl';
 import { getTranslations } from 'next-intl/server';
 import Image from 'next/image';
 import type { Metadata } from 'next';
 import CharacterCard from '@/components/character-card/CharacterCard';
 import HeroText from '@/components/HeroText';
-
-// SSR-free dynamic imports for heavy client components
-const FormationMorph = dynamic(() => import('@/components/formation-morph/FormationMorph'), {
-  ssr: false,
-});
-const LottieScrollSection = dynamic(() => import('@/components/lottie/LottieScrollSection'), {
-  ssr: false,
-});
-const ScrollCoordinator = dynamic(() => import('@/components/ScrollCoordinator'), {
-  ssr: false,
-});
-// Defer ProductSection which needs Shopify API
-const ProductSection = dynamic(() => import('@/components/shop/ProductSection'), { ssr: false });
-const StoryTimeline = dynamic(() => import('@/components/story/StoryTimeline'), { ssr: false });
+import {
+  FormationMorph,
+  LottieScrollSection,
+  ProductSection,
+  StoryTimeline,
+} from './HomeClientSections';
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('formation');
@@ -63,26 +54,12 @@ export default function HomePage() {
   return (
     <>
       {/* ── S1: Lottie hero — scroll-driven, pins until animation completes ── */}
-      <LottieScrollSection
-        idleSrc="/lottie/test.json"
-        src="/lottie/test2.json"
-        className="w-full max-w-[900px]"
-        scrollLength={1}
-      >
+      <LottieScrollSection idleSrc="/lottie/test.json">
         <HeroText />
       </LottieScrollSection>
 
-      {/* Sentinel: FormationMorph uses this on mobile to wait until S1 has fully scrolled away */}
-      <div id="formation-morph-guard" />
-
-      {/* ── S2: Formation morph (scroll-driven) ── */}
+      {/* ── S2: Formation morph — sticky canvas, scrolls away into S3 ── */}
       <FormationMorph />
-
-{/* Recalculates all ScrollTrigger positions after S1 + S2 have both registered their pins */}
-<ScrollCoordinator />
-
-      {/* All sections after S2 sit above FormationMorph's sticky canvas. */}
-      <div style={{ position: 'relative', zIndex: 10 }}>
 
       {/* ── S3: The physical object ── */}
       <section className="py-24 px-6 bg-background">
@@ -185,7 +162,7 @@ export default function HomePage() {
       </section>
 
       {/* ── S6: Shop ── */}
-      <section className="py-24 px-6 bg-background">
+      <section id="shop" className="py-24 px-6 bg-background">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="font-display text-4xl md:text-5xl font-bold text-foreground">
@@ -197,9 +174,7 @@ export default function HomePage() {
       </section>
 
       {/* ── S7: Story timeline ── */}
-      <StoryTimeline />
-
-      </div>{/* end z-index:10 wrapper */}
+      <div id="story"><StoryTimeline /></div>
     </>
   );
 }

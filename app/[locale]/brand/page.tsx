@@ -23,6 +23,23 @@ const PALETTE = [
   { hex: '#ae84ea', name: 'Primär lila' },
 ];
 
+const PALETTE_WILD = [
+  { hex: '#544550' },
+  { hex: '#f9ece4' },
+  { hex: '#e81317' },
+  { hex: '#05375a' },
+  { hex: '#533f7e' },
+  { hex: '#f6b8bd' },
+  { hex: '#530100' },
+  { hex: '#dac1ff' },
+  { hex: '#16ade6' },
+  { hex: '#57d494' },
+  { hex: '#fb8f02' },
+  { hex: '#fdf07d' },
+  { hex: '#0d8137' },
+  { hex: '#7ed6cd' },
+];
+
 const SIZES = [200, 400, 800, 1200, 1920];
 
 const FONTS = [
@@ -344,6 +361,34 @@ export default function BrandPage() {
                   </div>
                   <span style={{ fontFamily: 'monospace', fontSize: '0.78rem', color: '#7A6B8A' }}>{c.hex}</span>
                   <span style={{ fontSize: '0.82rem', color: '#1C1917' }}>{c.name}</span>
+                </div>
+              );
+            })}
+          </div>
+
+          <h3 style={{ ...sh, marginTop: '2.5rem' }}>Wild-palett</h3>
+          <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+            {PALETTE_WILD.map(c => {
+              const isLight = ['#f9ece4','#f6b8bd','#dac1ff','#fdf07d'].includes(c.hex);
+              return (
+                <div
+                  key={c.hex}
+                  onClick={() => copyHex(c.hex)}
+                  title="Klicka för att kopiera"
+                  style={{ cursor: 'pointer', display: 'flex', flexDirection: 'column', gap: '0.35rem', alignItems: 'center' }}
+                >
+                  <div style={{
+                    width: 72, height: 72, borderRadius: '10px', background: c.hex,
+                    border: '1.5px solid rgba(0,0,0,0.07)',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  }}>
+                    {copied === c.hex && (
+                      <span style={{ fontSize: '0.65rem', fontFamily: 'monospace', color: isLight ? '#1C1917' : '#fff' }}>
+                        ✓
+                      </span>
+                    )}
+                  </div>
+                  <span style={{ fontFamily: 'monospace', fontSize: '0.7rem', color: '#7A6B8A' }}>{c.hex}</span>
                 </div>
               );
             })}

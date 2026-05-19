@@ -49,3 +49,16 @@
     text-wrap: balance;
   }
 }
+
+/* Mobile portrait: rotate test.json 90° to fill the screen */
+@media (max-width: 768px) and (orientation: portrait) {
+  .lottie-idle-layer {
+    inset: auto !important;
+    width: 100vh !important;
+    height: 100vw !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) rotate(90deg) !important;
+    transform-origin: center center !important;
+  }
+}
