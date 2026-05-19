@@ -5,20 +5,8 @@ import { useTranslations } from 'next-intl';
 
 const CANVAS_W   = 550;
 const CANVAS_H   = 1265;
+const BASE       = '/formations/GASP/F1';
 const BREAKPOINT = 768;
-
-// F1 piece index that each F2 step removes (0-based) — used to build F2_SEQ at runtime
-const F2_REMOVE_IDX = [11, 15, 17, 14, 7, 6, 12, 13, 5, 3, 2, 18, 10, 16, 8, 9, 4, 1, 0];
-
-function buildSrcs(mobile: boolean) {
-  const base   = mobile ? '/images/pieces/mobile' : '/images/pieces';
-  const f1Srcs = Array.from({ length: 19 }, (_, i) => `${base}/piece_${i + 1}.png`);
-  const f2Seq  = F2_REMOVE_IDX.map((removeIdx, i) => ({
-    add:    `${base}/piece_f2_${i + 1}.png`,
-    remove: f1Srcs[removeIdx],
-  }));
-  return { f1Srcs, f2Seq };
-}
 
 const PX_PER_F1    = 25;
 const F1_PAUSE     = 150;
@@ -32,19 +20,40 @@ const F1_SCROLL  = P0_SCROLL + 18 * PX_PER_F1 + F1_PAUSE; // 690px
 const F2_SCROLL  = 19 * PX_PER_F2;             // 2280px
 const TOTAL_ANIM = F1_SCROLL + F2_SCROLL + POST_F2_HOLD; // 3680px
 
+const F1_SRCS = Array.from({ length: 19 }, (_, i) => `${BASE}/1_${i + 1}.png`);
+
+const F2_SEQ: { add: string; remove: string }[] = [
+  { add: `${BASE}/2_1.png`,  remove: `${BASE}/1_12.png` },
+  { add: `${BASE}/2_2.png`,  remove: `${BASE}/1_16.png` },
+  { add: `${BASE}/2_3.png`,  remove: `${BASE}/1_18.png` },
+  { add: `${BASE}/2_4.png`,  remove: `${BASE}/1_15.png` },
+  { add: `${BASE}/2_5.png`,  remove: `${BASE}/1_8.png`  },
+  { add: `${BASE}/2_6.png`,  remove: `${BASE}/1_7.png`  },
+  { add: `${BASE}/2_7.png`,  remove: `${BASE}/1_13.png` },
+  { add: `${BASE}/2_8.png`,  remove: `${BASE}/1_14.png` },
+  { add: `${BASE}/2_9.png`,  remove: `${BASE}/1_6.png`  },
+  { add: `${BASE}/2_10.png`, remove: `${BASE}/1_4.png`  },
+  { add: `${BASE}/2_11.png`, remove: `${BASE}/1_3.png`  },
+  { add: `${BASE}/2_12.png`, remove: `${BASE}/1_19.png` },
+  { add: `${BASE}/2_13.png`, remove: `${BASE}/1_11.png` },
+  { add: `${BASE}/2_14.png`, remove: `${BASE}/1_17.png` },
+  { add: `${BASE}/2_15.png`, remove: `${BASE}/1_9.png`  },
+  { add: `${BASE}/2_16.png`, remove: `${BASE}/1_10.png` },
+  { add: `${BASE}/2_17.png`, remove: `${BASE}/1_5.png`  },
+  { add: `${BASE}/2_18.png`, remove: `${BASE}/1_2.png`  },
+  { add: `${BASE}/2_19.png`, remove: `${BASE}/1_1.png`  },
+];
+
+const ALL_SRCS = [...F1_SRCS, ...F2_SEQ.map(s => s.add)];
 
 // Quadratic ease-out: slow deceleration as piece settles into place
 function easeOut(t: number) { return 1 - (1 - t) ** 2; }
 
 // f1Progresses: per-piece entrance progress [0..1] for each of 19 F1 pieces.
 // Piece 0 = seed (always 1). Pieces 1-18 each animate over one PX_PER_F1 slot.
-type F2Entry = { add: string; remove: string };
-
 function renderCanvas(
   canvas: HTMLCanvasElement,
   images: Map<string, HTMLImageElement>,
-  f1Srcs: string[],
-  f2Seq: F2Entry[],
   f1Progresses: number[],
   f2Step: number,
 ) {
@@ -53,19 +62,19 @@ function renderCanvas(
   ctx.clearRect(0, 0, CANVAS_W, CANVAS_H);
 
   const removedF1 = new Set<string>();
-  for (let i = 0; i <= f2Step; i++) removedF1.add(f2Seq[i].remove);
+  for (let i = 0; i <= f2Step; i++) removedF1.add(F2_SEQ[i].remove);
 
   for (let i = 0; i < 19; i++) {
-    if (removedF1.has(f1Srcs[i])) continue;
+    if (removedF1.has(F1_SRCS[i])) continue;
     const raw = f1Progresses[i] ?? 0;
     if (raw <= 0) continue;
-    const img = images.get(f1Srcs[i]);
+    const img = images.get(F1_SRCS[i]);
     if (!img?.complete || !img.naturalWidth) continue;
 
     if (raw >= 1) {
       ctx.drawImage(img, 0, 0, CANVAS_W, CANVAS_H);
     } else {
-      const e     = easeOut(raw);
+      const e    = easeOut(raw);
       const slide = i === 0 ? SLIDE_P0 : SLIDE_PX;
       ctx.save();
       ctx.globalAlpha = e;
@@ -75,7 +84,7 @@ function renderCanvas(
   }
 
   for (let i = 0; i <= f2Step; i++) {
-    const img = images.get(f2Seq[i].add);
+    const img = images.get(F2_SEQ[i].add);
     if (img?.complete && img.naturalWidth) ctx.drawImage(img, 0, 0, CANVAS_W, CANVAS_H);
   }
 }
@@ -101,8 +110,6 @@ export default function FormationMorph() {
   const cue4Ref    = useRef<HTMLDivElement>(null);
 
   const imagesRef    = useRef<Map<string, HTMLImageElement>>(new Map());
-  const f1SrcsRef    = useRef<string[]>([]);
-  const f2SeqRef     = useRef<F2Entry[]>([]);
   const loadedRef    = useRef(false);
   const scaleRef     = useRef(1);
   const isMobileRef  = useRef(false);
@@ -130,28 +137,22 @@ export default function FormationMorph() {
   // Preload all images, then prime canvas with seed piece only
   useEffect(() => {
     let cancelled = false;
-    const mobile = window.innerWidth < BREAKPOINT;
-    const { f1Srcs, f2Seq } = buildSrcs(mobile);
-    f1SrcsRef.current = f1Srcs;
-    f2SeqRef.current  = f2Seq;
-    const allSrcs = [...f1Srcs, ...f2Seq.map(s => s.add)];
-
     const map = new Map<string, HTMLImageElement>();
     let loaded = 0;
     const check = () => {
       loaded++;
-      if (loaded < allSrcs.length || cancelled) return;
+      if (loaded < ALL_SRCS.length || cancelled) return;
       imagesRef.current = map;
       loadedRef.current = true;
       const canvas = canvasRef.current;
       if (canvas) {
-        const initProgress = f1Srcs.map(() => 0);
-        renderCanvas(canvas, map, f1Srcs, f2Seq, initProgress, -1);
+        const initProgress = F1_SRCS.map(() => 0);
+        renderCanvas(canvas, map, initProgress, -1);
         prevF2.current = -1;
       }
       window.dispatchEvent(new Event('scroll'));
     };
-    allSrcs.forEach(src => {
+    ALL_SRCS.forEach(src => {
       const img = new Image();
       img.onload = check;
       img.onerror = check;
@@ -186,7 +187,7 @@ export default function FormationMorph() {
       // Per-piece entrance progress for F1:
       // Piece 0 gets P0_SCROLL px of scroll all to itself (longer slide, starts further below).
       // Pieces 1-18 each animate over one PX_PER_F1 slot, starting only after piece 0 settles.
-      const f1Progresses = f1SrcsRef.current.map((_, i) => {
+      const f1Progresses = F1_SRCS.map((_, i) => {
         if (i === 0) return Math.min(1, Math.max(0, scrolled / P0_SCROLL));
         const start = P0_SCROLL + (i - 1) * PX_PER_F1;
         return Math.min(1, Math.max(0, (scrolled - start) / PX_PER_F1));
@@ -209,7 +210,7 @@ export default function FormationMorph() {
       const f2Changed = f2Step !== prevF2.current;
       if (inF1Anim || f2Changed) {
         prevF2.current = f2Step;
-        renderCanvas(canvas, imagesRef.current, f1SrcsRef.current, f2SeqRef.current, f1Progresses, f2Step);
+        renderCanvas(canvas, imagesRef.current, f1Progresses, f2Step);
       }
 
       // Text cues
