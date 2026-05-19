@@ -157,9 +157,9 @@ export default function FormationMorph() {
       const img = new Image();
       img.onload = check;
       img.onerror = check;
-      // Mobile: fetch F1 pieces from mobile-optimised path; Map key stays unchanged
-      img.src = (mobile && src.includes('/1_'))
-        ? src.replace('/formations/GASP/F1/1_', '/images/pieces/mobile/piece_')
+      const match = src.match(/\/1_(\d+)\.png$/);
+      img.src = (mobile && match)
+        ? `/images/pieces/mobile/piece_${match[1]}.png`
         : src;
       map.set(src, img);
     });
