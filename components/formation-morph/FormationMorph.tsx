@@ -113,7 +113,8 @@ export default function FormationMorph() {
   const loadedRef    = useRef(false);
   const scaleRef     = useRef(1);
   const isMobileRef  = useRef(false);
-  const prevF2       = useRef(-2);
+  const prevF2         = useRef(-2);
+  const frameSkipRef   = useRef(0);
   const [scale, setScale] = useState(1);
   const [isMobile, setIsMobile] = useState(false);
 
@@ -204,11 +205,12 @@ export default function FormationMorph() {
         ? `translateY(${f2Progress * (window.innerHeight - 280 - CANVAS_H * scaleRef.current)}px)`
         : 'translateY(0)';
 
-      // Redraw every frame during F1 (pieces are mid-animation).
-      // During F2, only redraw when the step index changes.
-      const inF1Anim = !inF2;
+      const inF1Anim  = !inF2;
       const f2Changed = f2Step !== prevF2.current;
-      if (inF1Anim || f2Changed) {
+      frameSkipRef.current += 1;
+      // On mobile, skip every other frame during F1 to reduce redraw cost
+      const skipFrame = isMobileRef.current && inF1Anim && frameSkipRef.current % 2 !== 0;
+      if (!skipFrame && (inF1Anim || f2Changed)) {
         prevF2.current = f2Step;
         renderCanvas(canvas, imagesRef.current, f1Progresses, f2Step);
       }
