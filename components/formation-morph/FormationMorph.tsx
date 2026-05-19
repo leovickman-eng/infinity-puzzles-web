@@ -5,42 +5,55 @@ import { useTranslations } from 'next-intl';
 
 const CANVAS_W   = 550;
 const CANVAS_H   = 1265;
+const BASE       = '/formations/GASP/F1';
 const BREAKPOINT = 768;
 
 const PX_PER_F1    = 25;
 const F1_PAUSE     = 150;
 const PX_PER_F2    = 120;
 const POST_F2_HOLD = 800;
-const P0_SCROLL    = 90;
-const SLIDE_P0     = 250;
-const SLIDE_PX     = 80;
+const P0_SCROLL    = 90;  // scroll px devoted to piece 0 alone before others start
+const SLIDE_P0     = 250; // canvas-px slide distance for piece 0 (starts further below)
+const SLIDE_PX     = 80;  // canvas-px slide distance for pieces 1-18
 
 const F1_SCROLL  = P0_SCROLL + 18 * PX_PER_F1 + F1_PAUSE; // 690px
-const F2_SCROLL  = 19 * PX_PER_F2;                         // 2280px
-const TOTAL_ANIM = F1_SCROLL + F2_SCROLL + POST_F2_HOLD;   // 3770px
+const F2_SCROLL  = 19 * PX_PER_F2;             // 2280px
+const TOTAL_ANIM = F1_SCROLL + F2_SCROLL + POST_F2_HOLD; // 3680px
 
-// Which F1 piece (0-based index) each F2 step removes — path-independent
-const F2_REMOVE_IDX = [11, 15, 17, 14, 7, 6, 12, 13, 5, 3, 2, 18, 10, 16, 8, 9, 4, 1, 0];
+const F1_SRCS = Array.from({ length: 19 }, (_, i) => `${BASE}/1_${i + 1}.png`);
 
-type F2Entry = { add: string; remove: string };
+const F2_SEQ: { add: string; remove: string }[] = [
+  { add: `${BASE}/2_1.png`,  remove: `${BASE}/1_12.png` },
+  { add: `${BASE}/2_2.png`,  remove: `${BASE}/1_16.png` },
+  { add: `${BASE}/2_3.png`,  remove: `${BASE}/1_18.png` },
+  { add: `${BASE}/2_4.png`,  remove: `${BASE}/1_15.png` },
+  { add: `${BASE}/2_5.png`,  remove: `${BASE}/1_8.png`  },
+  { add: `${BASE}/2_6.png`,  remove: `${BASE}/1_7.png`  },
+  { add: `${BASE}/2_7.png`,  remove: `${BASE}/1_13.png` },
+  { add: `${BASE}/2_8.png`,  remove: `${BASE}/1_14.png` },
+  { add: `${BASE}/2_9.png`,  remove: `${BASE}/1_6.png`  },
+  { add: `${BASE}/2_10.png`, remove: `${BASE}/1_4.png`  },
+  { add: `${BASE}/2_11.png`, remove: `${BASE}/1_3.png`  },
+  { add: `${BASE}/2_12.png`, remove: `${BASE}/1_19.png` },
+  { add: `${BASE}/2_13.png`, remove: `${BASE}/1_11.png` },
+  { add: `${BASE}/2_14.png`, remove: `${BASE}/1_17.png` },
+  { add: `${BASE}/2_15.png`, remove: `${BASE}/1_9.png`  },
+  { add: `${BASE}/2_16.png`, remove: `${BASE}/1_10.png` },
+  { add: `${BASE}/2_17.png`, remove: `${BASE}/1_5.png`  },
+  { add: `${BASE}/2_18.png`, remove: `${BASE}/1_2.png`  },
+  { add: `${BASE}/2_19.png`, remove: `${BASE}/1_1.png`  },
+];
 
-function getSrcs(mobile: boolean): { f1Srcs: string[]; f2Seq: F2Entry[]; allSrcs: string[] } {
-  const base   = mobile ? '/images/pieces/mobile' : '/images/pieces';
-  const f1Srcs = Array.from({ length: 19 }, (_, i) => `${base}/piece_${i + 1}.png`);
-  const f2Seq  = F2_REMOVE_IDX.map((removeIdx, i) => ({
-    add:    `${base}/piece_f2_${i + 1}.png`,
-    remove: f1Srcs[removeIdx],
-  }));
-  return { f1Srcs, f2Seq, allSrcs: [...f1Srcs, ...f2Seq.map(s => s.add)] };
-}
+const ALL_SRCS = [...F1_SRCS, ...F2_SEQ.map(s => s.add)];
 
+// Quadratic ease-out: slow deceleration as piece settles into place
 function easeOut(t: number) { return 1 - (1 - t) ** 2; }
 
+// f1Progresses: per-piece entrance progress [0..1] for each of 19 F1 pieces.
+// Piece 0 = seed (always 1). Pieces 1-18 each animate over one PX_PER_F1 slot.
 function renderCanvas(
   canvas: HTMLCanvasElement,
   images: Map<string, HTMLImageElement>,
-  f1Srcs: string[],
-  f2Seq: F2Entry[],
   f1Progresses: number[],
   f2Step: number,
 ) {
@@ -49,19 +62,19 @@ function renderCanvas(
   ctx.clearRect(0, 0, CANVAS_W, CANVAS_H);
 
   const removedF1 = new Set<string>();
-  for (let i = 0; i <= f2Step; i++) removedF1.add(f2Seq[i].remove);
+  for (let i = 0; i <= f2Step; i++) removedF1.add(F2_SEQ[i].remove);
 
   for (let i = 0; i < 19; i++) {
-    if (removedF1.has(f1Srcs[i])) continue;
+    if (removedF1.has(F1_SRCS[i])) continue;
     const raw = f1Progresses[i] ?? 0;
     if (raw <= 0) continue;
-    const img = images.get(f1Srcs[i]);
+    const img = images.get(F1_SRCS[i]);
     if (!img?.complete || !img.naturalWidth) continue;
 
     if (raw >= 1) {
       ctx.drawImage(img, 0, 0, CANVAS_W, CANVAS_H);
     } else {
-      const e     = easeOut(raw);
+      const e    = easeOut(raw);
       const slide = i === 0 ? SLIDE_P0 : SLIDE_PX;
       ctx.save();
       ctx.globalAlpha = e;
@@ -71,7 +84,7 @@ function renderCanvas(
   }
 
   for (let i = 0; i <= f2Step; i++) {
-    const img = images.get(f2Seq[i].add);
+    const img = images.get(F2_SEQ[i].add);
     if (img?.complete && img.naturalWidth) ctx.drawImage(img, 0, 0, CANVAS_W, CANVAS_H);
   }
 }
@@ -80,8 +93,8 @@ function setCue(el: HTMLElement | null, visible: boolean, mobile: boolean) {
   if (!el) return;
   el.style.opacity   = visible ? '1' : '0';
   el.style.transform = mobile
-    ? visible ? 'translateX(-50%)'      : 'translateX(-50%) translateY(36px)'
-    : visible ? 'translate(-50%, -50%)' : 'translate(-50%, calc(-50% + 36px))';
+    ? visible ? 'translateX(-50%)'           : 'translateX(-50%) translateY(36px)'
+    : visible ? 'translate(-50%, -50%)'      : 'translate(-50%, calc(-50% + 36px))';
 }
 
 export default function FormationMorph() {
@@ -96,15 +109,12 @@ export default function FormationMorph() {
   const cue3Ref    = useRef<HTMLDivElement>(null);
   const cue4Ref    = useRef<HTMLDivElement>(null);
 
-  const imagesRef      = useRef<Map<string, HTMLImageElement>>(new Map());
-  const f1SrcsRef      = useRef<string[]>([]);
-  const f2SeqRef       = useRef<F2Entry[]>([]);
-  const loadedRef      = useRef(false);
-  const scaleRef       = useRef(1);
-  const isMobileRef    = useRef(false);
-  const prevF2Ref      = useRef(-2);
-  const prevScrollRef  = useRef(-999); // dirty flag: last scrolled value that caused a redraw
-  const [scale, setScale]     = useState(1);
+  const imagesRef    = useRef<Map<string, HTMLImageElement>>(new Map());
+  const loadedRef    = useRef(false);
+  const scaleRef     = useRef(1);
+  const isMobileRef  = useRef(false);
+  const prevF2       = useRef(-2);
+  const [scale, setScale] = useState(1);
   const [isMobile, setIsMobile] = useState(false);
 
   // Responsive scale
@@ -124,43 +134,35 @@ export default function FormationMorph() {
     return () => window.removeEventListener('resize', compute);
   }, []);
 
-  // Preload all images (mobile or desktop paths), then prime canvas
+  // Preload all images, then prime canvas with seed piece only
   useEffect(() => {
     let cancelled = false;
-    const mobile = window.innerWidth < BREAKPOINT;
-    const { f1Srcs, f2Seq, allSrcs } = getSrcs(mobile);
-    f1SrcsRef.current = f1Srcs;
-    f2SeqRef.current  = f2Seq;
-
     const map = new Map<string, HTMLImageElement>();
     let loaded = 0;
-
     const check = () => {
       loaded++;
-      if (loaded < allSrcs.length || cancelled) return;
-      // All images confirmed loaded before we enable the animation
+      if (loaded < ALL_SRCS.length || cancelled) return;
       imagesRef.current = map;
       loadedRef.current = true;
       const canvas = canvasRef.current;
       if (canvas) {
-        renderCanvas(canvas, map, f1Srcs, f2Seq, f1Srcs.map(() => 0), -1);
-        prevF2Ref.current = -1;
+        const initProgress = F1_SRCS.map(() => 0);
+        renderCanvas(canvas, map, initProgress, -1);
+        prevF2.current = -1;
       }
       window.dispatchEvent(new Event('scroll'));
     };
-
-    allSrcs.forEach(src => {
+    ALL_SRCS.forEach(src => {
       const img = new Image();
-      img.onload  = check;
+      img.onload = check;
       img.onerror = check;
-      img.src     = src;
+      img.src = src;
       map.set(src, img);
     });
-
     return () => { cancelled = true; };
   }, []);
 
-  // Scroll-driven update — RAF-throttled, dirty-flag guarded
+  // Scroll-driven update
   useEffect(() => {
     let raf = 0;
 
@@ -180,15 +182,12 @@ export default function FormationMorph() {
 
       overlay.style.opacity = '1';
 
-      // Dirty flag: skip canvas work when scroll position hasn't changed
-      const scrolledQ = Math.round(scrolled * 4) / 4; // 0.25px granularity
-      const dirty     = scrolledQ !== prevScrollRef.current;
-      if (dirty) prevScrollRef.current = scrolledQ;
-
       const inF2 = scrolled >= F1_SCROLL;
 
-      // Per-piece F1 entrance progress
-      const f1Progresses = f1SrcsRef.current.map((_, i) => {
+      // Per-piece entrance progress for F1:
+      // Piece 0 gets P0_SCROLL px of scroll all to itself (longer slide, starts further below).
+      // Pieces 1-18 each animate over one PX_PER_F1 slot, starting only after piece 0 settles.
+      const f1Progresses = F1_SRCS.map((_, i) => {
         if (i === 0) return Math.min(1, Math.max(0, scrolled / P0_SCROLL));
         const start = P0_SCROLL + (i - 1) * PX_PER_F1;
         return Math.min(1, Math.max(0, (scrolled - start) / PX_PER_F1));
@@ -201,21 +200,20 @@ export default function FormationMorph() {
         f2Step     = Math.min(18, Math.floor(f2Progress * 19));
       }
 
-      // Canvas translate during F2
       wrap.style.transform = inF2
         ? `translateY(${f2Progress * (window.innerHeight - 280 - CANVAS_H * scaleRef.current)}px)`
         : 'translateY(0)';
 
-      // Redraw: F1 every dirty frame (pieces animating), F2 only on step change
-      if (dirty) {
-        const f2Changed = f2Step !== prevF2Ref.current;
-        if (!inF2 || f2Changed) {
-          prevF2Ref.current = f2Step;
-          renderCanvas(canvas, imagesRef.current, f1SrcsRef.current, f2SeqRef.current, f1Progresses, f2Step);
-        }
+      // Redraw every frame during F1 (pieces are mid-animation).
+      // During F2, only redraw when the step index changes.
+      const inF1Anim = !inF2;
+      const f2Changed = f2Step !== prevF2.current;
+      if (inF1Anim || f2Changed) {
+        prevF2.current = f2Step;
+        renderCanvas(canvas, imagesRef.current, f1Progresses, f2Step);
       }
 
-      // Text cues (cheap DOM writes, always update)
+      // Text cues
       const mob = isMobileRef.current;
       if (!inF2) {
         const p = scrolled / F1_SCROLL;
@@ -286,12 +284,7 @@ export default function FormationMorph() {
             ref={canvasRef}
             width={CANVAS_W}
             height={CANVAS_H}
-            style={{
-              display: 'block',
-              width: CANVAS_W * scale,
-              height: CANVAS_H * scale,
-              willChange: 'transform',
-            }}
+            style={{ display: 'block', width: CANVAS_W * scale, height: CANVAS_H * scale }}
           />
         </div>
 
