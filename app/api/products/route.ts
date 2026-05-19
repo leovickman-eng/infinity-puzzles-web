@@ -6,7 +6,7 @@ export async function GET(req: NextRequest) {
   const handle = searchParams.get('handle');
 
   console.log('[/api/products] SHOPIFY_STORE_DOMAIN:', process.env.SHOPIFY_STORE_DOMAIN);
-  console.log('[/api/products] token present:', !!(process.env.SHOPIFY_STOREFRONT_TOKEN ?? process.env.NEXT_PUBLIC_SHOPIFY_STOREFRONT_TOKEN));
+console.log('[/api/products] token present:', !!process.env.SHOPIFY_STOREFRONT_TOKEN);
   console.log('[/api/products] handle:', handle);
 
   try {

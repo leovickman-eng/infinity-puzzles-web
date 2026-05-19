@@ -37,10 +37,14 @@ export default function Header({ locale }: Props) {
         <div className="absolute inset-0 mx-4 my-2 rounded-full bg-background/70 backdrop-blur-md border border-foreground/8 shadow-sm" />
 
         <div className="relative flex items-center gap-8 w-full">
-          {/* Logo */}
-          <Link href={`/${locale}`} className="font-display font-bold text-lg text-foreground tracking-tight">
-            ∞ Infinity
-          </Link>
+          {/* Menu toggle — left side */}
+          <button
+            onClick={() => setMenuOpen((o) => !o)}
+            aria-label="Toggle menu"
+            className="flex items-center justify-center p-1 opacity-90 hover:opacity-100 transition-opacity"
+          >
+            <MenuIcon />
+          </button>
 
           {/* Right actions */}
           <div className="ml-auto flex items-center gap-4">
@@ -68,15 +72,6 @@ export default function Header({ locale }: Props) {
                   {itemCount}
                 </span>
               )}
-            </button>
-
-            {/* Menu toggle — all screen sizes */}
-            <button
-              onClick={() => setMenuOpen((o) => !o)}
-              aria-label="Toggle menu"
-              className="flex items-center justify-center p-1 opacity-90 hover:opacity-100 transition-opacity"
-            >
-              <MenuIcon />
             </button>
           </div>
         </div>

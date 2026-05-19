@@ -69,10 +69,12 @@ function renderCanvas(
   }
 }
 
-function setCue(el: HTMLElement | null, visible: boolean) {
+function setCue(el: HTMLElement | null, visible: boolean, mobile: boolean) {
   if (!el) return;
-  el.style.opacity    = visible ? '1' : '0';
-  el.style.transform  = visible ? 'translateY(0)' : 'translateY(36px)';
+  el.style.opacity   = visible ? '1' : '0';
+  el.style.transform = mobile
+    ? visible ? 'translateX(-50%)'           : 'translateX(-50%) translateY(36px)'
+    : visible ? 'translate(-50%, -50%)'      : 'translate(-50%, calc(-50% + 36px))';
 }
 
 export default function FormationMorph() {
@@ -95,9 +97,11 @@ export default function FormationMorph() {
   const imagesRef   = useRef<Map<string, HTMLImageElement>>(new Map());
   const loadedRef   = useRef(false);
   const scaleRef    = useRef(1);
+  const isMobileRef = useRef(false);
   const prevF1      = useRef(-1);
   const prevF2      = useRef(-2);
   const [scale, setScale] = useState(1);
+  const [isMobile, setIsMobile] = useState(false);
 
   // Responsive scale
   useEffect(() => {
@@ -107,7 +111,9 @@ export default function FormationMorph() {
         ? Math.min((window.innerWidth * 0.9) / CANVAS_W, 1)
         : Math.min(window.innerWidth / CANVAS_W * 2, window.innerHeight / CANVAS_H * 1.5, 3);
       scaleRef.current = s;
+      isMobileRef.current = mobile;
       setScale(s);
+      setIsMobile(mobile);
     };
     compute();
     window.addEventListener('resize', compute);
@@ -217,22 +223,23 @@ export default function FormationMorph() {
       }
 
       // Text cues
+      const mob = isMobileRef.current;
       if (f2Top > 0 && f1Top <= 0) {
         const p = (-f1Top) / F1_SCROLL;
-        setCue(cue1Ref.current, p > 0.04 && p < 0.44);
-        setCue(cue2Ref.current, p > 0.63 && p < 0.97);
-        setCue(cue3Ref.current, false);
-        setCue(cue4Ref.current, false);
+        setCue(cue1Ref.current, p > 0.04 && p < 0.44, mob);
+        setCue(cue2Ref.current, p > 0.63 && p < 0.97, mob);
+        setCue(cue3Ref.current, false, mob);
+        setCue(cue4Ref.current, false, mob);
       } else if (f2Top <= 0) {
-        setCue(cue1Ref.current, false);
-        setCue(cue2Ref.current, false);
-        setCue(cue3Ref.current, f2Progress > 0.04 && f2Progress < 0.44);
-        setCue(cue4Ref.current, f2Progress > 0.63 && f2Progress < 0.97);
+        setCue(cue1Ref.current, false, mob);
+        setCue(cue2Ref.current, false, mob);
+        setCue(cue3Ref.current, f2Progress > 0.04 && f2Progress < 0.44, mob);
+        setCue(cue4Ref.current, f2Progress > 0.63 && f2Progress < 0.97, mob);
       } else {
-        setCue(cue1Ref.current, false);
-        setCue(cue2Ref.current, false);
-        setCue(cue3Ref.current, false);
-        setCue(cue4Ref.current, false);
+        setCue(cue1Ref.current, false, mob);
+        setCue(cue2Ref.current, false, mob);
+        setCue(cue3Ref.current, false, mob);
+        setCue(cue4Ref.current, false, mob);
       }
     };
 
@@ -251,25 +258,27 @@ export default function FormationMorph() {
   }, []);
 
   const cueStyle: React.CSSProperties = {
-    position: 'absolute',
-    bottom: 'clamp(2rem, 5vh, 4rem)',
-    right: 'clamp(1rem, 5vw, 4rem)',
-    maxWidth: 'min(240px, 38vw)',
-    textAlign: 'right',
+    position: 'fixed',
+    left: '50%',
+    ...(isMobile
+      ? { bottom: '80px',  transform: 'translateX(-50%) translateY(36px)' }
+      : { top: '50%',      transform: 'translate(-50%, calc(-50% + 36px))' }
+    ),
+    maxWidth: 'min(320px, 80vw)',
+    textAlign: 'center',
     zIndex: 10,
     opacity: 0,
-    transform: 'translateY(36px)',
     transition: 'opacity 0.6s ease, transform 0.6s ease',
     pointerEvents: 'none',
-    background: 'rgba(255,251,245,0.9)',
-    backdropFilter: 'blur(8px)',
-    WebkitBackdropFilter: 'blur(8px)',
-    padding: '0.75rem 1.1rem',
-    borderRadius: '10px',
+    background: 'rgba(255,251,245,0.7)',
+    backdropFilter: 'blur(6px)',
+    WebkitBackdropFilter: 'blur(6px)',
+    padding: '12px 24px',
+    borderRadius: '8px',
   };
 
   const cueText: React.CSSProperties = {
-    fontFamily: 'var(--font-trykker, Georgia, serif)',
+    fontFamily: 'Nakone, Georgia, serif',
     fontSize: 'clamp(1.2rem, 2vw, 1.5rem)',
     color: '#4a464b',
     lineHeight: 1.45,

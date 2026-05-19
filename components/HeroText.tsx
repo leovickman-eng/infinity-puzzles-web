@@ -90,20 +90,20 @@ export default function HeroText() {
           {/* Beat 1 — hero headline */}
           <span
             style={{
-              fontFamily: 'var(--font-trykker)',
+              fontFamily: 'Nakone, Georgia, serif',
               fontSize: 'clamp(2.4rem, 7vw, 5.5rem)',
               color: '#4a464b',
               lineHeight: 1.05,
               display: 'block',
             }}
           >
-            Infinity Puzzle
+            In<span style={{ letterSpacing: '0.08em' }}>f</span>inity Puzzle
           </span>
 
           {/* Beat 2 — Art. Math. Magic. */}
           <span
             style={{
-              fontFamily: 'var(--font-trykker)',
+              fontFamily: 'Nakone, Georgia, serif',
               fontSize: 'clamp(1.6rem, 4vw, 3rem)',
               color: '#4a464b',
               lineHeight: 1.2,
@@ -116,7 +116,7 @@ export default function HeroText() {
           {/* Beat 3 — softer line */}
           <span
             style={{
-              fontFamily: 'var(--font-trykker)',
+              fontFamily: 'Nakone, Georgia, serif',
               fontSize: 'clamp(1.1rem, 2.2vw, 1.75rem)',
               color: 'rgba(74,70,75,0.55)',
               lineHeight: 1.45,
@@ -134,7 +134,7 @@ export default function HeroText() {
           <span
             className="animate-pulse"
             style={{
-              fontFamily: 'var(--font-trykker)',
+              fontFamily: 'Nakone, Georgia, serif',
               fontSize: '0.95rem',
               color: 'rgba(74,70,75,0.38)',
               letterSpacing: '0.08em',

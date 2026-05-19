@@ -35,6 +35,7 @@ const config: Config = {
         display: ['var(--font-trykker)', 'Georgia', 'serif'],
         body: ['var(--font-dm-sans)', 'sans-serif'],
         serif: ['var(--font-playfair)', 'Georgia', 'serif'],
+        nakone: ['Nakone', 'Georgia', 'serif'],
       },
       animation: {
         'float': 'float 6s ease-in-out infinite',
