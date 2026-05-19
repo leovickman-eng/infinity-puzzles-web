@@ -152,11 +152,15 @@ export default function FormationMorph() {
       }
       window.dispatchEvent(new Event('scroll'));
     };
+    const mobile = window.innerWidth < BREAKPOINT;
     ALL_SRCS.forEach(src => {
       const img = new Image();
       img.onload = check;
       img.onerror = check;
-      img.src = src;
+      // Mobile: fetch F1 pieces from mobile-optimised path; Map key stays unchanged
+      img.src = (mobile && src.includes('/1_'))
+        ? src.replace('/formations/GASP/F1/1_', '/images/pieces/mobile/piece_')
+        : src;
       map.set(src, img);
     });
     return () => { cancelled = true; };
