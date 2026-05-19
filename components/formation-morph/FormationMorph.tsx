@@ -20,28 +20,28 @@ const F1_SCROLL  = P0_SCROLL + 18 * PX_PER_F1 + F1_PAUSE; // 690px
 const F2_SCROLL  = 19 * PX_PER_F2;             // 2280px
 const TOTAL_ANIM = F1_SCROLL + F2_SCROLL + POST_F2_HOLD; // 3680px
 
-const F1_SRCS = Array.from({ length: 19 }, (_, i) => `${BASE}/1_${i + 1}.png`);
+const F1_SRCS = Array.from({ length: 19 }, (_, i) => `${BASE}/1_${i + 1}.webp`);
 
 const F2_SEQ: { add: string; remove: string }[] = [
-  { add: `${BASE}/2_1.png`,  remove: `${BASE}/1_12.png` },
-  { add: `${BASE}/2_2.png`,  remove: `${BASE}/1_16.png` },
-  { add: `${BASE}/2_3.png`,  remove: `${BASE}/1_18.png` },
-  { add: `${BASE}/2_4.png`,  remove: `${BASE}/1_15.png` },
-  { add: `${BASE}/2_5.png`,  remove: `${BASE}/1_8.png`  },
-  { add: `${BASE}/2_6.png`,  remove: `${BASE}/1_7.png`  },
-  { add: `${BASE}/2_7.png`,  remove: `${BASE}/1_13.png` },
-  { add: `${BASE}/2_8.png`,  remove: `${BASE}/1_14.png` },
-  { add: `${BASE}/2_9.png`,  remove: `${BASE}/1_6.png`  },
-  { add: `${BASE}/2_10.png`, remove: `${BASE}/1_4.png`  },
-  { add: `${BASE}/2_11.png`, remove: `${BASE}/1_3.png`  },
-  { add: `${BASE}/2_12.png`, remove: `${BASE}/1_19.png` },
-  { add: `${BASE}/2_13.png`, remove: `${BASE}/1_11.png` },
-  { add: `${BASE}/2_14.png`, remove: `${BASE}/1_17.png` },
-  { add: `${BASE}/2_15.png`, remove: `${BASE}/1_9.png`  },
-  { add: `${BASE}/2_16.png`, remove: `${BASE}/1_10.png` },
-  { add: `${BASE}/2_17.png`, remove: `${BASE}/1_5.png`  },
-  { add: `${BASE}/2_18.png`, remove: `${BASE}/1_2.png`  },
-  { add: `${BASE}/2_19.png`, remove: `${BASE}/1_1.png`  },
+  { add: `${BASE}/2_1.webp`,  remove: `${BASE}/1_12.webp` },
+  { add: `${BASE}/2_2.webp`,  remove: `${BASE}/1_16.webp` },
+  { add: `${BASE}/2_3.webp`,  remove: `${BASE}/1_18.webp` },
+  { add: `${BASE}/2_4.webp`,  remove: `${BASE}/1_15.webp` },
+  { add: `${BASE}/2_5.webp`,  remove: `${BASE}/1_8.webp`  },
+  { add: `${BASE}/2_6.webp`,  remove: `${BASE}/1_7.webp`  },
+  { add: `${BASE}/2_7.webp`,  remove: `${BASE}/1_13.webp` },
+  { add: `${BASE}/2_8.webp`,  remove: `${BASE}/1_14.webp` },
+  { add: `${BASE}/2_9.webp`,  remove: `${BASE}/1_6.webp`  },
+  { add: `${BASE}/2_10.webp`, remove: `${BASE}/1_4.webp`  },
+  { add: `${BASE}/2_11.webp`, remove: `${BASE}/1_3.webp`  },
+  { add: `${BASE}/2_12.webp`, remove: `${BASE}/1_19.webp` },
+  { add: `${BASE}/2_13.webp`, remove: `${BASE}/1_11.webp` },
+  { add: `${BASE}/2_14.webp`, remove: `${BASE}/1_17.webp` },
+  { add: `${BASE}/2_15.webp`, remove: `${BASE}/1_9.webp`  },
+  { add: `${BASE}/2_16.webp`, remove: `${BASE}/1_10.webp` },
+  { add: `${BASE}/2_17.webp`, remove: `${BASE}/1_5.webp`  },
+  { add: `${BASE}/2_18.webp`, remove: `${BASE}/1_2.webp`  },
+  { add: `${BASE}/2_19.webp`, remove: `${BASE}/1_1.webp`  },
 ];
 
 const ALL_SRCS = [...F1_SRCS, ...F2_SEQ.map(s => s.add)];
