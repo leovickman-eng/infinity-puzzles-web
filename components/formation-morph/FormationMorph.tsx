@@ -20,28 +20,31 @@ const F1_SCROLL  = P0_SCROLL + 18 * PX_PER_F1 + F1_PAUSE; // 690px
 const F2_SCROLL  = 19 * PX_PER_F2;             // 2280px
 const TOTAL_ANIM = F1_SCROLL + F2_SCROLL + POST_F2_HOLD; // 3680px
 
-const F1_SRCS = Array.from({ length: 19 }, (_, i) => `${BASE}/1_${i + 1}.png`);
+const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+const imgPath = (n: number) => isMobile ? `/images/pieces/mobile/piece_${n}.png` : `/images/pieces/piece_${n}.png`;
+
+const F1_SRCS = Array.from({ length: 19 }, (_, i) => imgPath(i + 1));
 
 const F2_SEQ: { add: string; remove: string }[] = [
-  { add: `${BASE}/2_1.png`,  remove: `${BASE}/1_12.png` },
-  { add: `${BASE}/2_2.png`,  remove: `${BASE}/1_16.png` },
-  { add: `${BASE}/2_3.png`,  remove: `${BASE}/1_18.png` },
-  { add: `${BASE}/2_4.png`,  remove: `${BASE}/1_15.png` },
-  { add: `${BASE}/2_5.png`,  remove: `${BASE}/1_8.png`  },
-  { add: `${BASE}/2_6.png`,  remove: `${BASE}/1_7.png`  },
-  { add: `${BASE}/2_7.png`,  remove: `${BASE}/1_13.png` },
-  { add: `${BASE}/2_8.png`,  remove: `${BASE}/1_14.png` },
-  { add: `${BASE}/2_9.png`,  remove: `${BASE}/1_6.png`  },
-  { add: `${BASE}/2_10.png`, remove: `${BASE}/1_4.png`  },
-  { add: `${BASE}/2_11.png`, remove: `${BASE}/1_3.png`  },
-  { add: `${BASE}/2_12.png`, remove: `${BASE}/1_19.png` },
-  { add: `${BASE}/2_13.png`, remove: `${BASE}/1_11.png` },
-  { add: `${BASE}/2_14.png`, remove: `${BASE}/1_17.png` },
-  { add: `${BASE}/2_15.png`, remove: `${BASE}/1_9.png`  },
-  { add: `${BASE}/2_16.png`, remove: `${BASE}/1_10.png` },
-  { add: `${BASE}/2_17.png`, remove: `${BASE}/1_5.png`  },
-  { add: `${BASE}/2_18.png`, remove: `${BASE}/1_2.png`  },
-  { add: `${BASE}/2_19.png`, remove: `${BASE}/1_1.png`  },
+  { add: `${BASE}/2_1.png`,  remove: imgPath(12) },
+  { add: `${BASE}/2_2.png`,  remove: imgPath(16) },
+  { add: `${BASE}/2_3.png`,  remove: imgPath(18) },
+  { add: `${BASE}/2_4.png`,  remove: imgPath(15) },
+  { add: `${BASE}/2_5.png`,  remove: imgPath(8)  },
+  { add: `${BASE}/2_6.png`,  remove: imgPath(7)  },
+  { add: `${BASE}/2_7.png`,  remove: imgPath(13) },
+  { add: `${BASE}/2_8.png`,  remove: imgPath(14) },
+  { add: `${BASE}/2_9.png`,  remove: imgPath(6)  },
+  { add: `${BASE}/2_10.png`, remove: imgPath(4)  },
+  { add: `${BASE}/2_11.png`, remove: imgPath(3)  },
+  { add: `${BASE}/2_12.png`, remove: imgPath(19) },
+  { add: `${BASE}/2_13.png`, remove: imgPath(11) },
+  { add: `${BASE}/2_14.png`, remove: imgPath(17) },
+  { add: `${BASE}/2_15.png`, remove: imgPath(9)  },
+  { add: `${BASE}/2_16.png`, remove: imgPath(10) },
+  { add: `${BASE}/2_17.png`, remove: imgPath(5)  },
+  { add: `${BASE}/2_18.png`, remove: imgPath(2)  },
+  { add: `${BASE}/2_19.png`, remove: imgPath(1)  },
 ];
 
 const ALL_SRCS = [...F1_SRCS, ...F2_SEQ.map(s => s.add)];
