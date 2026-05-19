@@ -137,37 +137,29 @@ export default function FormationMorph() {
   // Preload all images, then prime canvas with seed piece only
   useEffect(() => {
     let cancelled = false;
-    const mobile = window.innerWidth < BREAKPOINT;
-    isMobileRef.current = mobile;
-    const timer = setTimeout(() => {
-      if (cancelled) return;
-      const map = new Map<string, HTMLImageElement>();
-      let loaded = 0;
-      const check = () => {
-        loaded++;
-        if (loaded < ALL_SRCS.length || cancelled) return;
-        imagesRef.current = map;
-        loadedRef.current = true;
-        const canvas = canvasRef.current;
-        if (canvas) {
-          const initProgress = F1_SRCS.map(() => 0);
-          renderCanvas(canvas, map, initProgress, -1);
-          prevF2.current = -1;
-        }
-        window.dispatchEvent(new Event('scroll'));
-      };
-      ALL_SRCS.forEach(src => {
-        const img = new Image();
-        img.onload = check;
-        img.onerror = check;
-        const match = src.match(/\/1_(\d+)\.png$/);
-        img.src = (mobile && match)
-          ? `/images/pieces/mobile/piece_${match[1]}.png`
-          : src;
-        map.set(src, img);
-      });
-    }, 0);
-    return () => { cancelled = true; clearTimeout(timer); };
+    const map = new Map<string, HTMLImageElement>();
+    let loaded = 0;
+    const check = () => {
+      loaded++;
+      if (loaded < ALL_SRCS.length || cancelled) return;
+      imagesRef.current = map;
+      loadedRef.current = true;
+      const canvas = canvasRef.current;
+      if (canvas) {
+        const initProgress = F1_SRCS.map(() => 0);
+        renderCanvas(canvas, map, initProgress, -1);
+        prevF2.current = -1;
+      }
+      window.dispatchEvent(new Event('scroll'));
+    };
+    ALL_SRCS.forEach(src => {
+      const img = new Image();
+      img.onload = check;
+      img.onerror = check;
+      img.src = src;
+      map.set(src, img);
+    });
+    return () => { cancelled = true; };
   }, []);
 
   // Scroll-driven update
