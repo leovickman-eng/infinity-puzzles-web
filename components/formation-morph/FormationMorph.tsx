@@ -137,8 +137,10 @@ export default function FormationMorph() {
   // Preload all images, then prime canvas with seed piece only
   useEffect(() => {
     let cancelled = false;
+    const mobile = window.innerWidth < BREAKPOINT;
+    isMobileRef.current = mobile;
     const timer = setTimeout(() => {
-      const mobile = isMobileRef.current; // safe: resize useEffect has already run
+      if (cancelled) return;
       const map = new Map<string, HTMLImageElement>();
       let loaded = 0;
       const check = () => {
