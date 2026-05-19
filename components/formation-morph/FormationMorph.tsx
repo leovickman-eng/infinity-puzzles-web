@@ -6,7 +6,6 @@ import { useTranslations } from 'next-intl';
 const CANVAS_W   = 550;
 const CANVAS_H   = 1265;
 const BREAKPOINT = 768;
-const MAX_DPR    = 2; // cap device pixel ratio on mobile to save GPU memory
 
 const PX_PER_F1    = 25;
 const F1_PAUSE     = 150;
@@ -108,13 +107,12 @@ export default function FormationMorph() {
   const [scale, setScale]     = useState(1);
   const [isMobile, setIsMobile] = useState(false);
 
-  // Responsive scale — caps DPR at MAX_DPR on mobile to limit canvas display resolution
+  // Responsive scale
   useEffect(() => {
     const compute = () => {
       const mobile = window.innerWidth < BREAKPOINT;
-      const dpr    = Math.min(window.devicePixelRatio || 1, mobile ? MAX_DPR : 3);
       const s = mobile
-        ? Math.min((window.innerWidth * 0.9) / CANVAS_W, 1) * (dpr / window.devicePixelRatio || 1)
+        ? Math.min((window.innerWidth * 0.9) / CANVAS_W, 1)
         : Math.min(window.innerWidth / CANVAS_W * 2, window.innerHeight / CANVAS_H * 1.5, 3);
       scaleRef.current    = s;
       isMobileRef.current = mobile;
