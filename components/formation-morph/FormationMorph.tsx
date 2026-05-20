@@ -102,7 +102,8 @@ export default function FormationMorph() {
       const wrapper = wrapperRef.current;
       if (!overlay || !wrap || !wrapper) return;
 
-      const scrolled = window.scrollY - (wrapper.offsetTop - window.innerHeight * 0.6);
+      const scrolled    = -wrapper.getBoundingClientRect().top;
+      const catScrolled = window.scrollY - (wrapper.offsetTop - window.innerHeight * 0.7);
 
       if (scrolled < 0) {
         overlay.style.opacity = '0';
@@ -114,7 +115,7 @@ export default function FormationMorph() {
       const inF2 = scrolled >= F1_SCROLL;
 
       const f1Progresses = F1_SRCS.map((_, i) => {
-        if (i === 0) return Math.min(1, Math.max(0, scrolled / P0_SCROLL));
+        if (i === 0) return Math.min(1, Math.max(0, catScrolled / P0_SCROLL));
         const start = P0_SCROLL + (i - 1) * PX_PER_F1;
         return Math.min(1, Math.max(0, (scrolled - start) / PX_PER_F1));
       });
