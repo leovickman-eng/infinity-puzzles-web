@@ -201,7 +201,7 @@ export default function HeroText() {
           {/* Beat 2 — Art. Math. Magic. */}
           <span
             style={{
-              fontFamily: 'Nakone, Georgia, serif',
+              fontFamily: 'tumb, sans-serif',
               fontSize: 'clamp(1.6rem, 4vw, 3rem)',
               color: '#5B4A8A',
               lineHeight: 1.2,
@@ -215,7 +215,7 @@ export default function HeroText() {
           {/* Beat 3 — softer line */}
           <span
             style={{
-              fontFamily: 'Nakone, Georgia, serif',
+              fontFamily: 'tumb, sans-serif',
               fontSize: 'clamp(1.1rem, 2.2vw, 1.75rem)',
               color: '#5B4A8A',
               lineHeight: 1.45,
@@ -234,7 +234,7 @@ export default function HeroText() {
           <span
             className="animate-pulse"
             style={{
-              fontFamily: 'Nakone, Georgia, serif',
+              fontFamily: 'tumb, sans-serif',
               fontSize: '0.95rem',
               color: '#e81317',
               letterSpacing: '0.08em',
