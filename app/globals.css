@@ -15,7 +15,6 @@
 @layer base {
   :root {
     --font-syne: '';
-    --font-dm-sans: '';
     color-scheme: light;
   }
 
