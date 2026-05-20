@@ -1,7 +1,7 @@
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
-import { Syne, DM_Sans, Playfair_Display, Trykker } from 'next/font/google';
+import { Syne, DM_Sans, Playfair_Display, Trykker, Bebas_Neue } from 'next/font/google';
 import type { Metadata } from 'next';
 import { routing } from '@/i18n/routing';
 import { CartProvider } from '@/components/shop/CartContext';
@@ -39,6 +39,13 @@ const trykker = Trykker({
   display: 'swap',
 });
 
+const bebasNeue = Bebas_Neue({
+  subsets: ['latin'],
+  weight: '400',
+  variable: '--font-bebas',
+  display: 'swap',
+});
+
 export const metadata: Metadata = {
   title: {
     default: 'Infinity Puzzles Wild',
@@ -71,7 +78,7 @@ export default async function LocaleLayout({ children, params }: Props) {
   const messages = await getMessages();
 
   return (
-    <html lang={locale} className={`${syne.variable} ${dmSans.variable} ${playfair.variable} ${trykker.variable}`}>
+    <html lang={locale} className={`${syne.variable} ${dmSans.variable} ${playfair.variable} ${trykker.variable} ${bebasNeue.variable}`}>
       <body className="bg-background text-foreground antialiased">
         <NextIntlClientProvider messages={messages}>
           <CartProvider>
