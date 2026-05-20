@@ -19,15 +19,15 @@ export default function AboutPage() {
         <h1 className="font-display text-5xl md:text-6xl font-bold text-foreground leading-tight text-balance">
           {t('title')}
         </h1>
-        <p className="font-display text-2xl text-foreground/40 mt-4 font-medium">
+        <p className="font-body text-2xl text-foreground/40 mt-4 font-medium">
           {t('subtitle')}
         </p>
 
         <div className="mt-16 space-y-8">
-          <p className="font-display text-lg text-foreground/70 leading-relaxed">
+          <p className="font-body text-lg text-foreground/70 leading-relaxed">
             {t('story')}
           </p>
-          <p className="font-display text-lg text-foreground/70 leading-relaxed">
+          <p className="font-body text-lg text-foreground/70 leading-relaxed">
             {t('mission')}
           </p>
         </div>
@@ -37,7 +37,7 @@ export default function AboutPage() {
             href="mailto:hello@infinity-puzzle.com"
             className="
               inline-flex items-center gap-3
-              font-display font-semibold text-foreground
+              font-body font-semibold text-foreground
               group
             "
           >

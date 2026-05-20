@@ -45,7 +45,7 @@ export default function ProductCard({ product }: Props) {
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-stone-100 to-stone-200">
-            <span className="font-display text-stone-400 text-lg">No image</span>
+            <span className="font-body text-stone-400 text-lg">No image</span>
           </div>
         )}
       </div>

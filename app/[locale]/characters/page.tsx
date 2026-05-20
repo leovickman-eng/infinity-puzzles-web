@@ -37,7 +37,7 @@ export default async function CharactersPage() {
           <h1 className="font-display text-5xl md:text-7xl font-bold text-foreground leading-tight text-balance">
             {t('title')}
           </h1>
-          <p className="font-display text-lg text-foreground/50 mt-6 max-w-xl mx-auto leading-relaxed">
+          <p className="font-body text-lg text-foreground/50 mt-6 max-w-xl mx-auto leading-relaxed">
             {t('subtitle')}
           </p>
         </div>

@@ -40,7 +40,7 @@ export default function HomePage() {
                 {t('physical.title')} <br />
                 <span className="text-foreground/40">{t('physical.subtitle')}</span>
               </h2>
-              <p className="font-display text-lg text-foreground/60 leading-relaxed max-w-md">
+              <p className="font-body text-lg text-foreground/60 leading-relaxed max-w-md">
                 {t('physical.description')}
               </p>
             </div>
@@ -102,7 +102,7 @@ export default function HomePage() {
             <h2 className="font-display text-4xl md:text-5xl font-bold text-foreground text-balance">
               {t('characters.title')}
             </h2>
-            <p className="font-display text-lg text-foreground/50 mt-4 max-w-xl mx-auto">
+            <p className="font-body text-lg text-foreground/50 mt-4 max-w-xl mx-auto">
               {t('characters.subtitle')}
             </p>
           </div>
@@ -112,7 +112,7 @@ export default function HomePage() {
           <div className="text-center mt-12 flex flex-col sm:flex-row items-center justify-center gap-6">
             <a
               href="characters"
-              className="inline-flex items-center gap-2 font-display text-sm text-foreground/50 hover:text-foreground transition-colors group"
+              className="inline-flex items-center gap-2 font-body text-sm text-foreground/50 hover:text-foreground transition-colors group"
             >
               {t('characters.viewAll')}
               <svg
@@ -124,7 +124,7 @@ export default function HomePage() {
             </a>
             <a
               href="WILD_NETWORK"
-              className="inline-flex items-center gap-2 font-display text-sm text-foreground/50 hover:text-foreground transition-colors group"
+              className="inline-flex items-center gap-2 font-body text-sm text-foreground/50 hover:text-foreground transition-colors group"
             >
               Wild Network
               <svg

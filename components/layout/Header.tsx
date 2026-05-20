@@ -201,7 +201,7 @@ export default function Header({ locale }: Props) {
 
           <button
             onClick={openCart}
-            className="relative flex items-center gap-2 font-display text-sm text-foreground/70 hover:text-foreground transition-colors"
+            className="relative flex items-center gap-2 font-body text-sm text-foreground/70 hover:text-foreground transition-colors"
             aria-label={t('cart')}
           >
             <img src="/images/SVG/Korg-01.svg" alt="" width={28} height={28} style={{ display: 'block' }} />
