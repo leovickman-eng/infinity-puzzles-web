@@ -204,11 +204,7 @@ export default function Header({ locale }: Props) {
             className="relative flex items-center gap-2 font-display text-sm text-foreground/70 hover:text-foreground transition-colors"
             aria-label={t('cart')}
           >
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-              <path d="M1 1h3l2.68 13.39a2 2 0 001.99 1.61h8.72a2 2 0 001.97-1.67l1.38-7.33H4.24" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-              <circle cx="8.5" cy="17.5" r="1" fill="currentColor" />
-              <circle cx="15.5" cy="17.5" r="1" fill="currentColor" />
-            </svg>
+            <img src="/images/SVG/Korg-01.svg" alt="" width={28} height={28} style={{ display: 'block' }} />
             {itemCount > 0 && (
               <span className="absolute -top-2 -right-2 w-4 h-4 bg-primary rounded-full text-white text-[10px] font-bold flex items-center justify-center">
                 {itemCount}
