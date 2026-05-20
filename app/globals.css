@@ -5,54 +5,6 @@
 @tailwind utilities;
 
 @font-face {
-  font-family: 'Brianne';
-  src: url('/fonts/Brianne.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'ITCBenguiat';
-  src: url('/fonts/ITCBenguiatStdBookCn.OTF') format('opentype');
-  font-weight: 300;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'ITCBenguiat';
-  src: url('/fonts/ITCBenguiatStdMediumCn.OTF') format('opentype');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'ITCBenguiat';
-  src: url('/fonts/ITCBenguiatStdBoldCn.OTF') format('opentype');
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Visati';
-  src: url('/fonts/visati.otf') format('opentype');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Solacine';
-  src: url('/fonts/Solacine Demo.otf') format('opentype');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
   font-family: 'Nakone';
   src: url('/fonts/Nakone.ttf') format('truetype');
   font-weight: normal;
