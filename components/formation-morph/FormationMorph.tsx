@@ -8,10 +8,10 @@ const CANVAS_H   = 1265;
 const BASE       = '/formations/GASP/F1';
 const BREAKPOINT = 768;
 
-const PX_PER_F1    = 25;
+const PX_PER_F1    = 40;
 const F1_PAUSE     = 150;
 const PX_PER_F2    = 120;
-const POST_F2_HOLD = 800;
+const POST_F2_HOLD = 200;
 const P0_SCROLL    = 90;  // scroll px devoted to piece 0 alone before others start
 const SLIDE_P0     = 250; // canvas-px slide distance for piece 0 (starts further below)
 const SLIDE_PX     = 80;  // canvas-px slide distance for pieces 1-18
