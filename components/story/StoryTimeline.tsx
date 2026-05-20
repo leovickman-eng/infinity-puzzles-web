@@ -55,11 +55,11 @@ export default function StoryTimeline() {
   const trykkerBold: React.CSSProperties = { ...trykker, fontWeight: 700 };
 
   return (
-    <div style={trykker}>
+    <div>
       {/* Section header */}
       <section className="py-20 px-6 bg-background">
         <div className="max-w-[680px] mx-auto">
-          <p className="uppercase tracking-widest text-primary mb-4" style={{ fontSize: '11px' }}>
+          <p className="font-body uppercase tracking-widest text-primary mb-4" style={{ fontSize: '11px' }}>
             {t('eyebrow')}
           </p>
           <h2
@@ -101,7 +101,7 @@ export default function StoryTimeline() {
 
                   {/* Meta */}
                   <p
-                    className="uppercase tracking-widest text-primary mb-2"
+                    className="font-body uppercase tracking-widest text-primary mb-2"
                     style={{ fontSize: '11px' }}
                   >
                     {ch.number} &nbsp;·&nbsp; {ch.period}
@@ -116,14 +116,14 @@ export default function StoryTimeline() {
                   </h3>
 
                   {/* Teaser / full text */}
-                  <p className="text-foreground/65 leading-[1.8]" style={{ fontSize: '15px' }}>
+                  <p className="font-body text-foreground/65 leading-[1.8]" style={{ fontSize: '15px' }}>
                     {isOpen ? ch.text : teaser}
                   </p>
 
                   {/* Read more / less */}
                   <button
                     onClick={() => toggle(i)}
-                    className="mt-4 inline-flex items-center gap-1.5 text-foreground/40 hover:text-foreground transition-colors"
+                    className="font-body mt-4 inline-flex items-center gap-1.5 text-foreground/40 hover:text-foreground transition-colors"
                     style={{ fontSize: '13px' }}
                   >
                     {isOpen ? 'Read less' : 'Read more'}
