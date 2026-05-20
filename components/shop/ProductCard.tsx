@@ -62,12 +62,12 @@ export default function ProductCard({ product }: Props) {
         </div>
 
         {price && (
-          <p className="font-display text-2xl font-semibold text-foreground">
+          <p className="font-body text-2xl font-semibold text-foreground">
             {formatMoney(price.amount, price.currencyCode)}
           </p>
         )}
 
-        <p className="font-display text-foreground/60 leading-relaxed">
+        <p className="font-body text-foreground/60 leading-relaxed">
           {product.description}
         </p>
 
@@ -77,7 +77,7 @@ export default function ProductCard({ product }: Props) {
           className="
             inline-flex items-center justify-center
             px-8 py-4 rounded-full
-            font-display font-semibold text-white text-base
+            font-body font-semibold text-white text-base
             bg-primary hover:bg-primary-dark
             disabled:opacity-50 disabled:cursor-not-allowed
             transition-all duration-200
