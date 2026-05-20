@@ -33,7 +33,7 @@ const config: Config = {
       },
       fontFamily: {
         display: ['tumb', 'Georgia', 'serif'],
-        body: ['Helvetica', 'Arial', 'sans-serif'],
+        body: ['var(--font-cormorant)', 'Georgia', 'serif'],
         serif: ['var(--font-playfair)', 'Georgia', 'serif'],
         nakone: ['Nakone', 'Georgia', 'serif'],
       },

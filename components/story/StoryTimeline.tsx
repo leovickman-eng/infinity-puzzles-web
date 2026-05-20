@@ -51,7 +51,7 @@ export default function StoryTimeline() {
       return next;
     });
 
-  const trykker: React.CSSProperties = { fontFamily: 'var(--font-trykker, Georgia, serif)' };
+  const trykker: React.CSSProperties = { fontFamily: 'tumb, Georgia, serif' };
   const trykkerBold: React.CSSProperties = { ...trykker, fontWeight: 700 };
 
   return (

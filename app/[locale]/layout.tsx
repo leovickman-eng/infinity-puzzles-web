@@ -1,7 +1,7 @@
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
-import { Syne, DM_Sans, Playfair_Display, Trykker, Bebas_Neue } from 'next/font/google';
+import { Syne, DM_Sans, Playfair_Display, Trykker, Bebas_Neue, Cormorant_Garamond } from 'next/font/google';
 import type { Metadata } from 'next';
 import { routing } from '@/i18n/routing';
 import { CartProvider } from '@/components/shop/CartContext';
@@ -46,6 +46,14 @@ const bebasNeue = Bebas_Neue({
   display: 'swap',
 });
 
+const cormorant = Cormorant_Garamond({
+  subsets: ['latin'],
+  variable: '--font-cormorant',
+  display: 'swap',
+  weight: ['300', '400', '500', '600', '700'],
+  style: ['normal', 'italic'],
+});
+
 export const metadata: Metadata = {
   title: {
     default: 'Infinity Puzzles Wild',
@@ -78,7 +86,7 @@ export default async function LocaleLayout({ children, params }: Props) {
   const messages = await getMessages();
 
   return (
-    <html lang={locale} className={`${syne.variable} ${dmSans.variable} ${playfair.variable} ${trykker.variable} ${bebasNeue.variable}`}>
+    <html lang={locale} className={`${syne.variable} ${dmSans.variable} ${playfair.variable} ${trykker.variable} ${bebasNeue.variable} ${cormorant.variable}`}>
 <body className="bg-background text-foreground antialiased">
         <NextIntlClientProvider messages={messages}>
           <CartProvider>
