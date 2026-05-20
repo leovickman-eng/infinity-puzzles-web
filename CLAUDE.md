@@ -24,21 +24,22 @@ InfinityPuzzles is a creative product combining a physical modular wooden puzzle
 - Erik (collaborator)
 
 ## Key File Locations
-- Navbar: `components/header/` — `HeaderClient.tsx` loaded with `ssr: false` via `dynamic()`
+- Navbar: `components/layout/Header.tsx` — `HeaderClient.tsx` loaded with `ssr: false` via `dynamic()`
 - Formation animation (s2): `components/formation-morph/FormationMorph.tsx`
 - Wild Network: `app/[locale]/wild_network/` — loaded with `ssr: false` via `dynamic()`
 - Brand page: `app/[locale]/brand/page.tsx` — password protected (`Spagetti!23`)
 - Lottie animation: `public/lottie/test.json`
-- Puzzle piece images (desktop): `public/formations/GASP/F1/` — WebP format
-- Puzzle piece images (mobile, 400px): `public/images/pieces/mobile/`
-- Character images: Cloudinary (`dk3ftfygx`, path: `infinitypuzzles/karaktarer/karaktar_1.png` → `karaktar_19.png`)
-- Logo SVG: `public/images/SVG/Logga_svart-02.svg`
-- Menu icon SVG: `public/images/SVG/Menu.svg`
+- Puzzle piece images: `public/formations/GASP/F1/` — WebP format (`1_1.webp`…`2_19.webp`)
+- Character images: `/public/images/characters/WILD_characters-01.webp` … `WILD_characters-19.webp`
+- Logo (hero): inline SVG in `HeroText.tsx`, fill `#5B4A8A`
+- Logo (footer): `<img src="/images/SVG/infinity-puzzles-logo (1).svg">`, width 120px
+- Cart icon: `/images/SVG/Korg-01.svg`, width 28px (`Header.tsx`)
 
 ## Fonts
-- **Trykker** — password gate, brand page
-- **Nakone** — menu links, cue text, body in places
-- **Brianne** — decorative
+- **Display/titles** (`font-display`): `tumb` via Adobe Fonts — `@import url("https://use.typekit.net/mnz1cmc.css")` at top of `globals.css`. Kit also has `aabak`, `aabak-swash`, `tt-modernoir`.
+- **Body text** (`font-body`): Cormorant Garamond via `next/font/google`, CSS var `--font-cormorant`
+- **Nakone**: formation cue text + legacy uses, loaded via `@font-face` from `/fonts/Nakone.ttf`
+- Rule: `font-display` only on h1–h6. All p-tags, spans, buttons, links → `font-body`.
 
 ## Brand Colors
 | Hex | Description |
@@ -61,24 +62,31 @@ InfinityPuzzles is a creative product combining a physical modular wooden puzzle
 | `#1C1917` | Almost black |
 
 ## Page Structure (Home)
-- **s1**: Hero — logo, headline "Infinity Puzzle", sublines, Lottie animation (`test.json`) below
-- **s2**: Formation Morph — canvas animation of 19 puzzle pieces assembling (F1 phase) then morphing (F2 phase), scroll-driven
-- **s3**: Hero photos / real-world imagery
+- **S1** `LottieScrollSection` — Lottie hero (`test.json`), `marginBottom: -50svh` so S2 overlaps underneath
+- **S2** `FormationMorph` — img-tag animation (not canvas), scroll-driven
+- **S3** Physical object section (hero photos)
+- **Shop** section (`id="shop"`)
+- **S4** Characters — `CharacterCarousel` 3D perspective carousel (`components/character-carousel/`)
+- **S7** `StoryTimeline`
 
 ## Formation Morph (s2) — Critical Notes
-- Canvas: 550×1265px internal, CSS-scaled
-- F1 phase: 19 pieces slide in one by one, scroll-driven (25px scroll per piece)
-- F2 phase: pieces swap out one by one
+- **Not canvas** — uses 38 `<img>` tags (`f1ImgRefs` / `f2ImgRefs`), styles set directly via refs
+- F1 phase: scroll-driven `opacity` + `translateY` on img elements, no React re-renders
+- F2 phase: opacity swap on `f2Step` change; CSS `transition: opacity 0.3s ease` on F2 imgs
+- Frame-skip on mobile: `frameSkipRef % 2 !== 0`, reset to 0 on new F2 step
+- Piece 0 (cat/1_1.webp): uses `catScrolled` (70% viewport early trigger) and `SLIDE_P0 = 350`
 - Images: `/formations/GASP/F1/1_X.webp` (F1), `/formations/GASP/F1/2_X.webp` (F2)
-- Map keys must match image src strings exactly — never change F1_SRCS or F2_SEQ keys without updating renderCanvas
-- **CRITICAL**: Never use GSAP ScrollTrigger pin on s2 — causes `removeChild` crash on navigation. Use CSS `position: sticky` instead.
-- Mobile images exist at `/images/pieces/mobile/piece_X.png` (400×400px) but are NOT compatible with canvas compositing (wrong format) — do not use these as canvas sources
+- **CRITICAL**: Never use GSAP ScrollTrigger pin on s2 — causes `removeChild` crash. Use CSS `position: sticky` instead.
+
+## Characters
+- 19 unique characters, each is a puzzle piece
+- Images: `/public/images/characters/WILD_characters-01.webp` … `WILD_characters-19.webp` (local, not Cloudinary)
+- Homepage: `CharacterCarousel` — 3D fan with `perspective: 1200px`, rotateY ±35°/±55°, scale 0.82/0.65
+- Characters page: flex-wrap grid, `w-1/3 md:w-1/5`, seeded shuffle (seed=42)
 
 ## Known Issues / To Do
-1. **S2 mobile lag** — F1 animation is slow on mobile. Next step: frame skip throttle (`frameSkipRef % 2 === 0` on mobile)
-2. **Shopify API locked** — `infinity-puzzle-2.myshopify.com` returns "Online Store channel is locked". Must log into that store specifically and contact Shopify support from there.
-3. **Logo gradient** — animated color gradient on the SVG logo in s1 using brand colors
-4. **S2→S3 transition** — s2 should scroll up and off screen revealing s3 hero images underneath
+1. **Shopify API locked** — `infinity-puzzle-2.myshopify.com` returns "Online Store channel is locked". Must log into that store specifically and contact Shopify support from there.
+2. **Logo gradient** — `Logga_gradient.svg` exists in `/images/SVG/` with animated gradient, not yet used in hero
 
 ## Hydration / SSR Rules
 - **Never** server-render components that use `document`, `window`, or `createPortal` — wrap in `dynamic(..., { ssr: false })`
