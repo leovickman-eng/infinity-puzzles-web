@@ -32,7 +32,7 @@ const config: Config = {
         },
       },
       fontFamily: {
-        display: ['var(--font-trykker)', 'Georgia', 'serif'],
+        display: ['Brianne', 'Georgia', 'serif'],
         body: ['var(--font-dm-sans)', 'sans-serif'],
         serif: ['var(--font-playfair)', 'Georgia', 'serif'],
         nakone: ['Nakone', 'Georgia', 'serif'],
