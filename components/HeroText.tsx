@@ -205,6 +205,7 @@ export default function HeroText() {
               fontSize: 'clamp(1.6rem, 4vw, 3rem)',
               color: '#5B4A8A',
               lineHeight: 1.2,
+              letterSpacing: '0.04em',
               display: 'block',
             }}
           >
@@ -218,6 +219,7 @@ export default function HeroText() {
               fontSize: 'clamp(1.1rem, 2.2vw, 1.75rem)',
               color: '#5B4A8A',
               lineHeight: 1.45,
+              letterSpacing: '0.04em',
               display: 'block',
               fontWeight: 300,
             }}
