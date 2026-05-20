@@ -8,7 +8,7 @@ export default function Footer() {
     <footer className="border-t border-foreground/10 bg-background px-6 py-12">
       <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
         <div>
-          <p className="font-display font-bold text-foreground text-lg">∞ Infinity Puzzles</p>
+          <img src="/images/SVG/infinity-puzzles-logo (1).svg" alt="Infinity Puzzles" style={{ width: '120px', height: 'auto' }} />
           <p className="font-body text-sm text-foreground/40 mt-1">{t('tagline')}</p>
         </div>
 
