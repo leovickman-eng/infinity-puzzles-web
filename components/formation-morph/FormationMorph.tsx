@@ -12,8 +12,8 @@ const PX_PER_F1    = 40;
 const F1_PAUSE     = 150;
 const PX_PER_F2    = 120;
 const POST_F2_HOLD = 200;
-const P0_SCROLL    = 120;
-const SLIDE_P0     = 350;
+const P0_SCROLL    = 90;
+const SLIDE_P0     = 250;
 const SLIDE_PX     = 80;
 
 const F1_SCROLL  = P0_SCROLL + 18 * PX_PER_F1 + F1_PAUSE;
@@ -102,8 +102,7 @@ export default function FormationMorph() {
       const wrapper = wrapperRef.current;
       if (!overlay || !wrap || !wrapper) return;
 
-      const scrolled    = -wrapper.getBoundingClientRect().top;
-      const catScrolled = window.scrollY - (wrapper.offsetTop - window.innerHeight * 0.7);
+      const scrolled = -wrapper.getBoundingClientRect().top;
 
       if (scrolled < 0) {
         overlay.style.opacity = '0';
@@ -115,7 +114,7 @@ export default function FormationMorph() {
       const inF2 = scrolled >= F1_SCROLL;
 
       const f1Progresses = F1_SRCS.map((_, i) => {
-        if (i === 0) return Math.min(1, Math.max(0, catScrolled / P0_SCROLL));
+        if (i === 0) return Math.min(1, Math.max(0, scrolled / P0_SCROLL));
         const start = P0_SCROLL + (i - 1) * PX_PER_F1;
         return Math.min(1, Math.max(0, (scrolled - start) / PX_PER_F1));
       });
@@ -145,11 +144,7 @@ export default function FormationMorph() {
             const e     = easeOut(Math.max(0, Math.min(1, raw)));
             const slide = i === 0 ? SLIDE_P0 : SLIDE_PX;
             el.style.opacity   = raw <= 0 ? '0' : String(e);
-            el.style.transform = raw >= 1
-              ? 'translateY(0px)'
-              : i === 0
-                ? `translateY(${(1 - e) * SLIDE_P0}px)`
-                : `translateY(${(1 - e) * slide}px)`;
+            el.style.transform = raw >= 1 ? 'translateY(0px)' : `translateY(${(1 - e) * slide}px)`;
           }
         }
 
@@ -242,7 +237,7 @@ export default function FormationMorph() {
           display: 'flex',
           alignItems: 'flex-start',
           justifyContent: 'center',
-          paddingTop: isMobile ? '40px' : '140px',
+          paddingTop: '140px',
           opacity: 0,
           pointerEvents: 'none',
           zIndex: 5,
