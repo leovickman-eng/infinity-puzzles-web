@@ -12,8 +12,8 @@ const PX_PER_F1    = 40;
 const F1_PAUSE     = 150;
 const PX_PER_F2    = 120;
 const POST_F2_HOLD = 200;
-const P0_SCROLL    = 90;
-const SLIDE_P0     = 250;
+const P0_SCROLL    = 120;
+const SLIDE_P0     = 350;
 const SLIDE_PX     = 80;
 
 const F1_SCROLL  = P0_SCROLL + 18 * PX_PER_F1 + F1_PAUSE;
@@ -237,7 +237,7 @@ export default function FormationMorph() {
           display: 'flex',
           alignItems: 'flex-start',
           justifyContent: 'center',
-          paddingTop: '140px',
+          paddingTop: isMobile ? '40px' : '140px',
           opacity: 0,
           pointerEvents: 'none',
           zIndex: 5,
