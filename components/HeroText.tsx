@@ -87,18 +87,12 @@ export default function HeroText() {
         {/* All three beats appear as one block */}
         <div ref={blockRef} style={{ display: 'flex', flexDirection: 'column', gap: '2rem', pointerEvents: 'auto' }}>
 
-          {/* Beat 1 — hero headline */}
-          <span
-            style={{
-              fontFamily: 'Nakone, Georgia, serif',
-              fontSize: 'clamp(2.4rem, 7vw, 5.5rem)',
-              color: '#4a464b',
-              lineHeight: 1.05,
-              display: 'block',
-            }}
-          >
-            In<span style={{ letterSpacing: '0.08em' }}>f</span>inity Puzzle
-          </span>
+          {/* Beat 1 — logo */}
+          <img
+            src="/images/SVG/Logga_gradient.svg"
+            alt="Infinity Puzzles"
+            style={{ width: 'min(480px, 80vw)', height: 'auto', display: 'block', margin: '0 auto' }}
+          />
 
           {/* Beat 2 — Art. Math. Magic. */}
           <span
