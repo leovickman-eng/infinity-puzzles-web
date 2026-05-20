@@ -214,7 +214,7 @@ export default function FormationMorph() {
       const inF1Anim  = !inF2;
       const f2Changed = f2Step !== prevF2.current;
       frameSkipRef.current += 1;
-      // On mobile, skip every other frame during F1 to reduce redraw cost
+      if (f2Changed) frameSkipRef.current = 0;
       const skipFrame = isMobileRef.current && frameSkipRef.current % 2 !== 0;
 
       // Build offscreen cache once when F1 completes
