@@ -89,9 +89,9 @@ export default function HeroText() {
 
           {/* Beat 1 — logo */}
           <img
-            src="/images/SVG/Logga_gradient.svg"
+            src="/images/SVG/Logga_svart-02.svg"
             alt="Infinity Puzzles"
-            style={{ width: 'min(480px, 80vw)', height: 'auto', display: 'block', margin: '0 auto' }}
+            style={{ width: 'min(300px, 80vw)', height: 'auto', display: 'block', margin: '0 auto' }}
           />
 
           {/* Beat 2 — Art. Math. Magic. */}
