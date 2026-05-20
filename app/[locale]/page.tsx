@@ -44,18 +44,6 @@ export default function HomePage() {
       {/* ── S2: Formation morph — sticky canvas, scrolls away into S3 ── */}
       <FormationMorph />
 
-      {/* ── S6: Shop ── */}
-      <section id="shop" className="py-24 px-6 bg-background">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="font-display text-4xl md:text-5xl font-bold text-foreground">
-              {t('shop.title')}
-            </h2>
-          </div>
-          <ProductSection />
-        </div>
-      </section>
-
       {/* ── S3: The physical object ── */}
       <section className="py-24 px-6 bg-background">
         <div className="max-w-6xl mx-auto">
@@ -103,6 +91,18 @@ export default function HomePage() {
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* ── S6: Shop ── */}
+      <section id="shop" className="py-24 px-6 bg-background">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="font-display text-4xl md:text-5xl font-bold text-foreground">
+              {t('shop.title')}
+            </h2>
+          </div>
+          <ProductSection />
         </div>
       </section>
 
