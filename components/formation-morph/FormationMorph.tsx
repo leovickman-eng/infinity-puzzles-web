@@ -145,7 +145,11 @@ export default function FormationMorph() {
             const e     = easeOut(Math.max(0, Math.min(1, raw)));
             const slide = i === 0 ? SLIDE_P0 : SLIDE_PX;
             el.style.opacity   = raw <= 0 ? '0' : String(e);
-            el.style.transform = raw >= 1 ? 'translateY(0px)' : `translateY(${(1 - e) * slide}px)`;
+            el.style.transform = raw >= 1
+              ? 'translateY(0px)'
+              : i === 0
+                ? `translateY(${(1 - e) * SLIDE_P0}px)`
+                : `translateY(${(1 - e) * slide}px)`;
           }
         }
 
