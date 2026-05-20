@@ -129,7 +129,7 @@ export default function HeroText() {
             style={{
               fontFamily: 'Nakone, Georgia, serif',
               fontSize: 'clamp(1.1rem, 2.2vw, 1.75rem)',
-              color: 'rgba(91,74,138,0.55)',
+              color: '#5B4A8A',
               lineHeight: 1.45,
               display: 'block',
               fontWeight: 300,
@@ -147,7 +147,7 @@ export default function HeroText() {
             style={{
               fontFamily: 'Nakone, Georgia, serif',
               fontSize: '0.95rem',
-              color: 'rgba(91,74,138,0.38)',
+              color: '#e81317',
               letterSpacing: '0.08em',
               display: 'inline-block',
             }}
