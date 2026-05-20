@@ -8,7 +8,7 @@ const CANVAS_H   = 1265;
 const BASE       = '/formations/GASP/F1';
 const BREAKPOINT = 768;
 
-const PX_PER_F1    = 40;
+const PX_PER_F1    = 60;
 const F1_PAUSE     = 150;
 const PX_PER_F2    = 120;
 const POST_F2_HOLD = 200;
