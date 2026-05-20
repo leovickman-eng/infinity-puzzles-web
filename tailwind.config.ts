@@ -32,7 +32,7 @@ const config: Config = {
         },
       },
       fontFamily: {
-        display: ['aabak-swash', 'Georgia', 'serif'],
+        display: ['tt-modernoir', 'Georgia', 'serif'],
         body: ['var(--font-dm-sans)', 'sans-serif'],
         serif: ['var(--font-playfair)', 'Georgia', 'serif'],
         nakone: ['Nakone', 'Georgia', 'serif'],
