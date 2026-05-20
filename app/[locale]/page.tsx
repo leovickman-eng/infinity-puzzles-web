@@ -4,6 +4,7 @@ import Image from 'next/image';
 import type { Metadata } from 'next';
 import HeroText from '@/components/HeroText';
 import {
+  CharacterCarousel,
   FormationMorph,
   LottieScrollSection,
   ProductSection,
@@ -15,20 +16,6 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: t('title') };
 }
 
-const WILD_COLORS = [
-  '#ae84ea', '#f6b8bd', '#dac1ff', '#16ade6', '#57d494',
-  '#fb8f02', '#fdf07d', '#7ed6cd', '#e81317', '#533f7e',
-  '#0d8137', '#05375a', '#530100', '#544550', '#ae84ea',
-  '#f6b8bd', '#dac1ff', '#16ade6', '#57d494',
-];
-
-const PLACEHOLDER_CHARACTERS = Array.from({ length: 19 }, (_, i) => ({
-  id: i + 1,
-  name: `Character ${i + 1}`,
-  description: '',
-  color: WILD_COLORS[i],
-  imageUrl: `/images/characters/WILD_characters-${String(i + 1).padStart(2, '0')}.webp`,
-}));
 
 export default function HomePage() {
   const t = useTranslations();
@@ -120,16 +107,7 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div style={{ display: 'flex', overflowX: 'auto', gap: 0, WebkitOverflowScrolling: 'touch' }}>
-            {PLACEHOLDER_CHARACTERS.map((char) => (
-              <img
-                key={char.id}
-                src={char.imageUrl}
-                alt={char.name}
-                style={{ width: '200px', height: 'auto', flexShrink: 0, display: 'block' }}
-              />
-            ))}
-          </div>
+          <CharacterCarousel />
 
           <div className="text-center mt-12 flex flex-col sm:flex-row items-center justify-center gap-6">
             <a

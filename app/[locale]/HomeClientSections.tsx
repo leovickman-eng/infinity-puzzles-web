@@ -17,6 +17,11 @@ export const ProductSection = dynamic(
   { ssr: false },
 );
 
+export const CharacterCarousel = dynamic(
+  () => import('@/components/character-carousel/CharacterCarousel'),
+  { ssr: false },
+);
+
 export const StoryTimeline = dynamic(
   () => import('@/components/story/StoryTimeline'),
   { ssr: false },
