@@ -2,7 +2,6 @@ import { useTranslations } from 'next-intl';
 import { getTranslations } from 'next-intl/server';
 import Image from 'next/image';
 import type { Metadata } from 'next';
-import CharacterCard from '@/components/character-card/CharacterCard';
 import HeroText from '@/components/HeroText';
 import {
   FormationMorph,
@@ -121,9 +120,14 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6 justify-items-center">
+          <div style={{ display: 'flex', overflowX: 'auto', gap: 0, WebkitOverflowScrolling: 'touch' }}>
             {PLACEHOLDER_CHARACTERS.map((char) => (
-              <CharacterCard key={char.id} character={char} size="md" />
+              <img
+                key={char.id}
+                src={char.imageUrl}
+                alt={char.name}
+                style={{ width: '200px', height: 'auto', flexShrink: 0, display: 'block' }}
+              />
             ))}
           </div>
 
