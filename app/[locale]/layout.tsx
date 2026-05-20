@@ -79,10 +79,7 @@ export default async function LocaleLayout({ children, params }: Props) {
 
   return (
     <html lang={locale} className={`${syne.variable} ${dmSans.variable} ${playfair.variable} ${trykker.variable} ${bebasNeue.variable}`}>
-      <head>
-        <link rel="stylesheet" href="https://use.typekit.net/mnz1cmc.css" />
-      </head>
-      <body className="bg-background text-foreground antialiased">
+<body className="bg-background text-foreground antialiased">
         <NextIntlClientProvider messages={messages}>
           <CartProvider>
             <Header locale={locale} />
