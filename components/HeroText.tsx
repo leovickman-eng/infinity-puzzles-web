@@ -47,21 +47,108 @@ function MathWord() {
   );
 }
 
+type Particle = {
+  x: number; y: number;
+  vx: number; vy: number;
+  alpha: number; color: string; size: number;
+};
+const GLITTER_COLORS = ['#ae84ea', '#f6b8bd', '#5B4A8A'];
+const CANVAS_W = 320;
+const CANVAS_H = 210;
+
 function MagicWord() {
-  const [on, setOn] = useState(false);
+  const [on, setOn]   = useState(false);
+  const canvasRef     = useRef<HTMLCanvasElement>(null);
+  const particles     = useRef<Particle[]>([]);
+  const rafRef        = useRef(0);
+  const hovering      = useRef(false);
+
+  const spawnBurst = (count: number) => {
+    for (let i = 0; i < count; i++) {
+      particles.current.push({
+        x:     CANVAS_W / 2 + (Math.random() - 0.5) * 90,
+        y:     CANVAS_H * 0.42,
+        vx:    (Math.random() - 0.5) * 7,
+        vy:    -Math.random() * 6 - 0.5,
+        alpha: 1,
+        color: GLITTER_COLORS[Math.floor(Math.random() * GLITTER_COLORS.length)],
+        size:  1.5 + Math.random() * 3,
+      });
+    }
+  };
+
+  const tick = () => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    if (hovering.current) spawnBurst(3);
+
+    ctx.clearRect(0, 0, CANVAS_W, CANVAS_H);
+    particles.current = particles.current.filter(p => p.alpha > 0.02);
+
+    for (const p of particles.current) {
+      p.vy    += 0.22;
+      p.x     += p.vx;
+      p.y     += p.vy;
+      p.alpha -= 0.022;
+      ctx.globalAlpha = Math.max(0, p.alpha);
+      ctx.fillStyle   = p.color;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+
+    if (particles.current.length > 0) {
+      rafRef.current = requestAnimationFrame(tick);
+    } else {
+      rafRef.current = 0;
+    }
+  };
+
+  const handleEnter = () => {
+    hovering.current = true;
+    setOn(true);
+    spawnBurst(18);
+    if (!rafRef.current) rafRef.current = requestAnimationFrame(tick);
+  };
+
+  const handleLeave = () => {
+    hovering.current = false;
+    setOn(false);
+  };
+
+  useEffect(() => () => { cancelAnimationFrame(rafRef.current); }, []);
+
   return (
-    <span
-      onMouseEnter={() => setOn(true)}
-      onMouseLeave={() => setOn(false)}
-      style={{
-        textShadow: on
-          ? '0 0 16px rgba(218,193,255,0.9), 0 0 36px rgba(154,132,188,0.55)'
-          : 'none',
-        transition: 'text-shadow 0.35s ease',
-        cursor: 'default',
-      }}
-    >
-      Magic
+    <span style={{ position: 'relative', display: 'inline-block', cursor: 'default' }}>
+      <canvas
+        ref={canvasRef}
+        width={CANVAS_W}
+        height={CANVAS_H}
+        style={{
+          position: 'absolute',
+          left: '50%',
+          top: '50%',
+          transform: 'translate(-50%, -42%)',
+          pointerEvents: 'none',
+          zIndex: 20,
+        }}
+      />
+      <span
+        onMouseEnter={handleEnter}
+        onMouseLeave={handleLeave}
+        style={{
+          textShadow: on
+            ? '0 0 16px rgba(218,193,255,0.9), 0 0 36px rgba(154,132,188,0.55)'
+            : 'none',
+          transition: 'text-shadow 0.35s ease',
+        }}
+      >
+        Magic
+      </span>
     </span>
   );
 }
