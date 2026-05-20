@@ -35,6 +35,14 @@
 }
 
 @font-face {
+  font-family: 'Solacine';
+  src: url('/fonts/Solacine Demo.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
   font-family: 'Nakone';
   src: url('/fonts/Nakone.ttf') format('truetype');
   font-weight: normal;
