@@ -28,7 +28,7 @@ function MathWord() {
       onMouseLeave={() => setOn(false)}
       style={{ position: 'relative', cursor: 'default' }}
     >
-      Math
+      Play
       <span
         aria-hidden
         style={{
