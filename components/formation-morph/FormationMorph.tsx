@@ -102,7 +102,7 @@ export default function FormationMorph() {
       const wrapper = wrapperRef.current;
       if (!overlay || !wrap || !wrapper) return;
 
-      const scrolled = -wrapper.getBoundingClientRect().top;
+      const scrolled = window.scrollY - (wrapper.offsetTop - window.innerHeight * 0.6);
 
       if (scrolled < 0) {
         overlay.style.opacity = '0';
