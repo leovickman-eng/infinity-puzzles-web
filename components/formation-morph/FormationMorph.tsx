@@ -56,30 +56,35 @@ function renderCanvas(
   images: Map<string, HTMLImageElement>,
   f1Progresses: number[],
   f2Step: number,
+  offscreen?: HTMLCanvasElement | null,
 ) {
   const ctx = canvas.getContext('2d');
   if (!ctx) return;
   ctx.clearRect(0, 0, CANVAS_W, CANVAS_H);
 
-  const removedF1 = new Set<string>();
-  for (let i = 0; i <= f2Step; i++) removedF1.add(F2_SEQ[i].remove);
+  if (offscreen) {
+    ctx.drawImage(offscreen, 0, 0);
+  } else {
+    const removedF1 = new Set<string>();
+    for (let i = 0; i <= f2Step; i++) removedF1.add(F2_SEQ[i].remove);
 
-  for (let i = 0; i < 19; i++) {
-    if (removedF1.has(F1_SRCS[i])) continue;
-    const raw = f1Progresses[i] ?? 0;
-    if (raw <= 0) continue;
-    const img = images.get(F1_SRCS[i]);
-    if (!img?.complete || !img.naturalWidth) continue;
+    for (let i = 0; i < 19; i++) {
+      if (removedF1.has(F1_SRCS[i])) continue;
+      const raw = f1Progresses[i] ?? 0;
+      if (raw <= 0) continue;
+      const img = images.get(F1_SRCS[i]);
+      if (!img?.complete || !img.naturalWidth) continue;
 
-    if (raw >= 1) {
-      ctx.drawImage(img, 0, 0, CANVAS_W, CANVAS_H);
-    } else {
-      const e    = easeOut(raw);
-      const slide = i === 0 ? SLIDE_P0 : SLIDE_PX;
-      ctx.save();
-      ctx.globalAlpha = e;
-      ctx.drawImage(img, 0, (1 - e) * slide, CANVAS_W, CANVAS_H);
-      ctx.restore();
+      if (raw >= 1) {
+        ctx.drawImage(img, 0, 0, CANVAS_W, CANVAS_H);
+      } else {
+        const e    = easeOut(raw);
+        const slide = i === 0 ? SLIDE_P0 : SLIDE_PX;
+        ctx.save();
+        ctx.globalAlpha = e;
+        ctx.drawImage(img, 0, (1 - e) * slide, CANVAS_W, CANVAS_H);
+        ctx.restore();
+      }
     }
   }
 
@@ -113,6 +118,7 @@ export default function FormationMorph() {
   const loadedRef    = useRef(false);
   const scaleRef     = useRef(1);
   const isMobileRef  = useRef(false);
+  const offscreenRef   = useRef<HTMLCanvasElement | null>(null);
   const prevF2         = useRef(-2);
   const frameSkipRef   = useRef(0);
   const [scale, setScale] = useState(1);
@@ -210,9 +216,25 @@ export default function FormationMorph() {
       frameSkipRef.current += 1;
       // On mobile, skip every other frame during F1 to reduce redraw cost
       const skipFrame = isMobileRef.current && inF1Anim && frameSkipRef.current % 2 !== 0;
+
+      // Build offscreen cache once when F1 completes
+      if (inF2 && !offscreenRef.current) {
+        const off = document.createElement('canvas');
+        off.width  = CANVAS_W;
+        off.height = CANVAS_H;
+        const offCtx = off.getContext('2d');
+        if (offCtx) {
+          for (let i = 0; i < 19; i++) {
+            const img = imagesRef.current.get(F1_SRCS[i]);
+            if (img?.complete && img.naturalWidth) offCtx.drawImage(img, 0, 0, CANVAS_W, CANVAS_H);
+          }
+        }
+        offscreenRef.current = off;
+      }
+
       if (!skipFrame && (inF1Anim || f2Changed)) {
         prevF2.current = f2Step;
-        renderCanvas(canvas, imagesRef.current, f1Progresses, f2Step);
+        renderCanvas(canvas, imagesRef.current, f1Progresses, f2Step, inF2 ? offscreenRef.current : null);
       }
 
       // Text cues
