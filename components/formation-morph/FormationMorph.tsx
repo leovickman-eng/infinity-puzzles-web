@@ -12,13 +12,13 @@ const PX_PER_F1    = 40;
 const F1_PAUSE     = 150;
 const PX_PER_F2    = 120;
 const POST_F2_HOLD = 200;
-const P0_SCROLL    = 90;  // scroll px devoted to piece 0 alone before others start
-const SLIDE_P0     = 250; // canvas-px slide distance for piece 0 (starts further below)
-const SLIDE_PX     = 80;  // canvas-px slide distance for pieces 1-18
+const P0_SCROLL    = 90;
+const SLIDE_P0     = 250;
+const SLIDE_PX     = 80;
 
-const F1_SCROLL  = P0_SCROLL + 18 * PX_PER_F1 + F1_PAUSE; // 690px
-const F2_SCROLL  = 19 * PX_PER_F2;             // 2280px
-const TOTAL_ANIM = F1_SCROLL + F2_SCROLL + POST_F2_HOLD; // 3680px
+const F1_SCROLL  = P0_SCROLL + 18 * PX_PER_F1 + F1_PAUSE;
+const F2_SCROLL  = 19 * PX_PER_F2;
+const TOTAL_ANIM = F1_SCROLL + F2_SCROLL + POST_F2_HOLD;
 
 const F1_SRCS = Array.from({ length: 19 }, (_, i) => `${BASE}/1_${i + 1}.webp`);
 
@@ -44,55 +44,9 @@ const F2_SEQ: { add: string; remove: string }[] = [
   { add: `${BASE}/2_19.webp`, remove: `${BASE}/1_1.webp`  },
 ];
 
-const ALL_SRCS = [...F1_SRCS, ...F2_SEQ.map(s => s.add)];
+const F1_IDX = new Map(F1_SRCS.map((src, i) => [src, i]));
 
-// Quadratic ease-out: slow deceleration as piece settles into place
 function easeOut(t: number) { return 1 - (1 - t) ** 2; }
-
-// f1Progresses: per-piece entrance progress [0..1] for each of 19 F1 pieces.
-// Piece 0 = seed (always 1). Pieces 1-18 each animate over one PX_PER_F1 slot.
-function renderCanvas(
-  canvas: HTMLCanvasElement,
-  images: Map<string, HTMLImageElement>,
-  f1Progresses: number[],
-  f2Step: number,
-  offscreen?: HTMLCanvasElement | null,
-) {
-  const ctx = canvas.getContext('2d');
-  if (!ctx) return;
-  ctx.clearRect(0, 0, CANVAS_W, CANVAS_H);
-
-  if (offscreen) {
-    ctx.drawImage(offscreen, 0, 0);
-  } else {
-    const removedF1 = new Set<string>();
-    for (let i = 0; i <= f2Step; i++) removedF1.add(F2_SEQ[i].remove);
-
-    for (let i = 0; i < 19; i++) {
-      if (removedF1.has(F1_SRCS[i])) continue;
-      const raw = f1Progresses[i] ?? 0;
-      if (raw <= 0) continue;
-      const img = images.get(F1_SRCS[i]);
-      if (!img?.complete || !img.naturalWidth) continue;
-
-      if (raw >= 1) {
-        ctx.drawImage(img, 0, 0, CANVAS_W, CANVAS_H);
-      } else {
-        const e    = easeOut(raw);
-        const slide = i === 0 ? SLIDE_P0 : SLIDE_PX;
-        ctx.save();
-        ctx.globalAlpha = e;
-        ctx.drawImage(img, 0, (1 - e) * slide, CANVAS_W, CANVAS_H);
-        ctx.restore();
-      }
-    }
-  }
-
-  for (let i = 0; i <= f2Step; i++) {
-    const img = images.get(F2_SEQ[i].add);
-    if (img?.complete && img.naturalWidth) ctx.drawImage(img, 0, 0, CANVAS_W, CANVAS_H);
-  }
-}
 
 function setCue(el: HTMLElement | null, visible: boolean, mobile: boolean) {
   if (!el) return;
@@ -108,23 +62,21 @@ export default function FormationMorph() {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
   const wrapRef    = useRef<HTMLDivElement>(null);
-  const canvasRef  = useRef<HTMLCanvasElement>(null);
   const cue1Ref    = useRef<HTMLDivElement>(null);
   const cue2Ref    = useRef<HTMLDivElement>(null);
   const cue3Ref    = useRef<HTMLDivElement>(null);
   const cue4Ref    = useRef<HTMLDivElement>(null);
 
-  const imagesRef    = useRef<Map<string, HTMLImageElement>>(new Map());
-  const loadedRef    = useRef(false);
+  const f1ImgRefs = useRef<(HTMLImageElement | null)[]>(Array(19).fill(null));
+  const f2ImgRefs = useRef<(HTMLImageElement | null)[]>(Array(19).fill(null));
+
   const scaleRef     = useRef(1);
   const isMobileRef  = useRef(false);
-  const offscreenRef   = useRef<HTMLCanvasElement | null>(null);
-  const prevF2         = useRef(-2);
-  const frameSkipRef   = useRef(0);
+  const prevF2       = useRef(-2);
+  const frameSkipRef = useRef(0);
   const [scale, setScale] = useState(1);
   const [isMobile, setIsMobile] = useState(false);
 
-  // Responsive scale
   useEffect(() => {
     const compute = () => {
       const mobile = window.innerWidth < BREAKPOINT;
@@ -141,48 +93,18 @@ export default function FormationMorph() {
     return () => window.removeEventListener('resize', compute);
   }, []);
 
-  // Preload all images, then prime canvas with seed piece only
-  useEffect(() => {
-    let cancelled = false;
-    const map = new Map<string, HTMLImageElement>();
-    let loaded = 0;
-    const check = () => {
-      loaded++;
-      if (loaded < ALL_SRCS.length || cancelled) return;
-      imagesRef.current = map;
-      loadedRef.current = true;
-      const canvas = canvasRef.current;
-      if (canvas) {
-        const initProgress = F1_SRCS.map(() => 0);
-        renderCanvas(canvas, map, initProgress, -1);
-        prevF2.current = -1;
-      }
-      window.dispatchEvent(new Event('scroll'));
-    };
-    ALL_SRCS.forEach(src => {
-      const img = new Image();
-      img.onload = check;
-      img.onerror = check;
-      img.src = src;
-      map.set(src, img);
-    });
-    return () => { cancelled = true; };
-  }, []);
-
-  // Scroll-driven update
   useEffect(() => {
     let raf = 0;
 
     const update = () => {
-      const canvas  = canvasRef.current;
       const overlay = overlayRef.current;
       const wrap    = wrapRef.current;
       const wrapper = wrapperRef.current;
-      if (!canvas || !overlay || !wrap || !wrapper) return;
+      if (!overlay || !wrap || !wrapper) return;
 
       const scrolled = -wrapper.getBoundingClientRect().top;
 
-      if (scrolled < 0 || !loadedRef.current) {
+      if (scrolled < 0) {
         overlay.style.opacity = '0';
         return;
       }
@@ -191,16 +113,12 @@ export default function FormationMorph() {
 
       const inF2 = scrolled >= F1_SCROLL;
 
-      // Per-piece entrance progress for F1:
-      // Piece 0 gets P0_SCROLL px of scroll all to itself (longer slide, starts further below).
-      // Pieces 1-18 each animate over one PX_PER_F1 slot, starting only after piece 0 settles.
       const f1Progresses = F1_SRCS.map((_, i) => {
         if (i === 0) return Math.min(1, Math.max(0, scrolled / P0_SCROLL));
         const start = P0_SCROLL + (i - 1) * PX_PER_F1;
         return Math.min(1, Math.max(0, (scrolled - start) / PX_PER_F1));
       });
 
-      // F2 phase
       let f2Step = -1, f2Progress = 0;
       if (inF2) {
         f2Progress = Math.min(1, (scrolled - F1_SCROLL) / F2_SCROLL);
@@ -217,27 +135,38 @@ export default function FormationMorph() {
       if (f2Changed) frameSkipRef.current = 0;
       const skipFrame = isMobileRef.current && frameSkipRef.current % 2 !== 0;
 
-      // Build offscreen cache once when F1 completes
-      if (inF2 && !offscreenRef.current) {
-        const off = document.createElement('canvas');
-        off.width  = CANVAS_W;
-        off.height = CANVAS_H;
-        const offCtx = off.getContext('2d');
-        if (offCtx) {
+      if (!skipFrame) {
+        if (inF1Anim) {
           for (let i = 0; i < 19; i++) {
-            const img = imagesRef.current.get(F1_SRCS[i]);
-            if (img?.complete && img.naturalWidth) offCtx.drawImage(img, 0, 0, CANVAS_W, CANVAS_H);
+            const el = f1ImgRefs.current[i];
+            if (!el) continue;
+            const raw   = f1Progresses[i] ?? 0;
+            const e     = easeOut(Math.max(0, Math.min(1, raw)));
+            const slide = i === 0 ? SLIDE_P0 : SLIDE_PX;
+            el.style.opacity   = raw <= 0 ? '0' : String(e);
+            el.style.transform = raw >= 1 ? 'translateY(0px)' : `translateY(${(1 - e) * slide}px)`;
           }
         }
-        offscreenRef.current = off;
+
+        if (f2Changed) {
+          prevF2.current = f2Step;
+          for (let i = 0; i < 19; i++) {
+            const done  = i <= f2Step;
+            const f2Img = f2ImgRefs.current[i];
+            if (f2Img) f2Img.style.opacity = done ? '1' : '0';
+
+            const removeIdx = F1_IDX.get(F2_SEQ[i].remove);
+            if (removeIdx !== undefined) {
+              const f1El = f1ImgRefs.current[removeIdx];
+              if (f1El) {
+                f1El.style.transition = done ? 'opacity 0.3s ease' : '';
+                f1El.style.opacity    = done ? '0' : '1';
+              }
+            }
+          }
+        }
       }
 
-      if (!skipFrame && (inF1Anim || f2Changed)) {
-        prevF2.current = f2Step;
-        renderCanvas(canvas, imagesRef.current, f1Progresses, f2Step, inF2 ? offscreenRef.current : null);
-      }
-
-      // Text cues
       const mob = isMobileRef.current;
       if (!inF2) {
         const p = scrolled / F1_SCROLL;
@@ -286,6 +215,17 @@ export default function FormationMorph() {
     lineHeight: 1.45,
   };
 
+  const imgBase: React.CSSProperties = {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    display: 'block',
+    opacity: 0,
+    pointerEvents: 'none',
+  };
+
   return (
     <div ref={wrapperRef} style={{ height: `calc(100svh + ${TOTAL_ANIM}px)` }}>
       <div
@@ -303,13 +243,39 @@ export default function FormationMorph() {
           zIndex: 5,
         }}
       >
-        <div ref={wrapRef} style={{ flexShrink: 0, willChange: 'transform' }}>
-          <canvas
-            ref={canvasRef}
-            width={CANVAS_W}
-            height={CANVAS_H}
-            style={{ display: 'block', width: CANVAS_W * scale, height: CANVAS_H * scale }}
-          />
+        <div
+          ref={wrapRef}
+          style={{
+            flexShrink: 0,
+            willChange: 'transform',
+            position: 'relative',
+            width: CANVAS_W * scale,
+            height: CANVAS_H * scale,
+          }}
+        >
+          {F1_SRCS.map((src, i) => (
+            <img
+              key={src}
+              ref={el => { f1ImgRefs.current[i] = el; }}
+              src={src}
+              alt=""
+              draggable={false}
+              style={{
+                ...imgBase,
+                transform: `translateY(${i === 0 ? SLIDE_P0 : SLIDE_PX}px)`,
+              }}
+            />
+          ))}
+          {F2_SEQ.map(({ add }, i) => (
+            <img
+              key={add}
+              ref={el => { f2ImgRefs.current[i] = el; }}
+              src={add}
+              alt=""
+              draggable={false}
+              style={{ ...imgBase, transition: 'opacity 0.3s ease' }}
+            />
+          ))}
         </div>
 
         <div ref={cue1Ref} style={cueStyle}><span style={cueText}>{t('f1Start')}</span></div>
