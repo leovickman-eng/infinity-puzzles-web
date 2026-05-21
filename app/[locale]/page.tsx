@@ -40,10 +40,10 @@ export default function HomePage() {
                 {t('physical.title')} <br />
                 <span className="text-foreground/40">{t('physical.subtitle')}</span>
               </h2>
-              <p className="font-body text-lg text-foreground/60 leading-relaxed max-w-md">
+              <p className="font-body text-lg text-foreground/75 leading-relaxed max-w-md">
                 {t('physical.description')}
               </p>
-              <p className="font-body text-base text-foreground/50 leading-relaxed max-w-md mt-4 whitespace-pre-line">
+              <p className="font-body text-base text-foreground/75 leading-relaxed max-w-md mt-4 whitespace-pre-line">
                 {t('physical.body')}
               </p>
             </div>
@@ -105,7 +105,7 @@ export default function HomePage() {
             <h2 className="font-display text-4xl md:text-5xl font-bold text-foreground text-balance">
               {t('characters.title')}
             </h2>
-            <p className="font-body text-lg text-foreground/50 mt-4 max-w-xl mx-auto">
+            <p className="font-body text-lg text-foreground/75 mt-4 max-w-xl mx-auto">
               {t('characters.subtitle')}
             </p>
           </div>
