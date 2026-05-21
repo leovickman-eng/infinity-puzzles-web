@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { useTranslations } from 'next-intl';
 
 const CANVAS_W   = 550;
 const CANVAS_H   = 1265;
@@ -48,24 +47,10 @@ const F1_IDX = new Map(F1_SRCS.map((src, i) => [src, i]));
 
 function easeOut(t: number) { return 1 - (1 - t) ** 2; }
 
-function setCue(el: HTMLElement | null, visible: boolean, mobile: boolean) {
-  if (!el) return;
-  el.style.opacity   = visible ? '1' : '0';
-  el.style.transform = mobile
-    ? visible ? 'translateX(-50%)'           : 'translateX(-50%) translateY(36px)'
-    : visible ? 'translate(-50%, -50%)'      : 'translate(-50%, calc(-50% + 36px))';
-}
-
 export default function FormationMorph() {
-  const t = useTranslations('formationCues');
-
   const wrapperRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
   const wrapRef    = useRef<HTMLDivElement>(null);
-  const cue1Ref    = useRef<HTMLDivElement>(null);
-  const cue2Ref    = useRef<HTMLDivElement>(null);
-  const cue3Ref    = useRef<HTMLDivElement>(null);
-  const cue4Ref    = useRef<HTMLDivElement>(null);
 
   const f1ImgRefs = useRef<(HTMLImageElement | null)[]>(Array(19).fill(null));
   const f2ImgRefs = useRef<(HTMLImageElement | null)[]>(Array(19).fill(null));
@@ -77,7 +62,6 @@ export default function FormationMorph() {
   const frameSkipRef    = useRef(0);
   const prevTranslateY  = useRef<number | null>(null);
   const [scale, setScale] = useState(1);
-  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     const compute = () => {
@@ -89,7 +73,6 @@ export default function FormationMorph() {
       isMobileRef.current    = mobile;
       innerHeightRef.current = window.innerHeight;
       setScale(s);
-      setIsMobile(mobile);
     };
     compute();
     window.addEventListener('resize', compute);
@@ -180,20 +163,6 @@ export default function FormationMorph() {
           }
         }
       }
-
-      const mob = isMobileRef.current;
-      if (!inF2) {
-        const p = scrolled / F1_SCROLL;
-        setCue(cue1Ref.current, p > 0.04 && p < 0.44, mob);
-        setCue(cue2Ref.current, p > 0.63 && p < 0.97, mob);
-        setCue(cue3Ref.current, false, mob);
-        setCue(cue4Ref.current, false, mob);
-      } else {
-        setCue(cue1Ref.current, false, mob);
-        setCue(cue2Ref.current, false, mob);
-        setCue(cue3Ref.current, f2Progress > 0.04 && f2Progress < 0.44, mob);
-        setCue(cue4Ref.current, f2Progress > 0.63 && f2Progress < 0.97, mob);
-      }
     };
 
     const onScroll = () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(update); };
@@ -201,33 +170,6 @@ export default function FormationMorph() {
     raf = requestAnimationFrame(update);
     return () => { window.removeEventListener('scroll', onScroll); cancelAnimationFrame(raf); };
   }, []);
-
-  const cueStyle: React.CSSProperties = {
-    position: 'absolute',
-    left: '50%',
-    ...(isMobile
-      ? { bottom: '80px',  transform: 'translateX(-50%) translateY(36px)' }
-      : { top: '50%',      transform: 'translate(-50%, calc(-50% + 36px))' }
-    ),
-    maxWidth: 'min(320px, 80vw)',
-    textAlign: 'center',
-    zIndex: 10,
-    opacity: 0,
-    transition: 'opacity 0.6s ease, transform 0.6s ease',
-    pointerEvents: 'none',
-    background: 'rgba(255,251,245,0.7)',
-    backdropFilter: 'blur(6px)',
-    WebkitBackdropFilter: 'blur(6px)',
-    padding: '12px 24px',
-    borderRadius: '8px',
-  };
-
-  const cueText: React.CSSProperties = {
-    fontFamily: 'Nakone, Georgia, serif',
-    fontSize: 'clamp(1.2rem, 2vw, 1.5rem)',
-    color: '#4a464b',
-    lineHeight: 1.45,
-  };
 
   const imgBase: React.CSSProperties = {
     position: 'absolute',
@@ -291,11 +233,6 @@ export default function FormationMorph() {
             />
           ))}
         </div>
-
-        <div ref={cue1Ref} style={cueStyle}><span style={cueText}>{t('f1Start')}</span></div>
-        <div ref={cue2Ref} style={cueStyle}><span style={cueText}>{t('f1End')}</span></div>
-        <div ref={cue3Ref} style={cueStyle}><span style={cueText}>{t('f2Start')}</span></div>
-        <div ref={cue4Ref} style={cueStyle}><span style={cueText}>{t('f2End')}</span></div>
       </div>
     </div>
   );

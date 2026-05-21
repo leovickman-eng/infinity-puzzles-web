@@ -13,12 +13,6 @@
     "tagline": "Varje formation berättar en annan historia.",
     "scrollHint": "Scrolla för att utforska"
   },
-  "formationCues": {
-    "f1Start": "Varje pusselbit är en karaktär",
-    "f1End": "Lägg ihop pusslet en efter en",
-    "f2Start": "Det blir olika varje gång",
-    "f2End": "Sedan kan du flytta pusselbitar åt alla håll"
-  },
   "physical": {
     "title": "Tillverkat i trä.",
     "subtitle": "Håll det i dina händer.",

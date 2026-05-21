@@ -13,12 +13,6 @@
     "tagline": "Every formation tells a different story.",
     "scrollHint": "Scroll to explore"
   },
-  "formationCues": {
-    "f1Start": "Every puzzle piece is a character",
-    "f1End": "Assemble the puzzle piece by piece",
-    "f2Start": "It's different every time",
-    "f2End": "Move the pieces in any direction"
-  },
   "physical": {
     "title": "Crafted in Wood.",
     "subtitle": "Held in your hands.",
