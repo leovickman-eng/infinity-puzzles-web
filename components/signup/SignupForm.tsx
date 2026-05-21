@@ -302,7 +302,7 @@ export default function SignupForm() {
   const curPieceTop = isMobile ? PIECE_TOP_SM         : PIECE_TOP;
 
   return (
-    <div className="min-h-screen bg-background flex flex-col items-center pt-10 md:pt-20 pb-6">
+    <div data-page="signup" className="min-h-screen bg-background flex flex-col items-center pt-10 md:pt-20 pb-6">
 
       {/* Lottie — fullscreen background */}
       <div
@@ -337,7 +337,7 @@ export default function SignupForm() {
               fontFamily: 'var(--font-trykker)',
               fontSize: '1.1rem',
               fontWeight: 700,
-              color: snapped ? '#16a34a' : 'rgba(28,25,23,0.38)',
+              color: snapped ? '#16a34a' : '#ae84ea',
             }}
           >
             {snapped ? "✓ Unlocked — you're in" : 'Slide the purple piece into place to unlock'}

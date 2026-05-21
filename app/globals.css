@@ -48,6 +48,11 @@
   }
 }
 
+body:has([data-page='signup']) header,
+body:has([data-page='signup']) footer {
+  display: none;
+}
+
 /* Mobile portrait: rotate test.json 90° to fill the screen */
 @media (max-width: 768px) and (orientation: portrait) {
   .lottie-idle-layer {
