@@ -43,6 +43,9 @@ export default function HomePage() {
               <p className="font-body text-lg text-foreground/60 leading-relaxed max-w-md">
                 {t('physical.description')}
               </p>
+              <p className="font-body text-base text-foreground/50 leading-relaxed max-w-md mt-4 whitespace-pre-line">
+                {t('physical.body')}
+              </p>
             </div>
 
             {/* Image grid */}
