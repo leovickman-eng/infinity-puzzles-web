@@ -70,10 +70,12 @@ export default function FormationMorph() {
   const f1ImgRefs = useRef<(HTMLImageElement | null)[]>(Array(19).fill(null));
   const f2ImgRefs = useRef<(HTMLImageElement | null)[]>(Array(19).fill(null));
 
-  const scaleRef     = useRef(1);
-  const isMobileRef  = useRef(false);
-  const prevF2       = useRef(-2);
-  const frameSkipRef = useRef(0);
+  const scaleRef        = useRef(1);
+  const isMobileRef     = useRef(false);
+  const innerHeightRef  = useRef(0);
+  const prevF2          = useRef(-2);
+  const frameSkipRef    = useRef(0);
+  const prevTranslateY  = useRef<number | null>(null);
   const [scale, setScale] = useState(1);
   const [isMobile, setIsMobile] = useState(false);
 
@@ -83,8 +85,9 @@ export default function FormationMorph() {
       const s = mobile
         ? Math.min((window.innerWidth * 0.9) / CANVAS_W, 1)
         : Math.min(window.innerWidth / CANVAS_W * 2, window.innerHeight / CANVAS_H * 1.5, 3);
-      scaleRef.current    = s;
-      isMobileRef.current = mobile;
+      scaleRef.current       = s;
+      isMobileRef.current    = mobile;
+      innerHeightRef.current = window.innerHeight;
       setScale(s);
       setIsMobile(mobile);
     };
@@ -125,15 +128,26 @@ export default function FormationMorph() {
         f2Step     = Math.min(18, Math.floor(f2Progress * 19));
       }
 
-      wrap.style.transform = inF2
-        ? `translateY(${f2Progress * (window.innerHeight - 280 - CANVAS_H * scaleRef.current)}px)`
-        : 'translateY(0)';
+      if (inF2) {
+        const ty = f2Progress * (innerHeightRef.current - 280 - CANVAS_H * scaleRef.current);
+        if (prevTranslateY.current === null || Math.abs(ty - prevTranslateY.current) >= 1) {
+          wrap.style.transform = `translateY(${ty}px)`;
+          prevTranslateY.current = ty;
+        }
+      } else {
+        if (prevTranslateY.current !== 0) {
+          wrap.style.transform = 'translateY(0)';
+          prevTranslateY.current = 0;
+        }
+      }
 
       const inF1Anim  = !inF2;
       const f2Changed = f2Step !== prevF2.current;
       frameSkipRef.current += 1;
       if (f2Changed) frameSkipRef.current = 0;
-      const skipFrame = isMobileRef.current && frameSkipRef.current % 2 !== 0;
+      const skipFrame = isMobileRef.current && (
+        inF2 ? frameSkipRef.current % 3 !== 0 : frameSkipRef.current % 2 !== 0
+      );
 
       if (!skipFrame) {
         if (inF1Anim) {
