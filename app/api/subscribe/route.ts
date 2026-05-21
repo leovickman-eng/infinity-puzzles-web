@@ -1,55 +1,89 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from "next/server";
 
-const KLAVIYO_PRIVATE_KEY = process.env.KLAVIYO_PRIVATE_KEY ?? '';
-const KLAVIYO_LIST_ID = process.env.KLAVIYO_LIST_ID ?? 'LIST_ID_PLACEHOLDER';
+const CUSTOMER_CREATE = `
+  mutation customerCreate($email: String!) {
+    customerCreate(input: { email: $email }) {
+      customer {
+        id
+        email
+      }
+      userErrors {
+        field
+        message
+      }
+    }
+  }
+`;
+
+async function fetchAccessToken(): Promise<string> {
+  const res = await fetch(
+    "https://infinity-puzzle-2.myshopify.com/admin/oauth/access_token",
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        client_id: process.env.SHOPIFY_CLIENT_ID,
+        client_secret: process.env.SHOPIFY_CLIENT_SECRET,
+        grant_type: "client_credentials",
+      }),
+    }
+  );
+  if (!res.ok) {
+    throw new Error(`Token fetch failed: ${res.status}`);
+  }
+  const data = await res.json();
+  return data.access_token as string;
+}
 
 export async function POST(req: NextRequest) {
   const body = await req.json().catch(() => null);
   const email = body?.email;
 
-  if (!email || typeof email !== 'string') {
-    return NextResponse.json({ error: 'Email required' }, { status: 400 });
+  if (!email || typeof email !== "string") {
+    return NextResponse.json({ error: "Email required" }, { status: 400 });
   }
 
-  if (!KLAVIYO_PRIVATE_KEY) {
-    return NextResponse.json({ error: 'API key not configured' }, { status: 500 });
+  const domain = process.env.SHOPIFY_STORE_DOMAIN;
+  if (!domain || !process.env.SHOPIFY_CLIENT_ID || !process.env.SHOPIFY_CLIENT_SECRET) {
+    return NextResponse.json({ error: "Server misconfiguration" }, { status: 500 });
   }
 
-  const res = await fetch('https://a.klaviyo.com/api/profile-subscription-bulk-create-jobs/', {
-    method: 'POST',
+  let token: string;
+  try {
+    token = await fetchAccessToken();
+  } catch (err) {
+    console.error("Shopify token error:", err);
+    return NextResponse.json({ error: "Subscription failed" }, { status: 500 });
+  }
+
+  const res = await fetch(`https://${domain}/admin/api/2026-04/graphql.json`, {
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Klaviyo-API-Key ${KLAVIYO_PRIVATE_KEY}`,
-      'revision': '2024-02-15',
+      "Content-Type": "application/json",
+      "X-Shopify-Access-Token": token,
     },
-    body: JSON.stringify({
-      data: {
-        type: 'profile-subscription-bulk-create-job',
-        attributes: {
-          profiles: {
-            data: [{
-              type: 'profile',
-              attributes: {
-                email,
-                subscriptions: {
-                  email: { marketing: { consent: 'SUBSCRIBED' } },
-                },
-              },
-            }],
-          },
-        },
-        relationships: {
-          list: { data: { type: 'list', id: KLAVIYO_LIST_ID } },
-        },
-      },
-    }),
+    body: JSON.stringify({ query: CUSTOMER_CREATE, variables: { email } }),
   });
 
   if (!res.ok) {
-    const text = await res.text();
-    console.error('Klaviyo error:', text);
-    return NextResponse.json({ error: 'Subscription failed' }, { status: 500 });
+    console.error("Shopify subscribe HTTP error:", res.status);
+    return NextResponse.json({ error: "Subscription failed" }, { status: 500 });
   }
 
-  return NextResponse.json({ success: true });
+  const data = await res.json();
+  const errors = data?.data?.customerCreate?.userErrors as
+    | { field: string; message: string }[]
+    | undefined;
+
+  if (!errors || errors.length === 0) {
+    return NextResponse.json({ success: true });
+  }
+
+  // Email already taken — treat as success
+  if (errors.some((e) => e.message.toLowerCase().includes("taken"))) {
+    return NextResponse.json({ success: true });
+  }
+
+  console.error("Shopify subscribe userErrors:", JSON.stringify(errors));
+  return NextResponse.json({ error: "Subscription failed" }, { status: 500 });
 }

@@ -52,7 +52,7 @@ export default function LottieScrollSection({
       ref={sectionRef}
       id="lottie-s1"
       className="relative flex justify-center items-center"
-      style={{ height: '100svh', marginBottom: '-50svh' }}
+      style={{ height: '100svh', marginBottom: '-50svh', overflow: 'hidden' }}
     >
       <div
         ref={idleRef}

@@ -17,7 +17,7 @@ export default function CharacterCarousel() {
   const go = (delta: number) => setCurrent(c => mod(c + delta, N));
 
   return (
-    <div>
+    <div style={{ overflow: 'hidden' }}>
       <div style={{ perspective: '1200px', position: 'relative', height: '300px', overflow: 'hidden' }}>
         {CHARS.map((char, idx) => {
           let offset = idx - current;
