@@ -4,34 +4,47 @@ import { useEffect, useRef, useState, useCallback } from 'react';
 import lottie from 'lottie-web';
 import { gsap } from 'gsap';
 
-// ── Geometry ────────────────────────────────────────────────────────────────
-// Piece A (fixed, left):  body 0-150, knob protrudes RIGHT 150-180
-// Piece B (draggable, right): socket carved-in on LEFT 0-30, body 30-180
-//
-// At snap: B_left = A_left + 150 (BODY)
-//   A's knob (absolute x 150-172) fills B's socket (same absolute x range)
-//   Both SVG viewBoxes are 180×120 — shapes are exact mirror images
-// ────────────────────────────────────────────────────────────────────────────
-const PIECE_H = 120;
-const BODY = 150;
-const KNOB = 30;
-const A_W = BODY + KNOB;   // 180
-const B_W = KNOB + BODY;   // 180
+// ── Desktop geometry ──────────────────────────────────────────────────────────
+const PIECE_H          = 120;
+const BODY             = 150;
+const KNOB             = 30;
+const A_W              = BODY + KNOB;   // 180
+const B_W              = KNOB + BODY;   // 180
 const CONTAINER_HEIGHT = 240;
-const PIECE_TOP = Math.round((CONTAINER_HEIGHT - PIECE_H) / 2);
+const PIECE_TOP        = Math.round((CONTAINER_HEIGHT - PIECE_H) / 2);
+const DRAG_GAP         = 110;
+
+// ── Mobile geometry ───────────────────────────────────────────────────────────
+const PIECE_H_SM          = 80;
+const BODY_SM             = 100;
+const KNOB_SM             = 20;
+const A_W_SM              = BODY_SM + KNOB_SM;   // 120
+const B_W_SM              = KNOB_SM + BODY_SM;   // 120
+const CONTAINER_HEIGHT_SM = 160;
+const PIECE_TOP_SM        = Math.round((CONTAINER_HEIGHT_SM - PIECE_H_SM) / 2);
+const DRAG_GAP_SM         = 75;
+
 const SNAP_THRESHOLD = 15;
-const DRAG_GAP = 110; // B starts this far right of snap
+const STAR_COLORS    = ['#faef85', '#57d494', '#dac1ff', '#9b84bc'];
 
-// Cubic bezier knob: peaks at ~x=172 (22px beyond body at midpoint)
-const PATH_A = `M 0,0 L ${BODY},0 L ${BODY},${(PIECE_H - KNOB) / 2} C ${A_W},${(PIECE_H - KNOB) / 2} ${A_W},${(PIECE_H + KNOB) / 2} ${BODY},${(PIECE_H + KNOB) / 2} L ${BODY},${PIECE_H} L 0,${PIECE_H} Z`;
-const PATH_B = `M 0,0 L ${B_W},0 L ${B_W},${PIECE_H} L 0,${PIECE_H} L 0,${(PIECE_H + KNOB) / 2} C ${KNOB},${(PIECE_H + KNOB) / 2} ${KNOB},${(PIECE_H - KNOB) / 2} 0,${(PIECE_H - KNOB) / 2} L 0,0 Z`;
+// ── Parametric path functions ─────────────────────────────────────────────────
+function makePathA(body: number, knob: number, pieceH: number): string {
+  const aw = body + knob;
+  return `M 0,0 L ${body},0 L ${body},${(pieceH - knob) / 2} C ${aw},${(pieceH - knob) / 2} ${aw},${(pieceH + knob) / 2} ${body},${(pieceH + knob) / 2} L ${body},${pieceH} L 0,${pieceH} Z`;
+}
 
-const STAR_COLORS = ['#faef85', '#57d494', '#dac1ff', '#9b84bc'];
+function makePathB(knob: number, pieceH: number, bw: number): string {
+  return `M 0,0 L ${bw},0 L ${bw},${pieceH} L 0,${pieceH} L 0,${(pieceH + knob) / 2} C ${knob},${(pieceH + knob) / 2} ${knob},${(pieceH - knob) / 2} 0,${(pieceH - knob) / 2} L 0,0 Z`;
+}
 
-// ── SVG piece components ─────────────────────────────────────────────────────
-function PuzzleA() {
+// ── SVG piece components ──────────────────────────────────────────────────────
+function PuzzleA({ body, knob, pieceH }: { body: number; knob: number; pieceH: number }) {
+  const aw   = body + knob;
+  const path = makePathA(body, knob, pieceH);
+  const sx   = body / 150;
+  const sy   = pieceH / 120;
   return (
-    <svg width={A_W} height={PIECE_H} viewBox={`0 0 ${A_W} ${PIECE_H}`} style={{ display: 'block', overflow: 'visible' }}>
+    <svg width={aw} height={pieceH} viewBox={`0 0 ${aw} ${pieceH}`} style={{ display: 'block', overflow: 'visible' }}>
       <defs>
         <linearGradient id="sg-gradA" x1="0%" y1="0%" x2="100%" y2="100%">
           <stop offset="0%" stopColor="#57d494" />
@@ -41,28 +54,29 @@ function PuzzleA() {
           <feDropShadow dx="0" dy="3" stdDeviation="5" floodColor="#57d494" floodOpacity="0.55" />
         </filter>
       </defs>
-      <path d={PATH_A} fill="url(#sg-gradA)" filter="url(#sg-glowA)" />
-      {/* Overlay shine */}
-      <path d={PATH_A} fill="none" stroke="rgba(255,255,255,0.45)" strokeWidth="1.5" />
-      {/* Inner decorative circles */}
-      <circle cx="70" cy="60" r="22" fill="rgba(255,255,255,0.12)" />
-      <circle cx="70" cy="60" r="10" fill="rgba(255,255,255,0.22)" />
-      <circle cx="25" cy="25" r="7" fill="rgba(255,255,255,0.13)" />
-      <circle cx="25" cy="95" r="7" fill="rgba(255,255,255,0.13)" />
-      <circle cx="125" cy="25" r="5" fill="rgba(255,255,255,0.1)" />
-      <circle cx="125" cy="95" r="5" fill="rgba(255,255,255,0.1)" />
-      {/* Star sparks */}
-      <text x="70" y="66" fontSize="14" textAnchor="middle" dominantBaseline="middle" fill="rgba(255,255,255,0.55)" style={{ userSelect: 'none' }}>✦</text>
-      <text x="115" y="40" fontSize="9" textAnchor="middle" fill="rgba(255,255,255,0.35)" style={{ userSelect: 'none' }}>✦</text>
-      <text x="115" y="85" fontSize="9" textAnchor="middle" fill="rgba(255,255,255,0.35)" style={{ userSelect: 'none' }}>✦</text>
-      <text x="30" y="62" fontSize="8" textAnchor="middle" fill="rgba(255,255,255,0.25)" style={{ userSelect: 'none' }}>★</text>
+      <path d={path} fill="url(#sg-gradA)" filter="url(#sg-glowA)" />
+      <path d={path} fill="none" stroke="rgba(255,255,255,0.45)" strokeWidth="1.5" />
+      <circle cx={70 * sx} cy={pieceH / 2} r={22 * sx} fill="rgba(255,255,255,0.12)" />
+      <circle cx={70 * sx} cy={pieceH / 2} r={10 * sx} fill="rgba(255,255,255,0.22)" />
+      <circle cx={25 * sx} cy={25 * sy} r={7 * sx} fill="rgba(255,255,255,0.13)" />
+      <circle cx={25 * sx} cy={95 * sy} r={7 * sx} fill="rgba(255,255,255,0.13)" />
+      <circle cx={125 * sx} cy={25 * sy} r={5 * sx} fill="rgba(255,255,255,0.1)" />
+      <circle cx={125 * sx} cy={95 * sy} r={5 * sx} fill="rgba(255,255,255,0.1)" />
+      <text x={70 * sx} y={66 * sy} fontSize={Math.round(14 * sx)} textAnchor="middle" dominantBaseline="middle" fill="rgba(255,255,255,0.55)" style={{ userSelect: 'none' }}>✦</text>
+      <text x={115 * sx} y={40 * sy} fontSize={Math.round(9 * sx)} textAnchor="middle" fill="rgba(255,255,255,0.35)" style={{ userSelect: 'none' }}>✦</text>
+      <text x={115 * sx} y={85 * sy} fontSize={Math.round(9 * sx)} textAnchor="middle" fill="rgba(255,255,255,0.35)" style={{ userSelect: 'none' }}>✦</text>
+      <text x={30 * sx} y={62 * sy} fontSize={Math.round(8 * sx)} textAnchor="middle" fill="rgba(255,255,255,0.25)" style={{ userSelect: 'none' }}>★</text>
     </svg>
   );
 }
 
-function PuzzleB({ snapped }: { snapped: boolean }) {
+function PuzzleB({ body, knob, pieceH, snapped }: { body: number; knob: number; pieceH: number; snapped: boolean }) {
+  const bw   = knob + body;
+  const path = makePathB(knob, pieceH, bw);
+  const sw   = bw / 180;
+  const sy   = pieceH / 120;
   return (
-    <svg width={B_W} height={PIECE_H} viewBox={`0 0 ${B_W} ${PIECE_H}`} style={{ display: 'block', overflow: 'visible' }}>
+    <svg width={bw} height={pieceH} viewBox={`0 0 ${bw} ${pieceH}`} style={{ display: 'block', overflow: 'visible' }}>
       <defs>
         <linearGradient id="sg-gradB" x1="100%" y1="0%" x2="0%" y2="100%">
           <stop offset="0%" stopColor="#b790ec" />
@@ -73,48 +87,68 @@ function PuzzleB({ snapped }: { snapped: boolean }) {
             floodColor={snapped ? '#b790ec' : '#9060d8'} floodOpacity={snapped ? 0.9 : 0.55} />
         </filter>
       </defs>
-      <path d={PATH_B} fill="url(#sg-gradB)" filter="url(#sg-glowB)" />
-      <path d={PATH_B} fill="none" stroke="rgba(255,255,255,0.45)" strokeWidth="1.5" />
-      <circle cx="110" cy="60" r="22" fill="rgba(255,255,255,0.12)" />
-      <circle cx="110" cy="60" r="10" fill="rgba(255,255,255,0.22)" />
-      <circle cx="155" cy="25" r="7" fill="rgba(255,255,255,0.13)" />
-      <circle cx="155" cy="95" r="7" fill="rgba(255,255,255,0.13)" />
-      <circle cx="60" cy="25" r="5" fill="rgba(255,255,255,0.1)" />
-      <circle cx="60" cy="95" r="5" fill="rgba(255,255,255,0.1)" />
-      <text x="110" y="66" fontSize="14" textAnchor="middle" dominantBaseline="middle" fill="rgba(255,255,255,0.55)" style={{ userSelect: 'none' }}>✦</text>
-      <text x="65" y="40" fontSize="9" textAnchor="middle" fill="rgba(255,255,255,0.35)" style={{ userSelect: 'none' }}>✦</text>
-      <text x="65" y="85" fontSize="9" textAnchor="middle" fill="rgba(255,255,255,0.35)" style={{ userSelect: 'none' }}>✦</text>
-      <text x="150" y="62" fontSize="8" textAnchor="middle" fill="rgba(255,255,255,0.25)" style={{ userSelect: 'none' }}>★</text>
+      <path d={path} fill="url(#sg-gradB)" filter="url(#sg-glowB)" />
+      <path d={path} fill="none" stroke="rgba(255,255,255,0.45)" strokeWidth="1.5" />
+      <circle cx={110 * sw} cy={pieceH / 2} r={22 * sw} fill="rgba(255,255,255,0.12)" />
+      <circle cx={110 * sw} cy={pieceH / 2} r={10 * sw} fill="rgba(255,255,255,0.22)" />
+      <circle cx={155 * sw} cy={25 * sy} r={7 * sw} fill="rgba(255,255,255,0.13)" />
+      <circle cx={155 * sw} cy={95 * sy} r={7 * sw} fill="rgba(255,255,255,0.13)" />
+      <circle cx={60 * sw} cy={25 * sy} r={5 * sw} fill="rgba(255,255,255,0.1)" />
+      <circle cx={60 * sw} cy={95 * sy} r={5 * sw} fill="rgba(255,255,255,0.1)" />
+      <text x={110 * sw} y={66 * sy} fontSize={Math.round(14 * sw)} textAnchor="middle" dominantBaseline="middle" fill="rgba(255,255,255,0.55)" style={{ userSelect: 'none' }}>✦</text>
+      <text x={65 * sw} y={40 * sy} fontSize={Math.round(9 * sw)} textAnchor="middle" fill="rgba(255,255,255,0.35)" style={{ userSelect: 'none' }}>✦</text>
+      <text x={65 * sw} y={85 * sy} fontSize={Math.round(9 * sw)} textAnchor="middle" fill="rgba(255,255,255,0.35)" style={{ userSelect: 'none' }}>✦</text>
+      <text x={150 * sw} y={62 * sy} fontSize={Math.round(8 * sw)} textAnchor="middle" fill="rgba(255,255,255,0.25)" style={{ userSelect: 'none' }}>★</text>
     </svg>
   );
 }
 
-// ── Main component ───────────────────────────────────────────────────────────
+// ── Main component ────────────────────────────────────────────────────────────
 export default function SignupForm() {
-  const lottieRef = useRef<HTMLDivElement>(null);
+  const lottieRef    = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const dragging = useRef(false);
-  const dragOffsetX = useRef(0);
-  const xRef = useRef(0);
-  const snapXRef = useRef(0);
+  const dragging     = useRef(false);
+  const dragOffsetX  = useRef(0);
+  const xRef         = useRef(0);
+  const snapXRef     = useRef(0);
+  const isMobileRef  = useRef(false);
 
-  const [aLeft, setALeft] = useState(0);
-  const [dragX, setDragX] = useState(0);
-  const [snapped, setSnapped] = useState(false);
-  const [email, setEmail] = useState('');
-  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [aLeft, setALeft]       = useState(0);
+  const [dragX, setDragX]       = useState(0);
+  const [snapped, setSnapped]   = useState(false);
+  const [email, setEmail]       = useState('');
+  const [status, setStatus]     = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [isMobile, setIsMobile] = useState(false);
+
+  // isMobile detection
+  useEffect(() => {
+    const check = () => {
+      const mob = window.innerWidth < 640;
+      isMobileRef.current = mob;
+      setIsMobile(mob);
+    };
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
 
   // Compute centered positions from container width
   useEffect(() => {
     const compute = () => {
       if (!containerRef.current) return;
-      const cw = containerRef.current.clientWidth;
-      const al = Math.round((cw - (A_W + B_W - KNOB)) / 2);  // center joined pair
-      const sx = al + BODY;
+      const mob     = isMobileRef.current;
+      const aw      = mob ? A_W_SM   : A_W;
+      const bw      = mob ? B_W_SM   : B_W;
+      const knob    = mob ? KNOB_SM  : KNOB;
+      const body    = mob ? BODY_SM  : BODY;
+      const dragGap = mob ? DRAG_GAP_SM : DRAG_GAP;
+      const cw      = containerRef.current.clientWidth;
+      const al      = Math.round((cw - (aw + bw - knob)) / 2);
+      const sx      = al + body;
       setALeft(al);
       snapXRef.current = sx;
       if (!snapped) {
-        const initX = sx + DRAG_GAP;
+        const initX = sx + dragGap;
         xRef.current = initX;
         setDragX(initX);
       }
@@ -122,7 +156,7 @@ export default function SignupForm() {
     compute();
     window.addEventListener('resize', compute);
     return () => window.removeEventListener('resize', compute);
-  }, [snapped]);
+  }, [snapped, isMobile]);
 
   // Lottie background
   useEffect(() => {
@@ -140,10 +174,17 @@ export default function SignupForm() {
   // Star-burst explosion
   const triggerStars = useCallback(() => {
     if (!containerRef.current) return;
-    const cx = snapXRef.current + (A_W - BODY / 2);
-    const cy = PIECE_TOP + PIECE_H / 2;
+    const mob      = isMobileRef.current;
+    const pieceH   = mob ? PIECE_H_SM : PIECE_H;
+    const body     = mob ? BODY_SM    : BODY;
+    const knob     = mob ? KNOB_SM    : KNOB;
+    const aw       = body + knob;
+    const cntH     = mob ? CONTAINER_HEIGHT_SM : CONTAINER_HEIGHT;
+    const pieceTop = Math.round((cntH - pieceH) / 2);
+    const cx       = snapXRef.current + (aw - body / 2);
+    const cy       = pieceTop + pieceH / 2;
     for (let i = 0; i < 36; i++) {
-      const el = document.createElement('div');
+      const el   = document.createElement('div');
       const size = 8 + (i % 5) * 4;
       el.textContent = i % 3 === 0 ? '✦' : '★';
       el.style.cssText = `
@@ -156,7 +197,7 @@ export default function SignupForm() {
       `;
       containerRef.current.appendChild(el);
       const angle = (i / 36) * Math.PI * 2;
-      const dist = 45 + (i % 5) * 22;
+      const dist  = 45 + (i % 5) * 22;
       gsap.to(el, {
         x: Math.cos(angle) * dist,
         y: Math.sin(angle) * dist,
@@ -199,7 +240,7 @@ export default function SignupForm() {
     const onMouseMove = (e: MouseEvent) => {
       if (!dragging.current || !containerRef.current) return;
       const rect = containerRef.current.getBoundingClientRect();
-      const x = e.clientX - rect.left - dragOffsetX.current;
+      const x    = e.clientX - rect.left - dragOffsetX.current;
       xRef.current = x;
       setDragX(x);
     };
@@ -221,7 +262,7 @@ export default function SignupForm() {
       if (!dragging.current || !containerRef.current) return;
       e.preventDefault();
       const rect = containerRef.current.getBoundingClientRect();
-      const x = e.touches[0].clientX - rect.left - dragOffsetX.current;
+      const x    = e.touches[0].clientX - rect.left - dragOffsetX.current;
       xRef.current = x;
       setDragX(x);
     };
@@ -254,8 +295,14 @@ export default function SignupForm() {
     }
   };
 
+  const curPieceH   = isMobile ? PIECE_H_SM          : PIECE_H;
+  const curBody     = isMobile ? BODY_SM              : BODY;
+  const curKnob     = isMobile ? KNOB_SM              : KNOB;
+  const curContH    = isMobile ? CONTAINER_HEIGHT_SM  : CONTAINER_HEIGHT;
+  const curPieceTop = isMobile ? PIECE_TOP_SM         : PIECE_TOP;
+
   return (
-    <div className="min-h-screen bg-background flex flex-col items-center pt-20 pb-6">
+    <div className="min-h-screen bg-background flex flex-col items-center pt-10 md:pt-20 pb-6">
 
       {/* Lottie — fullscreen background */}
       <div
@@ -268,13 +315,13 @@ export default function SignupForm() {
         {/* Text */}
         <div className="max-w-lg w-full px-6 text-center mt-0">
           <h1
-            className="text-5xl md:text-6xl text-foreground mb-4 leading-tight"
-            style={{ fontFamily: 'var(--font-trykker)' }}
+            className="text-3xl md:text-6xl text-foreground mb-4 leading-tight"
+            style={{ fontFamily: 'tumb, serif' }}
           >
             You found us.<br />The story starts here.
           </h1>
           <p
-            className="text-lg text-foreground/65 leading-relaxed"
+            className="text-sm md:text-lg text-foreground/65 leading-relaxed"
             style={{ fontFamily: 'var(--font-trykker)' }}
           >
             One email a week — honest, unfiltered, and occasionally a little
@@ -283,25 +330,27 @@ export default function SignupForm() {
         </div>
 
         {/* Captcha */}
-        <div className="w-full max-w-lg px-6 mt-6">
+        <div className="w-full max-w-lg px-6 mt-3 md:mt-6">
           <p
-            className="text-sm text-center mb-3 transition-colors duration-300"
+            className="text-center mb-3 transition-colors duration-300"
             style={{
               fontFamily: 'var(--font-trykker)',
+              fontSize: '1.1rem',
+              fontWeight: 700,
               color: snapped ? '#16a34a' : 'rgba(28,25,23,0.38)',
             }}
           >
-            {snapped ? "✓ Unlocked — you're in" : 'Slide the piece into place to unlock'}
+            {snapped ? "✓ Unlocked — you're in" : 'Slide the purple piece into place to unlock'}
           </p>
 
           <div
             ref={containerRef}
             className="relative w-full"
-            style={{ height: CONTAINER_HEIGHT, userSelect: 'none', overflow: 'visible' }}
+            style={{ height: curContH, userSelect: 'none', overflow: 'visible' }}
           >
             {/* Puzzle A — fixed left piece */}
-            <div style={{ position: 'absolute', top: PIECE_TOP, left: aLeft, pointerEvents: 'none' }}>
-              <PuzzleA />
+            <div style={{ position: 'absolute', top: curPieceTop, left: aLeft, pointerEvents: 'none' }}>
+              <PuzzleA body={curBody} knob={curKnob} pieceH={curPieceH} />
             </div>
 
             {/* Puzzle B — draggable right piece (X-axis only) */}
@@ -310,20 +359,20 @@ export default function SignupForm() {
               onTouchStart={onTouchStart}
               style={{
                 position: 'absolute',
-                top: PIECE_TOP,
+                top: curPieceTop,
                 left: dragX,
                 cursor: snapped ? 'default' : 'grab',
                 transition: snapped ? 'left 0.18s ease-out' : undefined,
                 zIndex: 10,
               }}
             >
-              <PuzzleB snapped={snapped} />
+              <PuzzleB body={curBody} knob={curKnob} pieceH={curPieceH} snapped={snapped} />
             </div>
           </div>
         </div>
 
         {/* Email form */}
-        <div className="max-w-lg w-full px-6 mt-3">
+        <div className="max-w-lg w-full px-6 mt-2 md:mt-3">
           {status === 'success' ? (
             <p
               className="text-center text-xl text-foreground/70 py-8"
