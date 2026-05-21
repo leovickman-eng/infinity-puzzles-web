@@ -10,7 +10,7 @@ const BREAKPOINT = 768;
 
 const PX_PER_F1    = 60;
 const F1_PAUSE     = 150;
-const PX_PER_F2    = 120;
+const PX_PER_F2    = 60;
 const POST_F2_HOLD = 200;
 const P0_SCROLL    = 90;
 const SLIDE_P0     = 250;
