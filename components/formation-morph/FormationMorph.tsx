@@ -2,8 +2,10 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 
-const CANVAS_W   = 550;
-const CANVAS_H   = 1265;
+const CANVAS_W        = 550;
+const CANVAS_H        = 1265;
+const MOBILE_CANVAS_W = 275;
+const MOBILE_CANVAS_H = 633;
 const BASE        = '/formations/GASP/F1';
 const BASE_MOBILE = '/formations/GASP/F1-mobile';
 const BREAKPOINT  = 768;
@@ -79,7 +81,7 @@ export default function FormationMorph() {
     const compute = () => {
       const mobile = window.innerWidth < BREAKPOINT;
       const s = mobile
-        ? Math.min((window.innerWidth * 0.9) / CANVAS_W, 1)
+        ? Math.min((window.innerWidth * 0.9) / MOBILE_CANVAS_W, 1.5)
         : Math.min(window.innerWidth / CANVAS_W * 2, window.innerHeight / CANVAS_H * 1.5, 3);
       scaleRef.current       = s;
       isMobileRef.current    = mobile;
@@ -125,7 +127,8 @@ export default function FormationMorph() {
       }
 
       if (inF2) {
-        const ty = f2Progress * (innerHeightRef.current - 280 - CANVAS_H * scaleRef.current);
+        const canvasH = isMobileRef.current ? MOBILE_CANVAS_H : CANVAS_H;
+        const ty = f2Progress * (innerHeightRef.current - 280 - canvasH * scaleRef.current);
         if (prevTranslateY.current === null || Math.abs(ty - prevTranslateY.current) >= 1) {
           wrap.style.transform = `translateY(${ty}px)`;
           prevTranslateY.current = ty;
@@ -218,8 +221,8 @@ export default function FormationMorph() {
             flexShrink: 0,
             willChange: 'transform',
             position: 'relative',
-            width: (isMobile ? 275 : CANVAS_W) * scale,
-            height: (isMobile ? 633 : CANVAS_H) * scale,
+            width: (isMobile ? MOBILE_CANVAS_W : CANVAS_W) * scale,
+            height: (isMobile ? MOBILE_CANVAS_H : CANVAS_H) * scale,
           }}
         >
           {f1Srcs.map((src, i) => (
