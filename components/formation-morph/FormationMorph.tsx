@@ -37,7 +37,9 @@ export default function FormationMorph() {
   const frameSkipRef    = useRef(0);
   const prevTranslateY  = useRef<number | null>(null);
   const [scale, setScale] = useState(1);
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState(
+    () => typeof window !== 'undefined' && window.innerWidth < BREAKPOINT
+  );
 
   const base = isMobile ? BASE_MOBILE : BASE;
 
