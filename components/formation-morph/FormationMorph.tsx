@@ -1,11 +1,12 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 const CANVAS_W   = 550;
 const CANVAS_H   = 1265;
-const BASE       = '/formations/GASP/F1';
-const BREAKPOINT = 768;
+const BASE        = '/formations/GASP/F1';
+const BASE_MOBILE = '/formations/GASP/F1-mobile';
+const BREAKPOINT  = 768;
 
 const PX_PER_F1    = 60;
 const F1_PAUSE     = 150;
@@ -18,32 +19,6 @@ const SLIDE_PX     = 80;
 const F1_SCROLL  = P0_SCROLL + 18 * PX_PER_F1 + F1_PAUSE;
 const F2_SCROLL  = 19 * PX_PER_F2;
 const TOTAL_ANIM = F1_SCROLL + F2_SCROLL + POST_F2_HOLD;
-
-const F1_SRCS = Array.from({ length: 19 }, (_, i) => `${BASE}/1_${i + 1}.webp`);
-
-const F2_SEQ: { add: string; remove: string }[] = [
-  { add: `${BASE}/2_1.webp`,  remove: `${BASE}/1_12.webp` },
-  { add: `${BASE}/2_2.webp`,  remove: `${BASE}/1_16.webp` },
-  { add: `${BASE}/2_3.webp`,  remove: `${BASE}/1_18.webp` },
-  { add: `${BASE}/2_4.webp`,  remove: `${BASE}/1_15.webp` },
-  { add: `${BASE}/2_5.webp`,  remove: `${BASE}/1_8.webp`  },
-  { add: `${BASE}/2_6.webp`,  remove: `${BASE}/1_7.webp`  },
-  { add: `${BASE}/2_7.webp`,  remove: `${BASE}/1_13.webp` },
-  { add: `${BASE}/2_8.webp`,  remove: `${BASE}/1_14.webp` },
-  { add: `${BASE}/2_9.webp`,  remove: `${BASE}/1_6.webp`  },
-  { add: `${BASE}/2_10.webp`, remove: `${BASE}/1_4.webp`  },
-  { add: `${BASE}/2_11.webp`, remove: `${BASE}/1_3.webp`  },
-  { add: `${BASE}/2_12.webp`, remove: `${BASE}/1_19.webp` },
-  { add: `${BASE}/2_13.webp`, remove: `${BASE}/1_11.webp` },
-  { add: `${BASE}/2_14.webp`, remove: `${BASE}/1_17.webp` },
-  { add: `${BASE}/2_15.webp`, remove: `${BASE}/1_9.webp`  },
-  { add: `${BASE}/2_16.webp`, remove: `${BASE}/1_10.webp` },
-  { add: `${BASE}/2_17.webp`, remove: `${BASE}/1_5.webp`  },
-  { add: `${BASE}/2_18.webp`, remove: `${BASE}/1_2.webp`  },
-  { add: `${BASE}/2_19.webp`, remove: `${BASE}/1_1.webp`  },
-];
-
-const F1_IDX = new Map(F1_SRCS.map((src, i) => [src, i]));
 
 function easeOut(t: number) { return 1 - (1 - t) ** 2; }
 
@@ -62,6 +37,41 @@ export default function FormationMorph() {
   const frameSkipRef    = useRef(0);
   const prevTranslateY  = useRef<number | null>(null);
   const [scale, setScale] = useState(1);
+  const [isMobile, setIsMobile] = useState(false);
+
+  const base = isMobile ? BASE_MOBILE : BASE;
+
+  const f1Srcs = useMemo(() =>
+    Array.from({ length: 19 }, (_, i) => `${base}/1_${i + 1}.webp`),
+    [base]
+  );
+
+  const f2Seq = useMemo(() => [
+    { add: `${base}/2_1.webp`,  remove: `${base}/1_12.webp` },
+    { add: `${base}/2_2.webp`,  remove: `${base}/1_16.webp` },
+    { add: `${base}/2_3.webp`,  remove: `${base}/1_18.webp` },
+    { add: `${base}/2_4.webp`,  remove: `${base}/1_15.webp` },
+    { add: `${base}/2_5.webp`,  remove: `${base}/1_8.webp`  },
+    { add: `${base}/2_6.webp`,  remove: `${base}/1_7.webp`  },
+    { add: `${base}/2_7.webp`,  remove: `${base}/1_13.webp` },
+    { add: `${base}/2_8.webp`,  remove: `${base}/1_14.webp` },
+    { add: `${base}/2_9.webp`,  remove: `${base}/1_6.webp`  },
+    { add: `${base}/2_10.webp`, remove: `${base}/1_4.webp`  },
+    { add: `${base}/2_11.webp`, remove: `${base}/1_3.webp`  },
+    { add: `${base}/2_12.webp`, remove: `${base}/1_19.webp` },
+    { add: `${base}/2_13.webp`, remove: `${base}/1_11.webp` },
+    { add: `${base}/2_14.webp`, remove: `${base}/1_17.webp` },
+    { add: `${base}/2_15.webp`, remove: `${base}/1_9.webp`  },
+    { add: `${base}/2_16.webp`, remove: `${base}/1_10.webp` },
+    { add: `${base}/2_17.webp`, remove: `${base}/1_5.webp`  },
+    { add: `${base}/2_18.webp`, remove: `${base}/1_2.webp`  },
+    { add: `${base}/2_19.webp`, remove: `${base}/1_1.webp`  },
+  ], [base]);
+
+  const f1Idx = useMemo(() =>
+    new Map(f1Srcs.map((src, i) => [src, i])),
+    [f1Srcs]
+  );
 
   useEffect(() => {
     const compute = () => {
@@ -73,6 +83,7 @@ export default function FormationMorph() {
       isMobileRef.current    = mobile;
       innerHeightRef.current = window.innerHeight;
       setScale(s);
+      setIsMobile(mobile);
     };
     compute();
     window.addEventListener('resize', compute);
@@ -99,7 +110,7 @@ export default function FormationMorph() {
 
       const inF2 = scrolled >= F1_SCROLL;
 
-      const f1Progresses = F1_SRCS.map((_, i) => {
+      const f1Progresses = f1Srcs.map((_, i) => {
         if (i === 0) return Math.min(1, Math.max(0, scrolled / P0_SCROLL));
         const start = P0_SCROLL + (i - 1) * PX_PER_F1;
         return Math.min(1, Math.max(0, (scrolled - start) / PX_PER_F1));
@@ -129,7 +140,7 @@ export default function FormationMorph() {
       frameSkipRef.current += 1;
       if (f2Changed) frameSkipRef.current = 0;
       const skipFrame = isMobileRef.current && (
-        inF2 ? frameSkipRef.current % 3 !== 0 : frameSkipRef.current % 2 !== 0
+        inF2 ? frameSkipRef.current % 4 !== 0 : frameSkipRef.current % 3 !== 0
       );
 
       if (!skipFrame) {
@@ -152,7 +163,7 @@ export default function FormationMorph() {
             const f2Img = f2ImgRefs.current[i];
             if (f2Img) f2Img.style.opacity = done ? '1' : '0';
 
-            const removeIdx = F1_IDX.get(F2_SEQ[i].remove);
+            const removeIdx = f1Idx.get(f2Seq[i].remove);
             if (removeIdx !== undefined) {
               const f1El = f1ImgRefs.current[removeIdx];
               if (f1El) {
@@ -205,16 +216,17 @@ export default function FormationMorph() {
             flexShrink: 0,
             willChange: 'transform',
             position: 'relative',
-            width: CANVAS_W * scale,
-            height: CANVAS_H * scale,
+            width: (isMobile ? 275 : CANVAS_W) * scale,
+            height: (isMobile ? 633 : CANVAS_H) * scale,
           }}
         >
-          {F1_SRCS.map((src, i) => (
+          {f1Srcs.map((src, i) => (
             <img
               key={src}
               ref={el => { f1ImgRefs.current[i] = el; }}
               src={src}
               alt=""
+              decoding="async"
               draggable={false}
               style={{
                 ...imgBase,
@@ -222,12 +234,14 @@ export default function FormationMorph() {
               }}
             />
           ))}
-          {F2_SEQ.map(({ add }, i) => (
+          {f2Seq.map(({ add }, i) => (
             <img
               key={add}
               ref={el => { f2ImgRefs.current[i] = el; }}
               src={add}
               alt=""
+              loading="lazy"
+              decoding="async"
               draggable={false}
               style={{ ...imgBase, transition: 'opacity 0.3s ease' }}
             />
