@@ -14,7 +14,7 @@ const IN_PX   = 60;
 const HOLD_PX = 200;
 const OUT_PX  = 60;
 const SCROLL_PER_LINE = IN_PX + HOLD_PX + OUT_PX;
-const TOTAL_SCROLL = SCROLL_PER_LINE * LINES.length + 150;
+const TOTAL_SCROLL = SCROLL_PER_LINE * LINES.length + 500;
 
 export default function PlayModes() {
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -38,22 +38,40 @@ export default function PlayModes() {
         const peakIn  = start + IN_PX;
         const peakOut = peakIn + HOLD_PX;
         const end     = peakOut + OUT_PX;
+        const isLast  = i === LINES.length - 1;
 
         let opacity = 0;
         let translateY = 40;
 
-        if (scrolled >= start && scrolled < peakIn) {
-          const t = (scrolled - start) / IN_PX;
-          const e = 1 - Math.pow(1 - t, 2);
-          opacity = e;
-          translateY = (1 - e) * 40;
-        } else if (scrolled >= peakIn && scrolled < peakOut) {
-          opacity = 1;
-          translateY = 0;
-        } else if (scrolled >= peakOut && scrolled < end) {
-          const t = (scrolled - peakOut) / OUT_PX;
-          opacity = 1 - t;
-          translateY = -t * 20;
+        if (isLast) {
+          const fadeStart = TOTAL_SCROLL - OUT_PX;
+          if (scrolled >= start && scrolled < peakIn) {
+            const t = (scrolled - start) / IN_PX;
+            const e = 1 - Math.pow(1 - t, 2);
+            opacity = e;
+            translateY = (1 - e) * 40;
+          } else if (scrolled >= peakIn && scrolled < fadeStart) {
+            opacity = 1;
+            translateY = 0;
+          } else if (scrolled >= fadeStart) {
+            const t = Math.min(1, (scrolled - fadeStart) / OUT_PX);
+            opacity = 1 - t;
+            translateY = -t * 20;
+          }
+        } else {
+          if (scrolled >= start && scrolled < peakIn) {
+            const t = (scrolled - start) / IN_PX;
+            const e = 1 - Math.pow(1 - t, 2);
+            opacity = e;
+            translateY = (1 - e) * 40;
+          } else if (scrolled >= peakIn && scrolled < peakOut) {
+            opacity = 1;
+            translateY = 0;
+          } else if (scrolled >= peakOut && scrolled < end) {
+            const t = (scrolled - peakOut) / OUT_PX;
+            opacity = 1 - t;
+            translateY = -t * 20;
+          }
         }
 
         el.style.opacity = String(opacity);
