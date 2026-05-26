@@ -26,3 +26,8 @@ export const StoryTimeline = dynamic(
   () => import('@/components/story/StoryTimeline'),
   { ssr: false },
 );
+
+export const PlayModes = dynamic(
+  () => import('@/components/play-modes/PlayModes'),
+  { ssr: false },
+);

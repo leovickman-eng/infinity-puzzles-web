@@ -7,6 +7,7 @@ import {
   CharacterCarousel,
   FormationMorph,
   LottieScrollSection,
+  PlayModes,
   ProductSection,
   StoryTimeline,
 } from './HomeClientSections';
@@ -29,6 +30,9 @@ export default function HomePage() {
 
       {/* ── S2: Formation morph — sticky canvas, scrolls away into S3 ── */}
       <FormationMorph />
+
+      {/* ── S2.5: Play modes — scroll-driven text ── */}
+      <PlayModes />
 
       {/* ── S3: The physical object ── */}
       <section className="py-24 px-6 bg-background">
