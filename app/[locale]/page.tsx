@@ -1,6 +1,6 @@
 import { useTranslations } from 'next-intl';
-import { getTranslations } from 'next-intl/server';
 import Image from 'next/image';
+import Script from 'next/script';
 import type { Metadata } from 'next';
 import HeroText from '@/components/HeroText';
 import {
@@ -13,8 +13,10 @@ import {
 } from './HomeClientSections';
 
 export async function generateMetadata(): Promise<Metadata> {
-  const t = await getTranslations('formation');
-  return { title: t('title') };
+  return {
+    title: 'Infinity Puzzle Wild | Wooden Puzzle with 19 Characters',
+    description: 'Infinity Puzzle Wild — 19 handcrafted wooden characters with endless formations. No right answer. Just creativity, flow, and play. Order now.',
+  };
 }
 
 
@@ -23,6 +25,28 @@ export default function HomePage() {
 
   return (
     <>
+      <h1 className="sr-only">Infinity Puzzle Wild — Wooden Puzzle with 19 Unique Characters</h1>
+      <Script
+        id="product-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'Product',
+            name: 'Infinity Puzzle Wild',
+            description: '19 handcrafted wooden characters with endless formations. No right answer. Just creativity, flow, and play.',
+            brand: { '@type': 'Brand', name: 'Infinity Puzzles' },
+            image: 'https://infinity-puzzle.com/images/hero/og-image.png',
+            offers: {
+              '@type': 'Offer',
+              availability: 'https://schema.org/InStock',
+              priceCurrency: 'SEK',
+              url: 'https://infinity-puzzle.com/en',
+            },
+          }),
+        }}
+      />
+
       {/* ── S1: Lottie hero — scroll-driven, pins until animation completes ── */}
       <LottieScrollSection idleSrc="/lottie/test.json">
         <HeroText />

@@ -56,14 +56,29 @@ const cormorant = Cormorant_Garamond({
 
 export const metadata: Metadata = {
   title: {
-    default: 'Infinity Puzzles Wild',
+    default: 'Infinity Puzzle Wild | Wooden Puzzle with 19 Characters',
     template: '%s | Infinity Puzzles',
   },
-  description: '19 pieces. Infinite formations. One extraordinary wooden puzzle.',
+  description: 'Infinity Puzzle Wild — 19 handcrafted wooden characters with endless formations. No right answer. Just creativity, flow, and play.',
   metadataBase: new URL('https://infinity-puzzle.com'),
   openGraph: {
     siteName: 'Infinity Puzzles',
     type: 'website',
+    images: [
+      {
+        url: '/images/hero/og-image.png',
+        width: 1376,
+        height: 768,
+        alt: 'Infinity Puzzle Wild — 19 wooden characters',
+      },
+    ],
+  },
+  alternates: {
+    canonical: 'https://infinity-puzzle.com/en',
+    languages: {
+      'en': 'https://infinity-puzzle.com/en',
+      'sv': 'https://infinity-puzzle.com/sv',
+    },
   },
 };
 
