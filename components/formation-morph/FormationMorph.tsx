@@ -35,7 +35,7 @@ export default function FormationMorph() {
   const scaleRef        = useRef(1);
   const isMobileRef     = useRef(false);
   const innerHeightRef  = useRef(0);
-  const prevF2          = useRef(-2);
+  const prevF2          = useRef(-1);
   const frameSkipRef    = useRef(0);
   const prevTranslateY  = useRef<number | null>(null);
   const [scale, setScale] = useState(1);
