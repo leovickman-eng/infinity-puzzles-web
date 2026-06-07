@@ -2,6 +2,9 @@
 
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
+import { useRef, useState } from 'react';
+
+const CHAPTER_AUDIO = 'https://res.cloudinary.com/dk3ftfygx/video/upload/q_auto/f_auto/v1779967174/WILD_CHAPTER_01_e0a9is.mp3';
 
 const CHAPTER = {
   number: 1,
@@ -61,6 +64,15 @@ But I am watching. I am always watching.`,
 export default function ChapterPage() {
   const params = useParams();
   const locale = params?.locale ?? 'en';
+  const audioRef = useRef<HTMLAudioElement>(null);
+  const [playing, setPlaying] = useState(false);
+
+  const toggleAudio = () => {
+    const a = audioRef.current;
+    if (!a) return;
+    if (playing) { a.pause(); setPlaying(false); }
+    else { a.play(); setPlaying(true); }
+  };
 
   return (
     <div
@@ -157,6 +169,38 @@ export default function ChapterPage() {
           background: 'rgba(174,132,234,0.3)',
           margin: '40px auto 0',
         }} />
+
+        {/* Audio player */}
+        <div style={{ marginTop: '32px' }}>
+          <audio
+            ref={audioRef}
+            src={CHAPTER_AUDIO}
+            onEnded={() => setPlaying(false)}
+          />
+          <button
+            onClick={toggleAudio}
+            style={{
+              background: 'rgba(174,132,234,0.08)',
+              border: '1px solid rgba(174,132,234,0.35)',
+              borderRadius: '40px',
+              color: '#ae84ea',
+              padding: '10px 28px',
+              fontSize: '13px',
+              letterSpacing: '0.08em',
+              fontFamily: "'DM Sans', sans-serif",
+              cursor: 'pointer',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '10px',
+              transition: 'background 0.2s',
+            }}
+            onMouseEnter={e => (e.currentTarget.style.background = 'rgba(174,132,234,0.16)')}
+            onMouseLeave={e => (e.currentTarget.style.background = 'rgba(174,132,234,0.08)')}
+          >
+            <span style={{ fontSize: '15px' }}>{playing ? '⏹' : '▶'}</span>
+            {playing ? 'Stoppa' : 'Lyssna på kapitlet'}
+          </button>
+        </div>
       </div>
 
       {/* Chapter body */}
