@@ -207,7 +207,7 @@ export default function CharactersClient({ title, subtitle }: { title: string; s
               <div style={{ fontSize: '20px', fontWeight: 600, fontFamily: "'tumb', serif", marginBottom: '10px', color: '#f0eaf8' }}>
                 {ch.name}
               </div>
-              <p style={{ fontSize: '13px', lineHeight: 1.7, color: 'rgba(240,234,248,0.6)', margin: '0 0 4px', fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: '14px' }}>
+              <p style={{ fontSize: '14px', lineHeight: 1.7, color: 'rgba(240,234,248,0.6)', margin: '0 0 4px', fontFamily: "'Cormorant Garamond', Georgia, serif" }}>
                 {ch.desc}
               </p>
 
