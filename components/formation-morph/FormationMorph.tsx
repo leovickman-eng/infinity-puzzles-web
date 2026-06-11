@@ -38,6 +38,8 @@ export default function FormationMorph() {
   const prevF2          = useRef(-1);
   const frameSkipRef    = useRef(0);
   const prevTranslateY  = useRef<number | null>(null);
+  const bgCanvasRef     = useRef<HTMLCanvasElement>(null);
+  const bgTranslateRef  = useRef(0);
   const [scale, setScale] = useState(1);
   const [isMobile, setIsMobile] = useState(
     () => typeof window !== 'undefined' && window.innerWidth < BREAKPOINT
@@ -95,6 +97,28 @@ export default function FormationMorph() {
   }, []);
 
   useEffect(() => {
+    const canvas = bgCanvasRef.current;
+    if (!canvas) return;
+    const W = CANVAS_W;
+    const H = CANVAS_H * 2;
+    canvas.width = W;
+    canvas.height = H;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    ctx.clearRect(0, 0, W, H);
+    for (let i = 0; i < 1200; i++) {
+      const x = Math.random() * W;
+      const y = Math.random() * H;
+      const r = 0.8 + Math.random() * 1.8;
+      const a = 0.06 + Math.random() * 0.14;
+      ctx.beginPath();
+      ctx.arc(x, y, r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(83,63,126,${a})`;
+      ctx.fill();
+    }
+  }, []);
+
+  useEffect(() => {
     let raf = 0;
 
     const update = () => {
@@ -124,6 +148,16 @@ export default function FormationMorph() {
       if (inF2) {
         f2Progress = Math.min(1, (scrolled - F1_SCROLL) / F2_SCROLL);
         f2Step     = Math.min(18, Math.floor(f2Progress * 19));
+      }
+
+      // Bakgrunds-canvas: stilla under F1, rör sig uppåt under F2
+      const bgEl = bgCanvasRef.current;
+      if (bgEl) {
+        const bgTY = inF2 ? -f2Progress * CANVAS_H : 0;
+        if (Math.abs(bgTY - bgTranslateRef.current) >= 1) {
+          bgEl.style.transform = `translateY(${bgTY}px)`;
+          bgTranslateRef.current = bgTY;
+        }
       }
 
       if (inF2) {
@@ -225,6 +259,19 @@ export default function FormationMorph() {
             height: (isMobile ? MOBILE_CANVAS_H : CANVAS_H) * scale,
           }}
         >
+          <canvas
+            ref={bgCanvasRef}
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: '100%',
+              height: 'auto',
+              zIndex: -1,
+              pointerEvents: 'none',
+              willChange: 'transform',
+            }}
+          />
           {f1Srcs.map((src, i) => (
             <img
               key={src}
