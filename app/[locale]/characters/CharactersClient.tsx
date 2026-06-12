@@ -20,7 +20,7 @@ const CHARACTERS = [
   { id: 13, name: 'Borro',         animal: 'Noshorning', desc: 'Kronologiskt ofelbar. Bokstavligen. Ingen i Vildmarken har någonsin fått honom att ljuga — men sanningen kan formas.',                                    audio: 'https://res.cloudinary.com/dk3ftfygx/video/upload/q_auto/f_auto/v1779967171/Borro_01_qhfkbi.mp3',                     chapterLink: null },
   { id: 14, name: 'Pepe',          animal: 'Pingvin',    desc: 'Ställer frågor som råkar vara exakt rätt. Han vet inte alltid varför han frågar — men svaren visar sig alltid vara viktiga.',                             audio: null,                                                                                                                    chapterLink: null },
   { id: 15, name: 'Ronda',         animal: 'Krokodil',   desc: 'Har en gåva för att hitta det enda felaktiga i ett annars perfekt resonemang. Hennes kritik är en present, om du klarar av att ta emot den.',             audio: 'https://res.cloudinary.com/dk3ftfygx/video/upload/q_auto/f_auto/v1779967172/Ronda_01_jzed46.mp3',                     chapterLink: null },
-  { id: 16, name: 'Rumi',          animal: 'Papegoja',   desc: 'Sitter i sitt träd och ser allt. Hennes perspektiv sträcker sig bakåt och framåt på ett sätt som gör att nuet känns bredare.',                           audio: 'https://res.cloudinary.com/dk3ftfygx/video/upload/q_auto/f_auto/v1779967174/Rumi_01_tcwd2u.mp3',                      chapterLink: '/book/chapter-1' },
+  { id: 16, name: 'Rumi',          animal: 'Papegoja',   desc: 'Sitter i sitt träd och ser allt. Hennes perspektiv sträcker sig bakåt och framåt på ett sätt som gör att nuet känns bredare.',                           audio: 'https://res.cloudinary.com/dk3ftfygx/video/upload/q_auto/f_auto/v1779967174/Rumi_01_tcwd2u.mp3',                      chapterLink: '/book/chapter-1', extraAudios: [{ url: 'https://res.cloudinary.com/dk3ftfygx/video/upload/q_auto/f_auto/v1781285810/Rumi_F%C3%B6rklarar_pusslet_uzhfgv.wav', label: 'Rumi förklarar pusslet' }] },
   { id: 17, name: 'Daffy Giraffy', animal: 'Giraff',     desc: 'Ser längre än de flesta — bokstavligen och bildligt. Hans lugn är inte passivitet, det är förtroende för tid.',                                          audio: null,                                                                                                                    chapterLink: null },
   { id: 18, name: 'Jerry',         animal: 'Hund',       desc: 'Följer instinkter som inte har namn. Hans fynd verkar slumpmässiga tills mönstret plötsligt är uppenbarat.',                                              audio: null,                                                                                                                    chapterLink: null },
   { id: 19, name: 'Silvana',       animal: 'Kamel',      desc: 'Har överlevt det omöjliga och kommit ut på andra sidan med en vild tilltro till det som ännu inte hänt.',                                                 audio: null,                                                                                                                    chapterLink: null },
@@ -213,6 +213,16 @@ export default function CharactersClient({ title, subtitle }: { title: string; s
 
               {/* Audio timeline */}
               {ch.audio && <AudioPlayer src={ch.audio} />}
+
+              {/* Extra audio clips */}
+              {'extraAudios' in ch && (ch as { extraAudios: { url: string; label: string }[] }).extraAudios.map(({ url, label }) => (
+                <div key={url}>
+                  <div style={{ fontSize: '10px', color: 'rgba(240,234,248,0.3)', fontFamily: "'DM Sans', sans-serif", letterSpacing: '1px', textTransform: 'uppercase', marginTop: '14px', marginBottom: '4px' }}>
+                    {label}
+                  </div>
+                  <AudioPlayer src={url} />
+                </div>
+              ))}
 
               {/* Chapter link */}
               {ch.chapterLink && (
