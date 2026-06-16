@@ -142,7 +142,7 @@ export default function HomePage() {
 
           <div className="text-center mt-12 flex flex-col sm:flex-row items-center justify-center gap-6">
             <a
-              href="characters"
+              href="universe/stories"
               className="inline-flex items-center gap-2 font-body text-sm text-foreground/50 hover:text-foreground transition-colors group"
             >
               {t('characters.viewAll')}

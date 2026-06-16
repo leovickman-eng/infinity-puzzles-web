@@ -69,7 +69,7 @@ export default function Header({ locale }: Props) {
     { href: string; label: string; scrollTo?: undefined } |
     { scrollTo: string; label: string; href?: undefined }
   > = [
-    { href: `/${locale}/characters`,  label: t('characters') },
+    { href: `/${locale}/universe/stories`,  label: t('characters') },
     { scrollTo: 'story',              label: t('story') },
     { scrollTo: 'shop',               label: 'Shop' },
     { href: `/${locale}/WILD_NETWORK`, label: 'Wild Network' },

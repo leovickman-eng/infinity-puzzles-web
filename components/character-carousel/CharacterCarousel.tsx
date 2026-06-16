@@ -5,7 +5,7 @@ import { useState } from 'react';
 const N = 19;
 const CHARS = Array.from({ length: N }, (_, i) => ({
   id: i + 1,
-  src: `/images/characters/WILD_characters-${String(i + 1).padStart(2, '0')}.webp`,
+  src: `/images/posters/poster_${String(i + 1).padStart(2, '0')}.webp`,
   alt: `Character ${i + 1}`,
 }));
 
