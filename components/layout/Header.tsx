@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useCart } from '@/components/shop/CartContext';
 
@@ -34,6 +34,10 @@ export default function Header({ locale }: Props) {
   const { cart, openCart } = useCart();
   const itemCount = cart?.totalQuantity ?? 0;
   const otherLocale = locale === 'en' ? 'sv' : 'en';
+  const pathname = usePathname();
+
+  // Hide header on /universe routes — feels like a standalone app
+  if (pathname.includes('/universe')) return null;
 
   const router = useRouter();
   const [open, setOpen] = useState(false);
