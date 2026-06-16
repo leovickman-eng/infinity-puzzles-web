@@ -1,6 +1,5 @@
 'use client';
 
-import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { useEffect, useRef } from 'react';
 
@@ -199,7 +198,7 @@ export default function UniversePage() {
         zIndex: 2,
       }}>
         {NAV.map(({ key, label, sub, href, color, border, bg }) => (
-          <Link
+          <a
             key={key}
             href={`/${locale}${href}`}
             style={{
@@ -248,7 +247,7 @@ export default function UniversePage() {
               </div>
             </div>
             <div style={{ color, opacity: 0.6, fontSize: '18px' }}>→</div>
-          </Link>
+          </a>
         ))}
       </div>
 
