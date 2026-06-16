@@ -118,6 +118,28 @@ export default function FormationMorph() {
     }
   }, []);
 
+  // Load F2 images lazily — only when the section is approaching the viewport.
+  // (loading="lazy" is unreliable for opacity:0/position:absolute elements)
+  useEffect(() => {
+    const wrapper = wrapperRef.current;
+    if (!wrapper) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (!entries[0].isIntersecting) return;
+        for (let i = 0; i < 19; i++) {
+          const el = f2ImgRefs.current[i];
+          if (el && el.dataset.src) el.src = el.dataset.src;
+        }
+        observer.disconnect();
+      },
+      { rootMargin: '500px 0px' }   // Start loading 500px before section enters view
+    );
+
+    observer.observe(wrapper);
+    return () => observer.disconnect();
+  }, []);
+
   useEffect(() => {
     let raf = 0;
 
@@ -290,9 +312,8 @@ export default function FormationMorph() {
             <img
               key={add}
               ref={el => { f2ImgRefs.current[i] = el; }}
-              src={add}
+              data-src={add}
               alt=""
-              loading="lazy"
               decoding="async"
               draggable={false}
               style={{ ...imgBase, transition: 'opacity 0.3s ease' }}
