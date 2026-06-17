@@ -99,16 +99,20 @@ export default function FormationMorph() {
     const canvas = bgCanvasRef.current;
     if (!canvas) return;
 
+    const EXTRA = 400; // extra buffer below viewport to cover translateY movement
+
     function draw() {
       if (!canvas) return;
       const W = window.innerWidth;
-      const H = window.innerHeight;
+      const H = window.innerHeight + EXTRA;
       canvas.width = W;
       canvas.height = H;
+      canvas.style.width  = '100%';
+      canvas.style.height = `calc(100% + ${EXTRA}px)`;
       const ctx = canvas.getContext('2d');
       if (!ctx) return;
       ctx.clearRect(0, 0, W, H);
-      const count = Math.round((W * H) / 4000); // density scales with screen area
+      const count = Math.round((W * H) / 4000);
       for (let i = 0; i < count; i++) {
         const x = Math.random() * W;
         const y = Math.random() * H;
