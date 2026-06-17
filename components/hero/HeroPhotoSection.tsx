@@ -1,6 +1,5 @@
 'use client';
 
-import Image from 'next/image';
 import { useParams } from 'next/navigation';
 
 export default function HeroPhotoSection() {
@@ -31,9 +30,9 @@ export default function HeroPhotoSection() {
           box-shadow: 0 6px 28px rgba(174,132,234,0.55) !important;
         }
         @keyframes hero-bounce-in {
-          0%   { opacity: 0; transform: translateX(-50%) translateY(16px); }
-          60%  { opacity: 1; transform: translateX(-50%) translateY(-4px); }
-          100% { opacity: 1; transform: translateX(-50%) translateY(0); }
+          0%   { opacity: 0; transform: translate(-50%, calc(-50% + 16px)); }
+          60%  { opacity: 1; transform: translate(-50%, calc(-50% - 4px)); }
+          100% { opacity: 1; transform: translate(-50%, -50%); }
         }
         .hero-buy-wrap {
           animation: hero-bounce-in 0.7s cubic-bezier(0.34,1.56,0.64,1) 0.5s both;
@@ -45,19 +44,32 @@ export default function HeroPhotoSection() {
         .hero-arrow { animation: hero-scroll-bounce 1.4s ease-in-out infinite; }
         .hero-arrow:nth-child(2) { animation-delay: 0.18s; }
         .hero-arrow:nth-child(3) { animation-delay: 0.36s; }
+
+        /* Responsive aspect ratio */
+        .hero-img-wrap { aspect-ratio: 4032 / 2503; }
+        @media (max-width: 767px) { .hero-img-wrap { aspect-ratio: 1080 / 944; } }
       `}</style>
 
       {/* ── Full-width image ── */}
       <section style={{ position: 'relative', width: '100%', background: '#FFFBF5', lineHeight: 0 }}>
-        <div style={{ position: 'relative', width: '100%', aspectRatio: '4032 / 2503' }}>
-          <Image
-            src="/images/hero/hero-main.webp"
-            alt="Infinity Puzzle Wild"
-            fill
-            priority
-            sizes="100vw"
-            style={{ objectFit: 'cover', objectPosition: 'center' }}
-          />
+        <div className="hero-img-wrap" style={{ position: 'relative', width: '100%' }}>
+
+          {/* Responsive image — mobile gets hero-mobile.webp, desktop hero-main.webp */}
+          <picture style={{ position: 'absolute', inset: 0, display: 'block' }}>
+            <source media="(max-width: 767px)" srcSet="/images/hero/hero-mobile.webp" />
+            <img
+              src="/images/hero/hero-main.webp"
+              alt="Infinity Puzzle Wild"
+              fetchPriority="high"
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+                objectPosition: 'center',
+                display: 'block',
+              }}
+            />
+          </picture>
 
           {/* Gradient: fade bottom toward light background */}
           <div style={{
@@ -65,12 +77,12 @@ export default function HeroPhotoSection() {
             background: 'linear-gradient(to bottom, rgba(0,0,0,0.08) 0%, transparent 25%, transparent 50%, rgba(255,251,245,0.9) 100%)',
           }} />
 
-          {/* Buy button — centered, higher up */}
+          {/* Buy button — centered in image */}
           <div className="hero-buy-wrap" style={{
             position: 'absolute',
-            bottom: 'clamp(60px, 16%, 130px)',
+            top: '50%',
             left: '50%',
-            transform: 'translateX(-50%)',
+            transform: 'translate(-50%, -50%)',
             zIndex: 5,
           }}>
             <button
