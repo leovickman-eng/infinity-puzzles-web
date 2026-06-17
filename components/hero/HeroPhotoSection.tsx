@@ -48,7 +48,7 @@ export default function HeroPhotoSection() {
       `}</style>
 
       {/* ── Full-width image ── */}
-      <section style={{ position: 'relative', width: '100%', background: '#0d0a12', lineHeight: 0 }}>
+      <section style={{ position: 'relative', width: '100%', background: '#FFFBF5', lineHeight: 0 }}>
         <div style={{ position: 'relative', width: '100%', aspectRatio: '4032 / 2503' }}>
           <Image
             src="/images/hero/hero-main.webp"
@@ -59,10 +59,10 @@ export default function HeroPhotoSection() {
             style={{ objectFit: 'cover', objectPosition: 'center' }}
           />
 
-          {/* Gradient: dark at top (for header), dark at bottom (for button) */}
+          {/* Gradient: fade bottom toward light background */}
           <div style={{
             position: 'absolute', inset: 0, pointerEvents: 'none',
-            background: 'linear-gradient(to bottom, rgba(13,10,18,0.45) 0%, transparent 25%, transparent 60%, rgba(13,10,18,0.8) 100%)',
+            background: 'linear-gradient(to bottom, rgba(0,0,0,0.15) 0%, transparent 20%, transparent 55%, rgba(255,251,245,0.85) 100%)',
           }} />
 
           {/* Pulsing buy button — bottom center */}
@@ -98,18 +98,18 @@ export default function HeroPhotoSection() {
 
       {/* ── Text + scroll arrows below image ── */}
       <section style={{
-        background: '#0d0a12',
+        background: '#FFFBF5',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        padding: 'clamp(32px, 5vw, 64px) 24px clamp(24px, 4vw, 48px)',
+        padding: 'clamp(28px, 5vw, 56px) 24px clamp(24px, 4vw, 48px)',
         textAlign: 'center',
         gap: '16px',
       }}>
         <h2 style={{
           fontFamily: "'tumb', serif",
           fontSize: 'clamp(1.5rem, 4vw, 3rem)',
-          color: '#ae84ea',
+          color: '#5B4A8A',
           lineHeight: 1.2,
           letterSpacing: '0.04em',
           margin: 0,
@@ -121,7 +121,7 @@ export default function HeroPhotoSection() {
         <p style={{
           fontFamily: "'tumb', serif",
           fontSize: 'clamp(0.95rem, 2vw, 1.5rem)',
-          color: 'rgba(240,234,248,0.5)',
+          color: 'rgba(28,25,23,0.45)',
           lineHeight: 1.45,
           letterSpacing: '0.04em',
           margin: 0,
