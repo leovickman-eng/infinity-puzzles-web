@@ -59,6 +59,10 @@ export const metadata: Metadata = {
     default: 'Infinity Puzzle Wild | Wooden Puzzle with 19 Characters',
     template: '%s | Infinity Puzzles',
   },
+  icons: {
+    icon: '/favicon.svg',
+    shortcut: '/favicon.svg',
+  },
   description: 'Infinity Puzzle Wild — 19 handcrafted wooden characters with endless formations. No right answer. Just creativity, flow, and play.',
   metadataBase: new URL('https://infinity-puzzle.com'),
   openGraph: {
