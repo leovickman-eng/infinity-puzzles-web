@@ -2,11 +2,10 @@ import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import Script from 'next/script';
 import type { Metadata } from 'next';
-import HeroText from '@/components/HeroText';
 import {
   CharacterCarousel,
   FormationMorph,
-  LottieScrollSection,
+  HeroPhotoSection,
   PlayModes,
   ProductSection,
   StoryTimeline,
@@ -47,10 +46,8 @@ export default function HomePage() {
         }}
       />
 
-      {/* ── S1: Lottie hero — scroll-driven, pins until animation completes ── */}
-      <LottieScrollSection idleSrc="/lottie/test.json">
-        <HeroText />
-      </LottieScrollSection>
+      {/* ── S1: Photo hero ── */}
+      <HeroPhotoSection />
 
       {/* ── S2: Formation morph — sticky canvas, scrolls away into S3 ── */}
       <FormationMorph />

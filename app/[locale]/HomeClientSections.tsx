@@ -12,6 +12,11 @@ export const LottieScrollSection = dynamic(
   { ssr: false },
 );
 
+export const HeroPhotoSection = dynamic(
+  () => import('@/components/hero/HeroPhotoSection'),
+  { ssr: false },
+);
+
 export const ProductSection = dynamic(
   () => import('@/components/shop/ProductSection'),
   { ssr: false },
