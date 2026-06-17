@@ -151,11 +151,6 @@ export default function FormationMorph() {
 
       const scrolled = -wrapper.getBoundingClientRect().top;
 
-      if (scrolled < 0) {
-        overlay.style.opacity = '0';
-        return;
-      }
-
       overlay.style.opacity = '1';
 
       const inF2 = scrolled >= F1_SCROLL;
@@ -266,7 +261,7 @@ export default function FormationMorph() {
           alignItems: 'flex-start',
           justifyContent: 'center',
           paddingTop: '48px',
-          opacity: 0,
+          opacity: 1,
           pointerEvents: 'none',
           zIndex: 5,
         }}

@@ -65,31 +65,14 @@ export default function HeroPhotoSection() {
             background: 'linear-gradient(to bottom, rgba(0,0,0,0.08) 0%, transparent 25%, transparent 50%, rgba(255,251,245,0.9) 100%)',
           }} />
 
-          {/* "THIS IS WILD" label + buy button — bottom center */}
+          {/* Buy button — centered, higher up */}
           <div className="hero-buy-wrap" style={{
             position: 'absolute',
-            bottom: 'clamp(40px, 8%, 80px)',
+            bottom: 'clamp(60px, 16%, 130px)',
             left: '50%',
             transform: 'translateX(-50%)',
             zIndex: 5,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: '10px',
           }}>
-            {/* Label above button */}
-            <span style={{
-              fontFamily: "'tumb', serif",
-              fontSize: 'clamp(0.7rem, 1.5vw, 1rem)',
-              letterSpacing: '0.22em',
-              color: 'rgba(255,251,245,0.85)',
-              textTransform: 'uppercase',
-              whiteSpace: 'nowrap',
-              textShadow: '0 1px 6px rgba(0,0,0,0.35)',
-            }}>
-              This is WILD
-            </span>
-
             <button
               className="hero-buy-btn"
               onClick={scrollToShop}
