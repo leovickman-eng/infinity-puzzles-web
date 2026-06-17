@@ -3,6 +3,33 @@
 import Image from 'next/image';
 import { useParams } from 'next/navigation';
 
+function InfinityPuzzlesLogo() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 1920 1080"
+      fill="#ae84ea"
+      aria-label="Infinity Puzzles"
+      style={{ width: 'min(220px, 55vw)', height: 'auto', display: 'block' }}
+    >
+      <path d="M504.7,703.1c0-82.5-93.4-108.6-184.2-108.6s-11.7.5-17.3,1v334.4h74.2v-122.6c70.5-5.3,127.4-47.8,127.4-104.2ZM432.3,703.1c0,27-20.4,49.7-55,55.5v-111c34.6,5.3,55,28.5,55,55.5Z"/>
+      <path d="M770.5,599.8h-74.2v246.1c0,13.5-1.9,34.7-24.7,34.7s-24.7-21.2-24.7-34.7v-246.1h-74.2v246.1c0,49.2,30.3,88.8,98.9,88.8s98.9-39.6,98.9-88.8v-246.1Z"/>
+      <path fillRule="evenodd" d="M1094.4,873.2s-35.7-205.9-51.7-298.4c-1.9-10.9,1.1-22.1,8.3-30.6,7.2-8.5,17.7-13.4,28.8-13.4h544.9c0,12.9-5.1,25.3-14.3,34.5-9.1,9.1-21.5,14.3-34.5,14.3h-455.5l59.3,358.3h-343.1l59.3-358.3H311.7c-12.9,0-25.3-5.1-34.5-14.3-9.1-9.1-14.3-21.5-14.3-34.5h0s674.4,0,674.4,0c10.9,0,21.3,4.8,28.3,13.2,7,8.4,10,19.4,8.2,30.1-16,92.1-51.8,299.1-51.8,299.1h172.5Z"/>
+      <path d="M1384.4,878.7h-62.4v-278.9h-74.2v330.1h136.6v-51.2Z"/>
+      <path d="M1579.7,878.7h-62.4v-96h62.4v-45.8h-62.4v-88.3h62.4v-48.7h-136.6v330.1h136.6v-51.2Z"/>
+      <path d="M357.8,154.9h-3.7c-32.6,0-58.9,26.4-58.9,58.9v298h62.6V154.9Z"/>
+      <path d="M593.7,154.9h-62.6v168.6l-42.8-168.6h-62.6v356.9h62.6v-171.2l42.8,171.2h62.6V154.9Z"/>
+      <path d="M900.5,154.9h-62.6v356.9h62.6V154.9ZM776.8,303.1h-52.7v-95.5h52.7v-52.7h-115.3v356.9h62.6v-159.2h52.7v-49.6Z"/>
+      <path d="M1136.4,154.9h-62.6v168.6l-42.8-168.6h-62.6v356.9h62.6v-171.2l42.8,171.2h62.6V154.9Z"/>
+      <rect x="1204.2" y="154.9" width="62.6" height="356.9"/>
+      <path d="M1470.4,154.9h-151.3v52.7h44.4v304.2h62.6V207.6h44.4v-52.7Z"/>
+      <path d="M1622.7,154.9l-30.3,134.6-30.3-134.6h-63.2l62.1,214.5-36.9,146.1h62.6l36.9-146.1,62.1-214.5h-63.1Z"/>
+      <circle cx="829.2" cy="642.1" r="35.6"/>
+      <circle cx="1182.6" cy="642.1" r="35.6"/>
+    </svg>
+  );
+}
+
 export default function HeroPhotoSection() {
   const params = useParams();
   const locale = (params?.locale as string) ?? 'en';
@@ -84,7 +111,7 @@ export default function HeroPhotoSection() {
                 background: '#ae84ea',
                 border: 'none',
                 borderRadius: '9999px',
-                padding: 'clamp(16px, 2.5vw, 22px) clamp(52px, 8vw, 88px)',
+                padding: 'clamp(16px, 2.5vw, 22px) clamp(32px, 4.5vw, 48px)',
                 cursor: 'pointer',
                 transition: 'background 0.2s, transform 0.2s, box-shadow 0.2s',
                 whiteSpace: 'nowrap',
@@ -93,46 +120,39 @@ export default function HeroPhotoSection() {
                 justifyContent: 'center',
               }}
             >
-              {isSv ? 'Köp' : 'Buy'}
+              {isSv ? 'Köp ditt' : 'Get Yours'}
             </button>
           </div>
         </div>
       </section>
 
-      {/* ── Text + scroll arrows below image ── */}
+      {/* ── Branding + scroll arrows below image ── */}
       <section style={{
         background: '#FFFBF5',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        padding: 'clamp(28px, 5vw, 56px) 24px clamp(24px, 4vw, 48px)',
+        padding: 'clamp(24px, 4vw, 44px) 24px clamp(20px, 3vw, 36px)',
         textAlign: 'center',
-        gap: '16px',
+        gap: '12px',
       }}>
-        <h2 style={{
-          fontFamily: "'tumb', serif",
-          fontSize: 'clamp(1.5rem, 4vw, 3rem)',
-          color: '#5B4A8A',
-          lineHeight: 1.2,
-          letterSpacing: '0.04em',
-          margin: 0,
-          fontWeight: 400,
-        }}>
-          Art, Play, and a bit of Magic.
-        </h2>
 
+        {/* "This is WILD by" */}
         <p style={{
           fontFamily: "'tumb', serif",
-          fontSize: 'clamp(0.95rem, 2vw, 1.5rem)',
-          color: 'rgba(28,25,23,0.45)',
-          lineHeight: 1.45,
-          letterSpacing: '0.04em',
+          fontSize: 'clamp(0.85rem, 1.8vw, 1.2rem)',
+          color: '#ae84ea',
+          letterSpacing: '0.12em',
+          textTransform: 'uppercase',
           margin: 0,
-          fontWeight: 300,
-          maxWidth: '600px',
+          fontWeight: 400,
+          opacity: 0.75,
         }}>
-          Shapes, colors, stories you haven&apos;t seen before.
+          {isSv ? 'Det här är WILD av' : 'This is WILD by'}
         </p>
+
+        {/* Logo */}
+        <InfinityPuzzlesLogo />
 
         {/* Scroll arrows */}
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2px', marginTop: '8px' }}>

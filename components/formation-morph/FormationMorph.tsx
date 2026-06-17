@@ -161,7 +161,7 @@ export default function FormationMorph() {
       const inF2 = scrolled >= F1_SCROLL;
 
       const f1Progresses = f1Srcs.map((_, i) => {
-        if (i === 0) return Math.min(1, Math.max(0, scrolled / P0_SCROLL));
+        if (i === 0) return 1; // always visible from the start
         const start = P0_SCROLL + (i - 1) * PX_PER_F1;
         return Math.min(1, Math.max(0, (scrolled - start) / PX_PER_F1));
       });
@@ -304,7 +304,8 @@ export default function FormationMorph() {
               draggable={false}
               style={{
                 ...imgBase,
-                transform: `translateY(${i === 0 ? SLIDE_P0 : SLIDE_PX}px)`,
+                opacity: i === 0 ? 1 : 0,
+                transform: i === 0 ? 'translateY(0px)' : `translateY(${SLIDE_PX}px)`,
               }}
             />
           ))}
