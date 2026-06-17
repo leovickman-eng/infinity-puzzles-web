@@ -18,7 +18,7 @@ export default function HeroPhotoSection() {
       <style>{`
         @keyframes hero-pulse {
           0%   { box-shadow: 0 0 0 0   rgba(174,132,234,0.75), 0 4px 20px rgba(174,132,234,0.35); }
-          60%  { box-shadow: 0 0 0 18px rgba(174,132,234,0),   0 4px 20px rgba(174,132,234,0.35); }
+          60%  { box-shadow: 0 0 0 28px rgba(174,132,234,0),   0 4px 20px rgba(174,132,234,0.35); }
           100% { box-shadow: 0 0 0 0   rgba(174,132,234,0),    0 4px 20px rgba(174,132,234,0.35); }
         }
         .hero-buy-btn {
@@ -68,7 +68,7 @@ export default function HeroPhotoSection() {
           {/* Pulsing buy button — bottom center */}
           <div className="hero-buy-wrap" style={{
             position: 'absolute',
-            bottom: 'clamp(20px, 5%, 48px)',
+            bottom: 'clamp(48px, 10%, 96px)',
             left: '50%',
             transform: 'translateX(-50%)',
             zIndex: 5,
@@ -78,16 +78,19 @@ export default function HeroPhotoSection() {
               onClick={scrollToShop}
               style={{
                 fontFamily: "'tumb', serif",
-                fontSize: 'clamp(1.1rem, 2.5vw, 1.5rem)',
-                letterSpacing: '0.12em',
+                fontSize: 'clamp(1.3rem, 3vw, 1.8rem)',
+                letterSpacing: '0.14em',
                 color: '#fff',
                 background: '#ae84ea',
                 border: 'none',
-                borderRadius: '100px',
-                padding: 'clamp(12px, 2vw, 18px) clamp(36px, 6vw, 64px)',
+                borderRadius: '9999px',
+                padding: 'clamp(16px, 2.5vw, 22px) clamp(52px, 8vw, 88px)',
                 cursor: 'pointer',
                 transition: 'background 0.2s, transform 0.2s, box-shadow 0.2s',
                 whiteSpace: 'nowrap',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
               }}
             >
               {isSv ? 'Köp' : 'Buy'}
