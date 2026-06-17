@@ -265,7 +265,7 @@ export default function FormationMorph() {
           display: 'flex',
           alignItems: 'flex-start',
           justifyContent: 'center',
-          paddingTop: '140px',
+          paddingTop: '48px',
           opacity: 0,
           pointerEvents: 'none',
           zIndex: 5,
