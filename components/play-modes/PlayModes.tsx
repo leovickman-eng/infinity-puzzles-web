@@ -2,7 +2,7 @@ export default function PlayModes() {
   return (
     <section style={{
       background: '#FFFBF5',
-      padding: 'clamp(48px, 8vw, 96px) clamp(24px, 6vw, 80px)',
+      padding: 'clamp(16px, 3vw, 32px) clamp(24px, 6vw, 80px) clamp(48px, 8vw, 96px)',
       display: 'flex',
       flexDirection: 'row',
       alignItems: 'flex-start',
