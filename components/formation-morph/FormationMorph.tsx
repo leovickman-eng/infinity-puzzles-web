@@ -170,7 +170,7 @@ export default function FormationMorph() {
       // Bakgrunds-canvas: stilla under F1, rör sig uppåt under F2
       const bgEl = bgCanvasRef.current;
       if (bgEl) {
-        const bgTY = inF2 ? -f2Progress * CANVAS_H : 0;
+        const bgTY = inF2 ? -f2Progress * (CANVAS_H / 2) : 0;
         if (Math.abs(bgTY - bgTranslateRef.current) >= 1) {
           bgEl.style.transform = `translateY(${bgTY}px)`;
           bgTranslateRef.current = bgTY;
