@@ -47,7 +47,7 @@ export default function HeroPhotoSection() {
 
         /* Responsive aspect ratio */
         .hero-img-wrap { aspect-ratio: 4032 / 2503; }
-        @media (max-width: 767px) { .hero-img-wrap { aspect-ratio: 1192 / 1920; } }
+        @media (max-width: 767px) { .hero-img-wrap { aspect-ratio: 900 / 1350; } }
       `}</style>
 
       {/* ── Full-width image ── */}
