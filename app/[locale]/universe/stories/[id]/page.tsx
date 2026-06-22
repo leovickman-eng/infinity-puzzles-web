@@ -160,7 +160,7 @@ export default function CharacterPage() {
       </div>
 
       {/* Poster — full width, fade to dark */}
-      <div style={{ position: 'relative', width: '100%', maxWidth: '480px', margin: '0 auto' }}>
+      <div style={{ position: 'relative', width: '100%', maxWidth: '480px', margin: '0 auto', borderRadius: '14px', overflow: 'hidden' }}>
         <img
           src={`/images/posters/poster_${String(id).padStart(2, '0')}.webp`}
           alt={ch.name}

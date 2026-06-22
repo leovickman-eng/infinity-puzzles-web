@@ -81,6 +81,7 @@ export default function StoriesPage() {
               overflow: 'hidden',
               aspectRatio: '3/4',
               background: '#1a1530',
+              borderRadius: '10px',
             }}>
               <img
                 src={`/images/posters/poster_${String(ch.id).padStart(2, '0')}.webp`}
