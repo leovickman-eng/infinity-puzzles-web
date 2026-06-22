@@ -124,12 +124,20 @@ function AudioPlayer({ url, label }: { url: string; label: string }) {
   );
 }
 
+// Returns true if hex color is light (needs dark text)
+function isLight(hex: string): boolean {
+  const r = parseInt(hex.slice(1, 3), 16) / 255;
+  const g = parseInt(hex.slice(3, 5), 16) / 255;
+  const b = parseInt(hex.slice(5, 7), 16) / 255;
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b > 0.45;
+}
+
 const BG: Record<number, string> = {
-  1:  '#3295BC', 2:  '#F19D9A', 3:  '#A194D4', 4:  '#7D1E1E',
-  5:  '#ECD887', 6:  '#95BE7B', 7:  '#8FBAA8', 8:  '#A99AC7',
-  9:  '#49802C', 10: '#CD7F83', 11: '#79BAB3', 12: '#DCC3C1',
-  13: '#D9C980', 14: '#44A4BE', 15: '#7A5F83', 16: '#2F5867',
-  17: '#AA89C1', 18: '#E86D3F', 19: '#84535B',
+  1:  '#12A3E3', 2:  '#F9AEBC', 3:  '#AB82E6', 4:  '#E1191E',
+  5:  '#FDF07C', 6:  '#D3EF8B', 7:  '#7ED6CC', 8:  '#DAC1FF',
+  9:  '#0D8138', 10: '#F9AEBB', 11: '#7ED6CC', 12: '#F8E2C3',
+  13: '#FDF07C', 14: '#15ACE8', 15: '#523E7B', 16: '#06375B',
+  17: '#B38CEE', 18: '#F35639', 19: '#554650',
 };
 
 export default function CharacterPage() {
@@ -140,6 +148,10 @@ export default function CharacterPage() {
   const audios   = AUDIO_MAP[id] ?? [];
   const chapter  = CHAPTER_MAP[id];
   const bg       = BG[id] ?? '#0d0a12';
+  const light    = isLight(bg);
+  const textColor  = light ? '#1C1917'              : '#f0eaf8';
+  const mutedColor = light ? 'rgba(28,25,23,0.5)'   : 'rgba(240,234,248,0.4)';
+  const accentColor = light ? '#5B4A8A'             : '#ae84ea';
 
   if (!ch) return (
     <div style={{ minHeight: '100svh', background: '#0d0a12', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#f0eaf8' }}>
@@ -148,7 +160,7 @@ export default function CharacterPage() {
   );
 
   return (
-    <div style={{ minHeight: '100svh', background: bg, color: '#f0eaf8' }}>
+    <div style={{ minHeight: '100svh', background: bg, color: textColor }}>
 
       {/* Top bar */}
       <div style={{
@@ -158,7 +170,7 @@ export default function CharacterPage() {
         background: `linear-gradient(to bottom, ${bg}f5 60%, transparent)`,
       }}>
         <Link href={`/${locale}/universe/stories`} style={{
-          color: 'rgba(240,234,248,0.4)', fontSize: '13px', textDecoration: 'none',
+          color: mutedColor, fontSize: '13px', textDecoration: 'none',
           fontFamily: "'DM Sans', sans-serif", letterSpacing: '0.06em', transition: 'color 0.15s',
         }}
           onMouseEnter={e => (e.currentTarget.style.color = '#ae84ea')}
@@ -190,14 +202,14 @@ export default function CharacterPage() {
         <div style={{ marginBottom: '28px' }}>
           <div style={{
             fontSize: '10px', letterSpacing: '2.5px', textTransform: 'uppercase',
-            color: 'rgba(240,234,248,0.3)', fontFamily: "'DM Sans', sans-serif", marginBottom: '8px',
+            color: mutedColor, fontFamily: "'DM Sans', sans-serif", marginBottom: '8px',
           }}>
             {ch.animal}
           </div>
           <h1 style={{
             fontFamily: "'tumb', serif",
             fontSize: 'clamp(2.2rem, 8vw, 3.5rem)',
-            fontWeight: 400, color: '#ae84ea',
+            fontWeight: 400, color: accentColor,
             margin: 0, letterSpacing: '0.03em', lineHeight: 1,
           }}>
             {ch.name}
@@ -224,7 +236,7 @@ export default function CharacterPage() {
             padding: '12px 22px', borderRadius: '10px',
             background: 'rgba(174,132,234,0.08)',
             border: '1px solid rgba(174,132,234,0.35)',
-            color: '#ae84ea', textDecoration: 'none',
+            color: accentColor, textDecoration: 'none',
             fontSize: '13px', fontFamily: "'DM Sans', sans-serif",
             letterSpacing: '0.05em', transition: 'background 0.2s',
           }}
