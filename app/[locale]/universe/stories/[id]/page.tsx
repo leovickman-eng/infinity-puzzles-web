@@ -124,6 +124,14 @@ function AudioPlayer({ url, label }: { url: string; label: string }) {
   );
 }
 
+const BG: Record<number, string> = {
+  1:  '#3295BC', 2:  '#F19D9A', 3:  '#A194D4', 4:  '#7D1E1E',
+  5:  '#ECD887', 6:  '#95BE7B', 7:  '#8FBAA8', 8:  '#A99AC7',
+  9:  '#49802C', 10: '#CD7F83', 11: '#79BAB3', 12: '#DCC3C1',
+  13: '#D9C980', 14: '#44A4BE', 15: '#7A5F83', 16: '#2F5867',
+  17: '#AA89C1', 18: '#E86D3F', 19: '#84535B',
+};
+
 export default function CharacterPage() {
   const params   = useParams();
   const locale   = (params?.locale as string) ?? 'en';
@@ -131,6 +139,7 @@ export default function CharacterPage() {
   const ch       = CHARACTERS.find(c => c.id === id);
   const audios   = AUDIO_MAP[id] ?? [];
   const chapter  = CHAPTER_MAP[id];
+  const bg       = BG[id] ?? '#0d0a12';
 
   if (!ch) return (
     <div style={{ minHeight: '100svh', background: '#0d0a12', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#f0eaf8' }}>
@@ -139,14 +148,14 @@ export default function CharacterPage() {
   );
 
   return (
-    <div style={{ minHeight: '100svh', background: '#0d0a12', color: '#f0eaf8' }}>
+    <div style={{ minHeight: '100svh', background: bg, color: '#f0eaf8' }}>
 
       {/* Top bar */}
       <div style={{
         position: 'fixed', top: 0, left: 0, right: 0, zIndex: 20,
         padding: '18px 24px',
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        background: 'linear-gradient(to bottom, rgba(13,10,18,0.98) 60%, transparent)',
+        background: `linear-gradient(to bottom, ${bg}f5 60%, transparent)`,
       }}>
         <Link href={`/${locale}/universe/stories`} style={{
           color: 'rgba(240,234,248,0.4)', fontSize: '13px', textDecoration: 'none',
@@ -169,7 +178,7 @@ export default function CharacterPage() {
         <div style={{
           position: 'absolute', bottom: 0, left: 0, right: 0,
           height: '60%',
-          background: 'linear-gradient(to top, #0d0a12 0%, transparent 100%)',
+          background: `linear-gradient(to top, ${bg} 0%, transparent 100%)`,
           pointerEvents: 'none',
         }} />
       </div>
