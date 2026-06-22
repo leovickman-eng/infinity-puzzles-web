@@ -133,11 +133,11 @@ function isLight(hex: string): boolean {
 }
 
 const BG: Record<number, string> = {
-  1:  '#12A3E3', 2:  '#F9AEBC', 3:  '#AB82E6', 4:  '#E1191E',
-  5:  '#FDF07C', 6:  '#D3EF8B', 7:  '#7ED6CC', 8:  '#DAC1FF',
-  9:  '#0D8138', 10: '#F9AEBB', 11: '#7ED6CC', 12: '#F8E2C3',
-  13: '#FDF07C', 14: '#15ACE8', 15: '#523E7B', 16: '#06375B',
-  17: '#B38CEE', 18: '#F35639', 19: '#554650',
+  1:  '#12a3e1', 2:  '#f9adbc', 3:  '#ac82e7', 4:  '#530000',
+  5:  '#fdf07d', 6:  '#d3ef8b', 7:  '#7ed6cd', 8:  '#dac1ff',
+  9:  '#0d8137', 10: '#f9adbc', 11: '#7ed6cd', 12: '#f8e1c3',
+  13: '#fdf07d', 14: '#16ade6', 15: '#533f7e', 16: '#05375a',
+  17: '#b38ced', 18: '#f35538', 19: '#544650',
 };
 
 export default function CharacterPage() {
@@ -187,12 +187,6 @@ export default function CharacterPage() {
           alt={ch.name}
           style={{ width: '100%', display: 'block' }}
         />
-        <div style={{
-          position: 'absolute', bottom: 0, left: 0, right: 0,
-          height: '60%',
-          background: `linear-gradient(to top, ${bg} 0%, transparent 100%)`,
-          pointerEvents: 'none',
-        }} />
       </div>
 
       {/* Content */}
