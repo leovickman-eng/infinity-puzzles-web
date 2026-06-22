@@ -214,8 +214,10 @@ export default function CharacterPage() {
         {audios.length > 0 && (
           <div style={{
             padding: '20px',
-            background: 'rgba(255,255,255,0.03)',
-            border: '1px solid rgba(255,255,255,0.07)',
+            background: 'rgba(255,255,255,0.35)',
+            backdropFilter: 'blur(12px)',
+            WebkitBackdropFilter: 'blur(12px)',
+            border: '1px solid rgba(255,255,255,0.25)',
             borderRadius: '14px',
             marginBottom: '24px',
           }}>
