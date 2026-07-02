@@ -186,7 +186,7 @@ export default function WildStats() {
     {
       icon: <DalaIcon />,
       text: t('sweden'),
-      label: t('design'),
+      label: null,
     },
   ];
 
@@ -202,7 +202,7 @@ export default function WildStats() {
                 flexDirection: 'column',
                 alignItems: 'center',
                 gap: 14,
-                padding: 'clamp(32px, 5vw, 52px) clamp(12px, 3vw, 28px)',
+                padding: 'clamp(16px, 2.5vw, 28px) clamp(12px, 3vw, 28px)',
               }}
             >
               {/* Icon */}
