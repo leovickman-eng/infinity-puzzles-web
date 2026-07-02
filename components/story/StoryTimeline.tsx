@@ -10,10 +10,19 @@ function extractTeaser(text: string, sentenceCount = 3): string {
 }
 
 export default function StoryTimeline() {
-  const t = useTranslations('story');
+  const t  = useTranslations('story');
+  const tp = useTranslations('physical');
+  const tc = useTranslations('catalog');
   const [expanded, setExpanded] = useState<Set<number>>(new Set());
 
   const chapters = [
+    {
+      number: '',
+      title:  `${tp('title')} ${tp('subtitle')}`,
+      period: tc('collection'),
+      text:   tp('body'),
+      image:  '/images/story/portrait_leo_vickman_infinity-puzzle.JPG',
+    },
     {
       number: t('chapter1.number'),
       title: t('chapter1.title'),
@@ -104,7 +113,7 @@ export default function StoryTimeline() {
                     className="font-body uppercase tracking-widest text-primary mb-2"
                     style={{ fontSize: '11px' }}
                   >
-                    {ch.number} &nbsp;·&nbsp; {ch.period}
+                    {ch.number ? <>{ch.number} &nbsp;·&nbsp; {ch.period}</> : ch.period}
                   </p>
 
                   {/* Title */}

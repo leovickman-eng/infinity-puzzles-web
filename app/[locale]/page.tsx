@@ -60,54 +60,38 @@ export default function HomePage() {
       <PlayModes />
 
       {/* ── S3: The physical object ── */}
-      <section className="py-24 px-6 bg-background">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
-            <div className="flex flex-col gap-6 order-2 md:order-1">
-              <p className="font-display text-sm uppercase tracking-widest text-primary">Wild Collection</p>
-              <h2 className="font-display text-4xl md:text-5xl font-bold text-foreground leading-tight text-balance">
-                {t('physical.title')} <br />
-                <span className="text-foreground/40">{t('physical.subtitle')}</span>
-              </h2>
-              <p className="font-body text-lg text-foreground/75 leading-relaxed max-w-md">
-                {t('physical.description')}
-              </p>
-              <p className="font-body text-base text-foreground/75 leading-relaxed max-w-md mt-4 whitespace-pre-line">
-                {t('physical.body')}
-              </p>
-            </div>
-
-            {/* Image grid */}
-            <div className="order-1 md:order-2 grid grid-cols-2 gap-3">
-              <div className="aspect-square rounded-2xl overflow-hidden bg-stone-100 col-span-2 relative">
-                <Image
-                  src="/images/hero/hero-1.png"
-                  alt="Infinity Puzzles Wild"
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                  priority
-                />
-              </div>
-              <div className="aspect-square rounded-2xl overflow-hidden bg-stone-100 relative">
-                <Image
-                  src="/images/hero/hero-2.png"
-                  alt="Infinity Puzzles detail"
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 768px) 50vw, 25vw"
-                />
-              </div>
-              <div className="aspect-square rounded-2xl overflow-hidden bg-stone-100 relative">
-                <Image
-                  src="/images/hero/hero-3.png"
-                  alt="Infinity Puzzles detail"
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 768px) 50vw, 25vw"
-                />
-              </div>
-            </div>
+      {/* ── S3: The physical object — full-bleed image triptych ── */}
+      <section className="bg-background">
+        {/* Image 1: full bleed — natural 4:3 */}
+        <div className="relative w-full overflow-hidden" style={{ aspectRatio: '4/3' }}>
+          <Image
+            src="/images/hero/nya/Infinity-puzzle_1.jpg"
+            alt="Infinity Puzzles Wild"
+            fill
+            className="object-cover object-center"
+            sizes="100vw"
+            priority
+          />
+        </div>
+        {/* Images 2 + 3: side by side, square crop */}
+        <div className="grid grid-cols-2 gap-2 p-2">
+          <div className="relative rounded-xl overflow-hidden bg-stone-100" style={{ aspectRatio: '1/1' }}>
+            <Image
+              src="/images/hero/nya/Infinity-puzzle_2.jpg"
+              alt="Infinity Puzzles detail"
+              fill
+              className="object-cover object-center"
+              sizes="50vw"
+            />
+          </div>
+          <div className="relative rounded-xl overflow-hidden bg-stone-100" style={{ aspectRatio: '1/1' }}>
+            <Image
+              src="/images/hero/nya/Infinity-puzzle_3.jpg"
+              alt="Infinity Puzzles detail"
+              fill
+              className="object-cover object-center"
+              sizes="50vw"
+            />
           </div>
         </div>
       </section>
