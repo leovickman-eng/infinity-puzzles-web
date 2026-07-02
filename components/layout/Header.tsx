@@ -19,12 +19,12 @@ function InfinityKnot() {
   );
 }
 
-function DotsIcon() {
+function HamburgerIcon() {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" aria-hidden="true">
-      <circle cx="4"  cy="9" r="1.6" fill="currentColor" />
-      <circle cx="9"  cy="9" r="1.6" fill="currentColor" />
-      <circle cx="14" cy="9" r="1.6" fill="currentColor" />
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="16" viewBox="0 0 20 16" aria-hidden="true">
+      <line x1="0" y1="2"  x2="20" y2="2"  stroke="#ae84ea" strokeWidth="2" strokeLinecap="round" />
+      <line x1="0" y1="8"  x2="20" y2="8"  stroke="#ae84ea" strokeWidth="2" strokeLinecap="round" />
+      <line x1="0" y1="14" x2="20" y2="14" stroke="#ae84ea" strokeWidth="2" strokeLinecap="round" />
     </svg>
   );
 }
@@ -188,7 +188,7 @@ export default function Header({ locale }: Props) {
           aria-expanded={open}
           className="flex items-center justify-center w-7 h-7 rounded-full text-foreground/40 hover:text-foreground/70 hover:bg-foreground/6 transition-colors"
         >
-          <DotsIcon />
+          <HamburgerIcon />
         </button>
 
         {/* Dropdown portal */}
