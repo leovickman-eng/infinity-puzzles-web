@@ -21,10 +21,10 @@ function InfinityKnot() {
 
 function HamburgerIcon() {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="16" viewBox="0 0 20 16" aria-hidden="true">
-      <line x1="0" y1="2"  x2="20" y2="2"  stroke="#ae84ea" strokeWidth="2" strokeLinecap="round" />
-      <line x1="0" y1="8"  x2="20" y2="8"  stroke="#ae84ea" strokeWidth="2" strokeLinecap="round" />
-      <line x1="0" y1="14" x2="20" y2="14" stroke="#ae84ea" strokeWidth="2" strokeLinecap="round" />
+    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="18" viewBox="0 0 22 18" aria-hidden="true">
+      <line x1="1" y1="2"  x2="21" y2="2"  stroke="#ae84ea" strokeWidth="3" strokeLinecap="round" />
+      <line x1="1" y1="9"  x2="21" y2="9"  stroke="#ae84ea" strokeWidth="3" strokeLinecap="round" />
+      <line x1="1" y1="16" x2="21" y2="16" stroke="#ae84ea" strokeWidth="3" strokeLinecap="round" />
     </svg>
   );
 }
