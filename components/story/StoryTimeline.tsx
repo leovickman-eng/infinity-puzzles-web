@@ -21,7 +21,7 @@ export default function StoryTimeline() {
       title:  `${tp('title')} ${tp('subtitle')}`,
       period: tc('collection'),
       text:   tp('body'),
-      image:  '/images/story/portrait_leo_vickman_infinity-puzzle.JPG',
+      image:  '/images/story/portrait_leo_vickman_infinity-puzzle.webp',
     },
     {
       number: t('chapter1.number'),
