@@ -75,6 +75,7 @@ export default function HeroPhotoSection() {
               objectFit: 'cover', objectPosition: 'center',
             }}
           >
+            <source src="/WILD_stopmotion/WILD_stopmotion_landscape.webm" type="video/webm" />
             <source src="/WILD_stopmotion/WILD_stopmotion_landscape.mp4" type="video/mp4" />
           </video>
 
@@ -91,6 +92,7 @@ export default function HeroPhotoSection() {
               objectFit: 'cover', objectPosition: 'center',
             }}
           >
+            <source src="/WILD_stopmotion/WILD_stopmotion_standing.webm" type="video/webm" />
             <source src="/WILD_stopmotion/WILD_stopmotion_standing.mp4" type="video/mp4" />
           </video>
 
