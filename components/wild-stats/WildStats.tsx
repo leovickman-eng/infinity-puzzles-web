@@ -214,7 +214,7 @@ export default function WildStats() {
   ];
 
   return (
-    <section style={{ background: '#FFFBF5', padding: '0 0 72px' }}>
+    <section style={{ background: '#FFFBF5', padding: '0 0 8px' }}>
       <div style={{ maxWidth: 960, margin: '0 auto', padding: '0 16px' }}>
         <div className="grid grid-cols-2 md:grid-cols-4">
           {cards.map((card, i) => (
@@ -225,7 +225,7 @@ export default function WildStats() {
                 flexDirection: 'column',
                 alignItems: 'center',
                 gap: 12,
-                padding: 'clamp(20px, 3vw, 36px) clamp(10px, 2vw, 24px)',
+                padding: 'clamp(12px, 2vw, 20px) clamp(10px, 2vw, 24px) clamp(16px, 2.5vw, 28px)',
               }}
             >
               <div style={{ minHeight: 68, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>

@@ -189,21 +189,21 @@ export default function PlayModes() {
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
-                gap: 14,
-                padding: 'clamp(20px, 3vw, 36px) clamp(10px, 2vw, 24px)',
+                gap: 12,
+                padding: 'clamp(8px, 1.5vw, 14px) clamp(10px, 2vw, 24px) clamp(20px, 3vw, 36px)',
               }}
             >
-              <div style={{ minHeight: 48, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <div style={{ minHeight: 68, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 {symbol}
               </div>
               <p style={{
                 fontFamily: "'eight-condensed', Georgia, serif",
                 fontWeight: 900,
-                fontSize: 'clamp(1.1rem, 2.5vw, 1.9rem)',
+                fontSize: 'clamp(1rem, 2vw, 1.4rem)',
                 color,
                 margin: 0,
-                letterSpacing: '0.02em',
-                lineHeight: 1.2,
+                letterSpacing: '0.03em',
+                lineHeight: 1.05,
                 textAlign: 'center',
               }}>
                 {text}
