@@ -46,30 +46,53 @@ export default function HeroPhotoSection() {
         .hero-arrow:nth-child(3) { animation-delay: 0.36s; }
 
         /* Responsive aspect ratio */
-        .hero-img-wrap { aspect-ratio: 4032 / 2503; }
-        @media (max-width: 767px) { .hero-img-wrap { aspect-ratio: 900 / 1350; } }
+        .hero-img-wrap { aspect-ratio: 1500 / 1000; }
+        @media (max-width: 767px) { .hero-img-wrap { aspect-ratio: 1000 / 1500; } }
+
+        /* Show/hide video per breakpoint */
+        .hero-video-landscape { display: block; }
+        .hero-video-standing  { display: none;  }
+        @media (max-width: 767px) {
+          .hero-video-landscape { display: none;  }
+          .hero-video-standing  { display: block; }
+        }
       `}</style>
 
       {/* ── Full-width image ── */}
       <section style={{ position: 'relative', width: '100%', background: '#FFFBF5', lineHeight: 0 }}>
         <div className="hero-img-wrap" style={{ position: 'relative', width: '100%' }}>
 
-          {/* Responsive image — mobile gets hero-mobile.webp, desktop hero-main.webp */}
-          <picture style={{ position: 'absolute', inset: 0, display: 'block' }}>
-            <source media="(max-width: 767px)" srcSet="/images/hero/hero-mobile.webp" />
-            <img
-              src="/images/hero/hero-main.webp"
-              alt="Infinity Puzzle Wild"
-              fetchPriority="high"
-              style={{
-                width: '100%',
-                height: '100%',
-                objectFit: 'cover',
-                objectPosition: 'center',
-                display: 'block',
-              }}
-            />
-          </picture>
+          {/* Desktop video — landscape */}
+          <video
+            className="hero-video-landscape"
+            autoPlay
+            muted
+            loop
+            playsInline
+            style={{
+              position: 'absolute', inset: 0,
+              width: '100%', height: '100%',
+              objectFit: 'cover', objectPosition: 'center',
+            }}
+          >
+            <source src="/WILD_stopmotion/WILD_stopmotion_landscape.mp4" type="video/mp4" />
+          </video>
+
+          {/* Mobile video — standing */}
+          <video
+            className="hero-video-standing"
+            autoPlay
+            muted
+            loop
+            playsInline
+            style={{
+              position: 'absolute', inset: 0,
+              width: '100%', height: '100%',
+              objectFit: 'cover', objectPosition: 'center',
+            }}
+          >
+            <source src="/WILD_stopmotion/WILD_stopmotion_standing.mp4" type="video/mp4" />
+          </video>
 
           {/* Gradient: fade bottom toward light background */}
           <div style={{
