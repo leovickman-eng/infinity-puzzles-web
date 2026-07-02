@@ -70,7 +70,7 @@ export default function HeroPhotoSection() {
       `}</style>
 
       {/* ── Full-width video ── */}
-      <section style={{ position: 'relative', width: '100%', background: '#0d0a12', lineHeight: 0 }}>
+      <section style={{ position: 'relative', width: '100%', background: '#FFFBF5', lineHeight: 0 }}>
         <div style={{ position: 'relative', width: '100%', aspectRatio }}>
 
           <video
