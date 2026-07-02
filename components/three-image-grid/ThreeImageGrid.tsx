@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, type CSSProperties } from 'react';
 import Image from 'next/image';
 
 const IMAGES = [
@@ -20,7 +20,7 @@ export default function ThreeImageGrid() {
 
   // ── Position helpers ───────────────────────────────────────────────────
 
-  const defaultStyle = (i: number): React.CSSProperties => ({
+  const defaultStyle = (i: number): CSSProperties => ({
     position:   'absolute',
     top:        0,
     left:       i === 0
@@ -35,7 +35,7 @@ export default function ThreeImageGrid() {
     overflow:   'hidden',
   });
 
-  const expandedStyle = (i: number): React.CSSProperties => {
+  const expandedStyle = (i: number): CSSProperties => {
     if (i === sel) {
       // Left half — full height
       return {

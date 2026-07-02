@@ -1,4 +1,4 @@
-import { useTranslations } from 'next-intl';
+import { getTranslations } from 'next-intl/server';
 import Image from 'next/image';
 import Script from 'next/script';
 import type { Metadata } from 'next';
@@ -21,8 +21,8 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 
-export default function HomePage() {
-  const t = useTranslations();
+export default async function HomePage() {
+  const t = await getTranslations();
 
   return (
     <>
