@@ -145,6 +145,7 @@ function DalaIcon() {
       alt=""
       width={110}
       height={71}
+      unoptimized
       style={{ objectFit: 'contain', filter: DALA_FILTER }}
       aria-hidden="true"
     />
