@@ -53,7 +53,7 @@ export default function CharacterCarousel() {
                 src={char.src}
                 alt={char.alt}
                 draggable={false}
-                style={{ width: '100%', height: 'auto', display: 'block', borderRadius: '10px' }}
+                style={{ width: '100%', height: 'auto', display: 'block', borderRadius: '10px', boxShadow: '0 8px 32px rgba(0,0,0,0.22), 0 2px 8px rgba(0,0,0,0.12)' }}
               />
             </div>
           );
