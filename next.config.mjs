@@ -4,6 +4,17 @@ const withNextIntl = createNextIntlPlugin('./i18n/request.ts');
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  async headers() {
+    return [
+      {
+        source: '/WILD_stopmotion/:path*',
+        headers: [
+          { key: 'Accept-Ranges', value: 'bytes' },
+          { key: 'Cache-Control', value: 'public, max-age=31536000, immutable' },
+        ],
+      },
+    ];
+  },
   images: {
     remotePatterns: [
       {

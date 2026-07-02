@@ -92,10 +92,10 @@ export default function HeroPhotoSection() {
             <source src={mp4} type="video/mp4" />
           </video>
 
-          {/* Gradient: fade bottom */}
+          {/* Gradient: subtle dark top, fade to cream at very bottom */}
           <div style={{
             position: 'absolute', inset: 0, pointerEvents: 'none',
-            background: 'linear-gradient(to bottom, rgba(0,0,0,0.08) 0%, transparent 25%, transparent 50%, rgba(255,251,245,0.9) 100%)',
+            background: 'linear-gradient(to bottom, rgba(0,0,0,0.15) 0%, transparent 20%, transparent 70%, rgba(255,251,245,0.6) 100%)',
           }} />
 
           {/* Buy button */}
