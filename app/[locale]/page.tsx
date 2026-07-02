@@ -59,13 +59,12 @@ export default function HomePage() {
       {/* ── S2.6: Play modes — scroll-driven text ── */}
       <PlayModes />
 
-      {/* ── S3: The physical object ── */}
-      {/* ── S3: The physical object — full-bleed image triptych ── */}
+      {/* ── S3: The physical object — full-bleed panoramics + 3-col grid ── */}
       <section className="bg-background">
-        {/* Image 1: full bleed — natural 4:3 */}
-        <div className="relative w-full overflow-hidden" style={{ aspectRatio: '4/3' }}>
+        {/* Top panoramic: CR5_1192 — 2400×687 ≈ 3.49:1 */}
+        <div className="relative w-full overflow-hidden" style={{ aspectRatio: '2400/687' }}>
           <Image
-            src="/images/hero/nya/Infinity-puzzle_1.jpg"
+            src="/images/hero/nya/CR5_1192.webp"
             alt="Infinity Puzzles Wild"
             fill
             className="object-cover object-center"
@@ -73,26 +72,47 @@ export default function HomePage() {
             priority
           />
         </div>
-        {/* Images 2 + 3: side by side, square crop */}
-        <div className="grid grid-cols-2 gap-2 p-2">
-          <div className="relative rounded-xl overflow-hidden bg-stone-100" style={{ aspectRatio: '1/1' }}>
+
+        {/* 3 images in a row — square crop */}
+        <div className="grid grid-cols-3 gap-1 p-1">
+          <div className="relative overflow-hidden bg-stone-100" style={{ aspectRatio: '1/1' }}>
             <Image
-              src="/images/hero/nya/Infinity-puzzle_2.jpg"
+              src="/images/hero/nya/Infinity-puzzle_1.webp"
+              alt="Infinity Puzzles Wild"
+              fill
+              className="object-cover object-center"
+              sizes="33vw"
+            />
+          </div>
+          <div className="relative overflow-hidden bg-stone-100" style={{ aspectRatio: '1/1' }}>
+            <Image
+              src="/images/hero/nya/Infinity-puzzle_2.webp"
               alt="Infinity Puzzles detail"
               fill
               className="object-cover object-center"
-              sizes="50vw"
+              sizes="33vw"
             />
           </div>
-          <div className="relative rounded-xl overflow-hidden bg-stone-100" style={{ aspectRatio: '1/1' }}>
+          <div className="relative overflow-hidden bg-stone-100" style={{ aspectRatio: '1/1' }}>
             <Image
-              src="/images/hero/nya/Infinity-puzzle_3.jpg"
+              src="/images/hero/nya/Infinity-puzzle_3.webp"
               alt="Infinity Puzzles detail"
               fill
               className="object-cover object-center"
-              sizes="50vw"
+              sizes="33vw"
             />
           </div>
+        </div>
+
+        {/* Bottom panoramic: CR5_1177 — 2400×828 ≈ 2.90:1 */}
+        <div className="relative w-full overflow-hidden" style={{ aspectRatio: '2400/828' }}>
+          <Image
+            src="/images/hero/nya/CR5_1177.webp"
+            alt="Infinity Puzzles Wild"
+            fill
+            className="object-cover object-center"
+            sizes="100vw"
+          />
         </div>
       </section>
 
