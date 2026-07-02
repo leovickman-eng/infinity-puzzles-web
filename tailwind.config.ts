@@ -32,10 +32,10 @@ const config: Config = {
         },
       },
       fontFamily: {
-        display: ['benguiat-pro-itc', 'Georgia', 'serif'],
+        display: ['eight-condensed', 'Georgia', 'serif'],
         body: ['var(--font-cormorant)', 'Georgia', 'serif'],
         serif: ['var(--font-playfair)', 'Georgia', 'serif'],
-        nakone: ['benguiat-pro-itc', 'Georgia', 'serif'],
+        nakone: ['eight-condensed', 'Georgia', 'serif'],
       },
       animation: {
         'float': 'float 6s ease-in-out infinite',

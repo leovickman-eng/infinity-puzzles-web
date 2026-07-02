@@ -103,7 +103,7 @@ export default function Header({ locale }: Props) {
         const itemStyle = {
           display: 'block',
           padding: '10px 20px',
-          fontFamily: 'benguiat-pro-itc, serif',
+          fontFamily: 'eight-condensed, sans-serif',
           fontSize: '1.05rem',
           color: 'rgba(255,251,245,0.82)' as const,
           textDecoration: 'none',
@@ -150,7 +150,7 @@ export default function Header({ locale }: Props) {
         style={{
           display: 'block',
           padding: '8px 20px',
-          fontFamily: 'benguiat-pro-itc, serif',
+          fontFamily: 'eight-condensed, sans-serif',
           fontSize: '0.75rem',
           color: 'rgba(255,251,245,0.35)',
           textDecoration: 'none',

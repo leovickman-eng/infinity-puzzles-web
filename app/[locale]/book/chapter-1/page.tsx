@@ -146,7 +146,7 @@ export default function ChapterPage() {
           margin: '0 0 12px',
           letterSpacing: '-0.01em',
           lineHeight: 1.05,
-          fontFamily: "'benguiat-pro-itc', serif",
+          fontFamily: "'eight-condensed', sans-serif",
           color: '#f0eaf8',
         }}>
           {CHAPTER.title}
