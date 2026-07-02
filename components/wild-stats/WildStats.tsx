@@ -139,17 +139,51 @@ function DotGrid() {
   return <canvas ref={canvasRef} width={W} height={H} aria-hidden="true" style={{ display: 'block' }} />;
 }
 
-// ─── Diameter circle (card 3) ────────────────────────────────────────
+// ─── Diameter circle (card 3) — thick ring + dot row ─────────────────
 
 function DiameterIcon() {
-  return (
-    <svg width="60" height="60" viewBox="0 0 60 60" fill="none" aria-hidden="true">
-      <circle cx="30" cy="30" r="24" stroke="#ae84ea" strokeWidth="2.2" strokeOpacity="0.5" />
-      <line x1="6" y1="30" x2="54" y2="30" stroke="#ae84ea" strokeWidth="1.8" strokeDasharray="4.5 3" />
-      <line x1="6"  y1="24" x2="6"  y2="36" stroke="#ae84ea" strokeWidth="1.8" strokeOpacity="0.7" />
-      <line x1="54" y1="24" x2="54" y2="36" stroke="#ae84ea" strokeWidth="1.8" strokeOpacity="0.7" />
-    </svg>
-  );
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const rafRef    = useRef<number>(0);
+  const W = 60, H = 60, cx = 30, cy = 30, R = 24;
+  const DOT_N = 9;
+
+  useEffect(() => {
+    const cv = canvasRef.current; if (!cv) return;
+    const ctx = cv.getContext('2d')!;
+    const draw = () => {
+      ctx.clearRect(0, 0, W, H);
+      const now = performance.now() / 1000;
+
+      // Thick outer ring
+      ctx.save();
+      ctx.strokeStyle = 'rgba(174,132,234,0.55)';
+      ctx.lineWidth = 3.5;
+      ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI * 2); ctx.stroke();
+      ctx.restore();
+
+      // End tick marks
+      ctx.save();
+      ctx.strokeStyle = 'rgba(174,132,234,0.7)';
+      ctx.lineWidth = 1.8;
+      ctx.beginPath(); ctx.moveTo(cx - R, cy - 6); ctx.lineTo(cx - R, cy + 6); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(cx + R, cy - 6); ctx.lineTo(cx + R, cy + 6); ctx.stroke();
+      ctx.restore();
+
+      // Dots in a row along diameter
+      for (let i = 0; i < DOT_N; i++) {
+        const x = (cx - R) + (2 * R) * (i / (DOT_N - 1));
+        const alpha = blinkAlpha(now, i);
+        ctx.fillStyle = `rgba(174,132,234,${alpha.toFixed(2)})`;
+        ctx.beginPath(); ctx.arc(x, cy, 1.8, 0, Math.PI * 2); ctx.fill();
+      }
+
+      rafRef.current = requestAnimationFrame(draw);
+    };
+    draw();
+    return () => cancelAnimationFrame(rafRef.current);
+  }, []);
+
+  return <canvas ref={canvasRef} width={W} height={H} aria-hidden="true" style={{ display: 'block' }} />;
 }
 
 // ─── Dalahäst with red duotone (card 4) ──────────────────────────────
@@ -197,7 +231,7 @@ export default function WildStats() {
     },
     {
       icon:         <DiameterIcon />,
-      value:        '39 cm diameter',
+      value:        '30 cm diameter',
       valueColor:   '#ae84ea',
       label:        null as string | null,
       valueSz:      'clamp(1rem, 2vw, 1.4rem)',
@@ -210,6 +244,7 @@ export default function WildStats() {
       label:        t('wood') as string | null,
       valueSz:      'clamp(1rem, 2.2vw, 1.4rem)',
       labelDisplay: true,
+      labelColor:   '#e81317' as string | undefined,
     },
   ];
 
@@ -250,7 +285,7 @@ export default function WildStats() {
                   fontWeight: 900,
                   fontSize: 'clamp(0.85rem, 1.6vw, 1.05rem)',
                   letterSpacing: '0.04em',
-                  color: 'rgba(28,25,23,0.45)',
+                  color: (card as {labelColor?: string}).labelColor ?? 'rgba(28,25,23,0.45)',
                   textAlign: 'center',
                   lineHeight: 1.3,
                 } : {

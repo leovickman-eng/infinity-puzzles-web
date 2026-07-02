@@ -128,7 +128,7 @@ function DotsSplit() {
 
 // ─── Kolumn 3: rullande band (seamless loop), #544550 ─────────────────────
 
-const BAND_SP  = 20;
+const BAND_SP  = 13;
 const BAND_N   = 19;
 const BAND_TOT = BAND_N * BAND_SP;
 const BAND_W   = 120;
@@ -181,7 +181,7 @@ export default function PlayModes() {
   return (
     <section style={{ background: '#FFFBF5', padding: '0 0 72px' }}>
       <div style={{ maxWidth: 960, margin: '0 auto', padding: '0 16px' }}>
-        <div className="grid grid-cols-3">
+        <div className="grid grid-cols-1 sm:grid-cols-3">
           {cols.map(({ symbol, text, color }, i) => (
             <div
               key={i}
