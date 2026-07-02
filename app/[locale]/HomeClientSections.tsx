@@ -41,3 +41,8 @@ export const WildStats = dynamic(
   () => import('@/components/wild-stats/WildStats'),
   { ssr: false },
 );
+
+export const ThreeImageGrid = dynamic(
+  () => import('@/components/three-image-grid/ThreeImageGrid'),
+  { ssr: false },
+);

@@ -9,6 +9,7 @@ import {
   PlayModes,
   ProductSection,
   StoryTimeline,
+  ThreeImageGrid,
   WildStats,
 } from './HomeClientSections';
 
@@ -73,36 +74,8 @@ export default function HomePage() {
           />
         </div>
 
-        {/* 3 images in a row — square crop */}
-        <div className="grid grid-cols-3 gap-1 p-1">
-          <div className="relative overflow-hidden bg-stone-100" style={{ aspectRatio: '1/1' }}>
-            <Image
-              src="/images/hero/nya/Infinity-puzzle_1.webp"
-              alt="Infinity Puzzles Wild"
-              fill
-              className="object-cover object-center"
-              sizes="33vw"
-            />
-          </div>
-          <div className="relative overflow-hidden bg-stone-100" style={{ aspectRatio: '1/1' }}>
-            <Image
-              src="/images/hero/nya/Infinity-puzzle_2.webp"
-              alt="Infinity Puzzles detail"
-              fill
-              className="object-cover object-center"
-              sizes="33vw"
-            />
-          </div>
-          <div className="relative overflow-hidden bg-stone-100" style={{ aspectRatio: '1/1' }}>
-            <Image
-              src="/images/hero/nya/Infinity-puzzle_3.webp"
-              alt="Infinity Puzzles detail"
-              fill
-              className="object-cover object-center"
-              sizes="33vw"
-            />
-          </div>
-        </div>
+        {/* 3 interactive images — click to expand */}
+        <ThreeImageGrid />
 
         {/* Bottom panoramic: CR5_1177 — 2400×828 ≈ 2.90:1 */}
         <div className="relative w-full overflow-hidden" style={{ aspectRatio: '2400/828' }}>
