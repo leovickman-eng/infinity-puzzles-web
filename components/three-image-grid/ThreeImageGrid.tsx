@@ -4,9 +4,9 @@ import { useState, type CSSProperties } from 'react';
 import Image from 'next/image';
 
 const IMAGES = [
-  '/images/hero/nya/Infinity-puzzle_1.webp',
-  '/images/hero/nya/Infinity-puzzle_2.webp',
-  '/images/hero/nya/Infinity-puzzle_3.webp',
+  { src: '/images/hero/nya/Infinity-puzzle_1.webp', pos: '70% 50%' },  // mer höger
+  { src: '/images/hero/nya/Infinity-puzzle_2.webp', pos: 'center'   },
+  { src: '/images/hero/nya/Infinity-puzzle_3.webp', pos: 'center'   },
 ];
 
 const EASE = 'cubic-bezier(0.4, 0, 0.2, 1)';
@@ -77,7 +77,7 @@ export default function ThreeImageGrid() {
         background: '#f5f5f4',
       }}
     >
-      {IMAGES.map((src, i) => {
+      {IMAGES.map(({ src, pos }, i) => {
         const style = sel === null ? defaultStyle(i) : expandedStyle(i);
         const isExpanded = sel === i;
 
@@ -92,8 +92,9 @@ export default function ThreeImageGrid() {
               src={src}
               alt="Infinity Puzzles Wild"
               fill
-              className="object-cover object-center"
+              className="object-cover"
               style={{
+                objectPosition: pos,
                 transition: `transform ${DUR} ${EASE}`,
                 transform:  isExpanded ? 'scale(1.02)' : 'scale(1)',
               }}
