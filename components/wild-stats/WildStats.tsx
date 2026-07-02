@@ -4,6 +4,14 @@ import { useEffect, useRef } from 'react';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 
+// Slow blink: golden-angle stagger → bara 1-2 prickar dimmar åt gången
+const GOLDEN_S = 2.399963;
+const BLINK_W  = 1.38; // ~0.22 Hz → period ≈ 4.5 s per pricka
+function blinkAlpha(now: number, i: number): number {
+  const narrow = Math.pow(Math.max(0, Math.sin(now * BLINK_W + i * GOLDEN_S)), 8);
+  return 0.9 - 0.75 * narrow;
+}
+
 // ─── Fibonacci sphere (card 1) ────────────────────────────────────────
 
 function fibonacciSphere(n: number): [number, number, number][] {
@@ -98,10 +106,11 @@ function SphereCanvas() {
   );
 }
 
-// ─── 19 dot grid (card 2) ────────────────────────────────────────────
+// ─── 19 dot grid (card 2) — animated slow blink ──────────────────────
 
 function DotGrid() {
-  // squareGridPoints(19, 9): 4-col rounded square
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const rafRef    = useRef<number>(0);
   const pts: [number, number][] = [
     [18,18],[18,9],[9,18],[27,18],[18,27],
     [9,9],[27,9],[9,27],[27,27],[0,18],
@@ -109,13 +118,25 @@ function DotGrid() {
     [0,27],[36,27],[9,0],[27,0],
   ];
   const W = 48, H = 48;
-  return (
-    <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`} aria-hidden="true">
-      {pts.map(([x, y], i) => (
-        <circle key={i} cx={x + 6} cy={y + 6} r={2.5} fill="#5DCCA0" opacity={0.55 + (i / pts.length) * 0.4} />
-      ))}
-    </svg>
-  );
+
+  useEffect(() => {
+    const cv = canvasRef.current; if (!cv) return;
+    const ctx = cv.getContext('2d')!;
+    const draw = () => {
+      ctx.clearRect(0, 0, W, H);
+      const now = performance.now() / 1000;
+      pts.forEach(([x, y], i) => {
+        const alpha = blinkAlpha(now, i);
+        ctx.fillStyle = `rgba(93,204,160,${alpha.toFixed(2)})`;
+        ctx.beginPath(); ctx.arc(x + 6, y + 6, 2.5, 0, Math.PI * 2); ctx.fill();
+      });
+      rafRef.current = requestAnimationFrame(draw);
+    };
+    draw();
+    return () => cancelAnimationFrame(rafRef.current);
+  }, []);
+
+  return <canvas ref={canvasRef} width={W} height={H} aria-hidden="true" style={{ display: 'block' }} />;
 }
 
 // ─── Diameter circle (card 3) ────────────────────────────────────────

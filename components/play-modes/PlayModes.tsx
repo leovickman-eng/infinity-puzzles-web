@@ -3,14 +3,18 @@
 import { useEffect, useRef } from 'react';
 import { useTranslations } from 'next-intl';
 
-// Golden angle → asynkron ("twinklande") fas-offset per pricka
-const GOLDEN     = 2.399963;
-const FADE_SPEED = 0.7;
+// Golden angle → staggerar blink-faserna så bara 1-2 prickar dimmar åt gången
+const GOLDEN  = 2.399963;
+const BLINK_W = 1.38;   // ≈ 0.22 Hz → period ~4.5 s per pricka
 
-// ─── Hjälp: kvadratisk grid med avtrimmade hörn ───────────────────────
-// Skapar n punkter i ett kvadratiskt rutnät. Hörnen trimmas bort
-// (de n punkter närmast mitten väljs) → lite rundad form.
+// ─── Slow blink helper ─────────────────────────────────────────────────────
+// Normalt alpha ~0.9, smala kortvariga dipp ned mot ~0.15, max 1-2 åt gången
+function blinkAlpha(now: number, i: number): number {
+  const narrow = Math.pow(Math.max(0, Math.sin(now * BLINK_W + i * GOLDEN)), 8);
+  return 0.9 - 0.75 * narrow;
+}
 
+// ─── Hjälp: kvadratisk grid med avtrimmade hörn ────────────────────────────
 function squareGridPoints(n: number, spacing: number): [number, number][] {
   const side = Math.ceil(Math.sqrt(n * 1.5));
   const pts: [number, number][] = [];
@@ -37,7 +41,7 @@ function hexToRgb(hex: string): [number, number, number] {
   ];
 }
 
-// ─── Rad 1: 19 prickar med golden-angle fade, #0d8137 ────────────────
+// ─── Kolumn 1: 19 prickar, slow blink, #0d8137 ────────────────────────────
 
 function DotsAlone() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -54,8 +58,8 @@ function DotsAlone() {
       ctx.clearRect(0, 0, W, H);
       const now = performance.now() / 1000;
       PTS_19.forEach(([x, y], i) => {
-        const alpha = 0.45 + 0.275 * (1 + Math.sin(now * FADE_SPEED + i * GOLDEN));
-        ctx.fillStyle = `rgba(${r},${g},${b},${alpha})`;
+        const alpha = blinkAlpha(now, i);
+        ctx.fillStyle = `rgba(${r},${g},${b},${alpha.toFixed(2)})`;
         ctx.beginPath(); ctx.arc(x + 6, y + 6, 2.5, 0, Math.PI * 2); ctx.fill();
       });
       rafRef.current = requestAnimationFrame(draw);
@@ -67,7 +71,7 @@ function DotsAlone() {
   return <canvas ref={canvasRef} width={W} height={H} aria-hidden="true" style={{ display: 'block' }} />;
 }
 
-// ─── Rad 2: 9 + 10 prickar sida vid sida, #dac1ff ───────────────────
+// ─── Kolumn 2: 9 + 10 prickar, vertikalt centrerade, dashed divider, #dac1ff
 
 function DotsSplit() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -78,10 +82,14 @@ function DotsSplit() {
   const max9Y  = Math.max(...PTS_9.map(p => p[1]));
   const max10X = Math.max(...PTS_10.map(p => p[0]));
   const max10Y = Math.max(...PTS_10.map(p => p[1]));
-  const GAP  = 12;
-  const W    = max9X + 12 + GAP + max10X + 12;
-  const H    = Math.max(max9Y, max10Y) + 12;
-  const OFF  = max9X + 12 + GAP;
+  const GAP = 14;
+  const W   = max9X + 12 + GAP + max10X + 12;
+  const H   = Math.max(max9Y, max10Y) + 12;
+  const OFF = max9X + 12 + GAP;
+
+  // Centrera varje kluster vertikalt i canvas-höjden
+  const oy9  = (H - max9Y)  / 2;
+  const oy10 = (H - max10Y) / 2;
 
   useEffect(() => {
     const cv = canvasRef.current; if (!cv) return;
@@ -89,7 +97,8 @@ function DotsSplit() {
     const draw = () => {
       ctx.clearRect(0, 0, W, H);
       const now = performance.now() / 1000;
-      // Faint dashed divider between the two groups
+
+      // Streckad mittlinje
       const divX = max9X + 12 + GAP / 2;
       ctx.save();
       ctx.strokeStyle = 'rgba(35,30,34,0.15)';
@@ -99,14 +108,14 @@ function DotsSplit() {
       ctx.restore();
 
       PTS_9.forEach(([x, y], i) => {
-        const alpha = 0.45 + 0.275 * (1 + Math.sin(now * FADE_SPEED + i * GOLDEN));
-        ctx.fillStyle = `rgba(${r},${g},${b},${alpha})`;
-        ctx.beginPath(); ctx.arc(x + 6, y + 6, 2.5, 0, Math.PI * 2); ctx.fill();
+        const alpha = blinkAlpha(now, i);
+        ctx.fillStyle = `rgba(${r},${g},${b},${alpha.toFixed(2)})`;
+        ctx.beginPath(); ctx.arc(x + 6, y + oy9, 2.5, 0, Math.PI * 2); ctx.fill();
       });
       PTS_10.forEach(([x, y], i) => {
-        const alpha = 0.45 + 0.275 * (1 + Math.sin(now * FADE_SPEED + (i + 9) * GOLDEN));
-        ctx.fillStyle = `rgba(${r},${g},${b},${alpha})`;
-        ctx.beginPath(); ctx.arc(x + OFF + 6, y + 6, 2.5, 0, Math.PI * 2); ctx.fill();
+        const alpha = blinkAlpha(now, i + 9);
+        ctx.fillStyle = `rgba(${r},${g},${b},${alpha.toFixed(2)})`;
+        ctx.beginPath(); ctx.arc(x + OFF + 6, y + oy10, 2.5, 0, Math.PI * 2); ctx.fill();
       });
       rafRef.current = requestAnimationFrame(draw);
     };
@@ -117,14 +126,14 @@ function DotsSplit() {
   return <canvas ref={canvasRef} width={W} height={H} aria-hidden="true" style={{ display: 'block' }} />;
 }
 
-// ─── Rad 3: rullande band (seamless loop), #544550 ───────────────────
+// ─── Kolumn 3: rullande band (seamless loop), #544550 ─────────────────────
 
-const BAND_SP    = 20;   // avstånd mellan prickar
-const BAND_N     = 19;
-const BAND_TOT   = BAND_N * BAND_SP;   // 380 px total loop-längd
-const BAND_W     = 120;
-const BAND_H     = 14;
-const BAND_FADE  = BAND_W * 0.28;      // fade-zon vid varje kant
+const BAND_SP  = 20;
+const BAND_N   = 19;
+const BAND_TOT = BAND_N * BAND_SP;
+const BAND_W   = 120;
+const BAND_H   = 14;
+const BAND_FADE = BAND_W * 0.28;
 const [BR, BG, BB] = hexToRgb('#544550');
 
 function DotsChain() {
@@ -158,58 +167,50 @@ function DotsChain() {
   return <canvas ref={canvasRef} width={BAND_W} height={BAND_H} aria-hidden="true" style={{ display: 'block' }} />;
 }
 
-// ─── Huvud-komponent ─────────────────────────────────────────────────
+// ─── Huvud-komponent ──────────────────────────────────────────────────────
 
 export default function PlayModes() {
   const t = useTranslations('playModes');
 
-  const rows = [
-    { symbol: <DotsAlone />, text: t('alone'), color: '#0d8137'  },
-    { symbol: <DotsSplit />, text: t('split'), color: '#dac1ff'  },
-    { symbol: <DotsChain />, text: t('chain'), color: '#544550'  },
+  const cols = [
+    { symbol: <DotsAlone />, text: t('alone'), color: '#0d8137' },
+    { symbol: <DotsSplit />, text: t('split'), color: '#dac1ff' },
+    { symbol: <DotsChain />, text: t('chain'), color: '#544550' },
   ];
 
   return (
-    <section style={{
-      background: '#FFFBF5',
-      padding: '0 clamp(24px, 6vw, 80px) clamp(48px, 7vw, 80px)',
-    }}>
-      <div style={{ maxWidth: 680, margin: '0 auto', display: 'flex', flexDirection: 'column' }}>
-        {rows.map(({ symbol, text, color }, i) => (
-          <div
-            key={i}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 'clamp(16px, 3vw, 28px)',
-              padding: 'clamp(14px, 2.5vw, 22px) 0',
-              borderBottom: i < rows.length - 1 ? '1px solid rgba(13,129,55,0.13)' : 'none',
-            }}
-          >
-            {/* Symbol — fast bredd så texterna ligger i linje */}
-            <div style={{
-              flexShrink: 0,
-              width: 132,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'flex-start',
-            }}>
-              {symbol}
+    <section style={{ background: '#FFFBF5', padding: '0 0 72px' }}>
+      <div style={{ maxWidth: 960, margin: '0 auto', padding: '0 16px' }}>
+        <div className="grid grid-cols-3">
+          {cols.map(({ symbol, text, color }, i) => (
+            <div
+              key={i}
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: 14,
+                padding: 'clamp(20px, 3vw, 36px) clamp(10px, 2vw, 24px)',
+              }}
+            >
+              <div style={{ minHeight: 48, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                {symbol}
+              </div>
+              <p style={{
+                fontFamily: "'eight-condensed', Georgia, serif",
+                fontWeight: 900,
+                fontSize: 'clamp(1.1rem, 2.5vw, 1.9rem)',
+                color,
+                margin: 0,
+                letterSpacing: '0.02em',
+                lineHeight: 1.2,
+                textAlign: 'center',
+              }}>
+                {text}
+              </p>
             </div>
-
-            <p style={{
-              fontFamily: "'eight-condensed', Georgia, serif",
-              fontWeight: 900,
-              fontSize: 'clamp(1.4rem, 3vw, 2.2rem)',
-              color,
-              margin: 0,
-              letterSpacing: '0.02em',
-              lineHeight: 1.2,
-            }}>
-              {text}
-            </p>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </section>
   );
