@@ -90,11 +90,17 @@
     "contact": "Kontakta oss"
   },
   "stats": {
-    "formations": "Oändliga formationer",
-    "characters": "19 Karaktärer",
-    "diameter": "30 cm Diameter",
+    "formations": "Oändliga möjligheter",
+    "characters": "Unika karaktärer",
+    "diameter": "Sammansatt diameter",
     "sweden": "Formgivet i Sverige",
+    "wood": "Gjort i trä",
     "design": "Koncept & formgivning"
+  },
+  "playModes": {
+    "alone": "Bygg ensam.",
+    "split": "Dela med en främling.",
+    "chain": "Eller försök med den omöjliga kedjan."
   },
   "footer": {
     "tagline": "Oändliga formationer. Ett universum.",

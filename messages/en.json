@@ -91,10 +91,16 @@
   },
   "stats": {
     "formations": "Infinite formations",
-    "characters": "19 Characters",
-    "diameter": "30 cm Diameter",
+    "characters": "Unique characters",
+    "diameter": "Assembled diameter",
     "sweden": "Designed in Sweden",
+    "wood": "Made in wood",
     "design": "Concept & design"
+  },
+  "playModes": {
+    "alone": "Build alone.",
+    "split": "Split it with a stranger.",
+    "chain": "Or try the impossible chain."
   },
   "footer": {
     "tagline": "Infinite formations. One universe.",

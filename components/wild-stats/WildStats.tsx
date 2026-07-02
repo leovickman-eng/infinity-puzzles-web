@@ -186,9 +186,9 @@ export default function WildStats() {
       icon:         <DalaIcon />,
       value:        t('sweden'),
       valueColor:   '#e81317',
-      label:        null as string | null,
+      label:        t('wood') as string | null,
       valueSz:      'clamp(1rem, 2.2vw, 1.4rem)',
-      labelDisplay: false,
+      labelDisplay: true,
     },
   ];
 
