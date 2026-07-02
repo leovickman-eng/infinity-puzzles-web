@@ -71,12 +71,13 @@ function DotsAlone() {
   return <canvas ref={canvasRef} width={W} height={H} aria-hidden="true" style={{ display: 'block' }} />;
 }
 
-// ─── Kolumn 2: 9 + 10 prickar, vertikalt centrerade, dashed divider, #dac1ff
+// ─── Kolumn 2: 9 prickar (#ae84ea) + 10 prickar (#dac1ff), dashed divider ──
 
 function DotsSplit() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const rafRef    = useRef<number>(0);
-  const [r, g, b] = hexToRgb('#dac1ff');
+  const [r9, g9, b9]    = hexToRgb('#ae84ea'); // vänster kluster — lila
+  const [r10, g10, b10] = hexToRgb('#dac1ff'); // höger kluster — ljus lila
 
   const max9X  = Math.max(...PTS_9.map(p => p[0]));
   const max9Y  = Math.max(...PTS_9.map(p => p[1]));
@@ -109,12 +110,12 @@ function DotsSplit() {
 
       PTS_9.forEach(([x, y], i) => {
         const alpha = blinkAlpha(now, i);
-        ctx.fillStyle = `rgba(${r},${g},${b},${alpha.toFixed(2)})`;
+        ctx.fillStyle = `rgba(${r9},${g9},${b9},${alpha.toFixed(2)})`;
         ctx.beginPath(); ctx.arc(x + 6, y + oy9, 2.5, 0, Math.PI * 2); ctx.fill();
       });
       PTS_10.forEach(([x, y], i) => {
         const alpha = blinkAlpha(now, i + 9);
-        ctx.fillStyle = `rgba(${r},${g},${b},${alpha.toFixed(2)})`;
+        ctx.fillStyle = `rgba(${r10},${g10},${b10},${alpha.toFixed(2)})`;
         ctx.beginPath(); ctx.arc(x + OFF + 6, y + oy10, 2.5, 0, Math.PI * 2); ctx.fill();
       });
       rafRef.current = requestAnimationFrame(draw);
@@ -181,10 +182,12 @@ export default function PlayModes() {
   return (
     <section style={{ background: '#FFFBF5', padding: '0 0 72px' }}>
       <div style={{ maxWidth: 960, margin: '0 auto', padding: '0 16px' }}>
-        <div className="grid grid-cols-1 sm:grid-cols-3">
+        {/* Mobile: 2 kolumner, sista centrerad på egen rad. Desktop: 3 kolumner */}
+        <div className="grid grid-cols-2 sm:grid-cols-3">
           {cols.map(({ symbol, text, color }, i) => (
             <div
               key={i}
+              className={i === 2 ? 'col-span-2 sm:col-span-1' : ''}
               style={{
                 display: 'flex',
                 flexDirection: 'column',
