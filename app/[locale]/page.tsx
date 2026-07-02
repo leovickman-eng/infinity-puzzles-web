@@ -9,6 +9,7 @@ import {
   PlayModes,
   ProductSection,
   StoryTimeline,
+  WildStats,
 } from './HomeClientSections';
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -52,7 +53,10 @@ export default function HomePage() {
       {/* ── S2: Formation morph — sticky canvas, scrolls away into S3 ── */}
       <FormationMorph />
 
-      {/* ── S2.5: Play modes — scroll-driven text ── */}
+      {/* ── S2.5: Stats — 4 cards (sphere, 19, diameter, Sweden) ── */}
+      <WildStats />
+
+      {/* ── S2.6: Play modes — scroll-driven text ── */}
       <PlayModes />
 
       {/* ── S3: The physical object ── */}

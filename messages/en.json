@@ -89,6 +89,13 @@
     "mission": "We believe play should be limitless. Every formation you discover is yours alone.",
     "contact": "Get in touch"
   },
+  "stats": {
+    "formations": "Infinite formations",
+    "characters": "Unique characters",
+    "diameter": "Assembled diameter",
+    "sweden": "Designed in Sweden",
+    "design": "Concept & design"
+  },
   "footer": {
     "tagline": "Infinite formations. One universe.",
     "links": {

@@ -89,6 +89,13 @@
     "mission": "Vi tror att lek ska vara gränslös. Varje formation du upptäcker är bara din.",
     "contact": "Kontakta oss"
   },
+  "stats": {
+    "formations": "Oändliga möjligheter",
+    "characters": "Unika karaktärer",
+    "diameter": "Sammansatt diameter",
+    "sweden": "Formgivet i Sverige",
+    "design": "Koncept & formgivning"
+  },
   "footer": {
     "tagline": "Oändliga formationer. Ett universum.",
     "links": {

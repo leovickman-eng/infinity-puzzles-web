@@ -36,3 +36,8 @@ export const PlayModes = dynamic(
   () => import('@/components/play-modes/PlayModes'),
   { ssr: false },
 );
+
+export const WildStats = dynamic(
+  () => import('@/components/wild-stats/WildStats'),
+  { ssr: false },
+);
