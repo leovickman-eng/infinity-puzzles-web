@@ -33,11 +33,11 @@ export default function HeroPhotoSection() {
 
   const aspectRatio = isMobile ? '1000 / 1500' : '1500 / 1000';
   const src = isMobile
-    ? '/WILD_stopmotion/WILD_stopmotion_standing.webm'
-    : '/WILD_stopmotion/WILD_stopmotion_landscape.webm';
+    ? '/api/video/WILD_stopmotion_standing.webm'
+    : '/api/video/WILD_stopmotion_landscape.webm';
   const mp4 = isMobile
-    ? '/WILD_stopmotion/WILD_stopmotion_standing.mp4'
-    : '/WILD_stopmotion/WILD_stopmotion_landscape.mp4';
+    ? '/api/video/WILD_stopmotion_standing.mp4'
+    : '/api/video/WILD_stopmotion_landscape.mp4';
 
   return (
     <>
