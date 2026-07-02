@@ -201,7 +201,7 @@ export default function CharacterPage() {
             {ch.animal}
           </div>
           <h1 style={{
-            fontFamily: "'tumb', serif",
+            fontFamily: "'benguiat-pro-itc', serif",
             fontSize: 'clamp(2.2rem, 8vw, 3.5rem)',
             fontWeight: 400, color: accentColor,
             margin: 0, letterSpacing: '0.03em', lineHeight: 1,

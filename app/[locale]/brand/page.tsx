@@ -44,7 +44,7 @@ const SIZES = [200, 400, 800, 1200, 1920];
 
 const FONTS = [
   { name: 'Trykker',  family: 'var(--font-trykker, Georgia, serif)', useCase: 'Body text, UI, all general copy' },
-  { name: 'Nakone',   family: 'Nakone, Georgia, serif',              useCase: 'Hero overlay (S1)' },
+  { name: 'Nakone',   family: 'benguiat-pro-itc, serif',              useCase: 'Hero overlay (S1)' },
   { name: 'Brianne',  family: 'Brianne, Georgia, serif',             useCase: 'Scroll text cues (S2)' },
 ];
 

@@ -107,7 +107,7 @@ export default function HeroPhotoSection() {
               className="hero-buy-btn"
               onClick={scrollToShop}
               style={{
-                fontFamily: "'tumb', serif",
+                fontFamily: "'benguiat-pro-itc', serif",
                 fontSize: 'clamp(1.1rem, 2.4vw, 1.5rem)',
                 letterSpacing: '0.18em',
                 color: '#fff',

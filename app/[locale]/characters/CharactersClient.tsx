@@ -162,7 +162,7 @@ export default function CharactersClient({ title, subtitle }: { title: string; s
         <p style={{ fontSize: '11px', letterSpacing: '3px', textTransform: 'uppercase', color: '#ae84ea', marginBottom: '16px', fontFamily: "'DM Sans', sans-serif" }}>
           Wild Collection
         </p>
-        <h1 style={{ fontSize: 'clamp(2.4rem, 7vw, 4.5rem)', fontWeight: 400, margin: '0 0 16px', fontFamily: "'tumb', serif", lineHeight: 1.05 }}>
+        <h1 style={{ fontSize: 'clamp(2.4rem, 7vw, 4.5rem)', fontWeight: 400, margin: '0 0 16px', fontFamily: "'benguiat-pro-itc', serif", lineHeight: 1.05 }}>
           {title}
         </h1>
         <p style={{ fontSize: '1rem', color: 'rgba(240,234,248,0.45)', lineHeight: 1.7, fontFamily: "'Cormorant Garamond', Georgia, serif" }}>
@@ -204,7 +204,7 @@ export default function CharactersClient({ title, subtitle }: { title: string; s
               <div style={{ fontSize: '10px', letterSpacing: '2.5px', textTransform: 'uppercase', color: 'rgba(240,234,248,0.3)', fontFamily: "'DM Sans', sans-serif", marginBottom: '6px' }}>
                 {ch.animal}
               </div>
-              <div style={{ fontSize: '20px', fontWeight: 600, fontFamily: "'tumb', serif", marginBottom: '10px', color: '#f0eaf8' }}>
+              <div style={{ fontSize: '20px', fontWeight: 600, fontFamily: "'benguiat-pro-itc', serif", marginBottom: '10px', color: '#f0eaf8' }}>
                 {ch.name}
               </div>
               <p style={{ fontSize: '14px', lineHeight: 1.7, color: 'rgba(240,234,248,0.6)', margin: '0 0 4px', fontFamily: "'Cormorant Garamond', Georgia, serif" }}>

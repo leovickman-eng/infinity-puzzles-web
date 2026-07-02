@@ -170,7 +170,7 @@ export default function UniversePage() {
       {/* Title */}
       <div style={{ textAlign: 'center', marginBottom: '64px', position: 'relative', zIndex: 2 }}>
         <h1 style={{
-          fontFamily: "'tumb', serif",
+          fontFamily: "'benguiat-pro-itc', serif",
           fontSize: 'clamp(2.8rem, 10vw, 6rem)',
           fontWeight: 400,
           color: '#ae84ea',
@@ -228,7 +228,7 @@ export default function UniversePage() {
           >
             <div>
               <div style={{
-                fontFamily: "'tumb', serif",
+                fontFamily: "'benguiat-pro-itc', serif",
                 fontSize: '1.5rem',
                 color,
                 letterSpacing: '0.06em',

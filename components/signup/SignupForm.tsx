@@ -316,7 +316,7 @@ export default function SignupForm() {
         <div className="max-w-lg w-full px-6 text-center mt-0">
           <h1
             className="text-3xl md:text-6xl text-foreground mb-4 leading-tight"
-            style={{ fontFamily: 'tumb, serif' }}
+            style={{ fontFamily: 'benguiat-pro-itc, serif' }}
           >
             You found us.<br />The story starts here.
           </h1>

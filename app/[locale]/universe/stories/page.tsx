@@ -54,7 +54,7 @@ export default function StoriesPage() {
           ← Universe
         </Link>
         <span style={{
-          fontFamily: "'tumb', serif",
+          fontFamily: "'benguiat-pro-itc', serif",
           fontSize: '1.1rem', color: '#ae84ea', letterSpacing: '0.06em',
         }}>
           STORIES
@@ -117,7 +117,7 @@ export default function StoriesPage() {
                 position: 'absolute', bottom: '12px', left: '12px', right: '12px',
               }}>
                 <div style={{
-                  fontFamily: "'tumb', serif",
+                  fontFamily: "'benguiat-pro-itc', serif",
                   fontSize: '1rem', color: '#f0eaf8',
                   letterSpacing: '0.04em', lineHeight: 1.1,
                 }}>

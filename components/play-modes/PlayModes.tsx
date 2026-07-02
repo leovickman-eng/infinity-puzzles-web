@@ -16,7 +16,7 @@ export default function PlayModes() {
         { text: 'Or try the impossible chain.', color: '#7B5EA7' },
       ].map(({ text, color }) => (
         <p key={text} style={{
-          fontFamily: 'tumb, serif',
+          fontFamily: 'benguiat-pro-itc, serif',
           fontSize: 'clamp(1.1rem, 2.5vw, 2rem)',
           color,
           margin: 0,
