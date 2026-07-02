@@ -1,7 +1,6 @@
 'use client';
 
-import { useState } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useState, useRef } from 'react';
 
 const N = 19;
 const CHARS = Array.from({ length: N }, (_, i) => ({
@@ -12,44 +11,50 @@ const CHARS = Array.from({ length: N }, (_, i) => ({
 
 function mod(n: number, m: number) { return ((n % m) + m) % m; }
 
+const SWIPE_THRESHOLD = 40; // px
+
 export default function CharacterCarousel() {
   const [current, setCurrent] = useState(0);
-  const router = useRouter();
-  const params = useParams();
-  const locale = (params?.locale as string) ?? 'en';
+  const touchStartX = useRef<number | null>(null);
 
   const go = (delta: number) => setCurrent(c => mod(c + delta, N));
 
+  const onTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+
+  const onTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX.current === null) return;
+    const dx = e.changedTouches[0].clientX - touchStartX.current;
+    if (Math.abs(dx) > SWIPE_THRESHOLD) go(dx < 0 ? 1 : -1);
+    touchStartX.current = null;
+  };
+
   return (
-    <div style={{ overflow: 'hidden' }}>
+    <div
+      style={{ overflow: 'hidden', touchAction: 'pan-y' }}
+      onTouchStart={onTouchStart}
+      onTouchEnd={onTouchEnd}
+    >
       <div style={{ perspective: '1200px', position: 'relative', height: '300px', overflow: 'hidden' }}>
         {CHARS.map((char, idx) => {
           let offset = idx - current;
           if (offset >  N / 2) offset -= N;
           if (offset < -N / 2) offset += N;
 
-          const abs       = Math.abs(offset);
-          const visible   = abs <= 2;
-          const isCenter  = offset === 0;
-          const scale     = isCenter ? 1 : abs === 1 ? 0.82 : 0.65;
-          const rotateY   = isCenter ? 0 : -(offset / abs) * (abs === 1 ? 35 : 55);
+          const abs      = Math.abs(offset);
+          const visible  = abs <= 2;
+          const scale    = abs === 0 ? 1 : abs === 1 ? 0.82 : 0.65;
+          const rotateY  = abs === 0 ? 0 : -(offset / abs) * (abs === 1 ? 35 : 55);
           const translateX = offset * 200;
-          const opacity   = !visible ? 0 : abs === 2 ? 0.7 : abs === 1 ? 0.9 : 1;
-          const zIndex    = visible ? 3 - abs : 0;
-          const isClickable = visible && (isCenter || offset !== 0);
-
-          const handleClick = () => {
-            if (isCenter) {
-              router.push(`/${locale}/universe/stories/${char.id}`);
-            } else if (visible && offset !== 0) {
-              setCurrent(idx);
-            }
-          };
+          const opacity  = !visible ? 0 : abs === 2 ? 0.7 : abs === 1 ? 0.9 : 1;
+          const zIndex   = visible ? 3 - abs : 0;
+          const isSide   = visible && offset !== 0;
 
           return (
             <div
               key={char.id}
-              onClick={isClickable ? handleClick : undefined}
+              onClick={isSide ? () => setCurrent(idx) : undefined}
               style={{
                 position:  'absolute',
                 left:      '50%',
@@ -59,8 +64,8 @@ export default function CharacterCarousel() {
                 transition: 'transform 0.4s ease, opacity 0.4s ease',
                 zIndex,
                 opacity,
-                cursor:      isClickable ? 'pointer' : 'default',
-                pointerEvents: isClickable ? 'auto' : 'none',
+                cursor:        isSide ? 'pointer' : 'default',
+                pointerEvents: visible ? 'auto' : 'none',
               }}
             >
               <img
@@ -71,36 +76,8 @@ export default function CharacterCarousel() {
                   width: '100%', height: 'auto', display: 'block',
                   borderRadius: '10px',
                   boxShadow: '0 8px 32px rgba(0,0,0,0.22), 0 2px 8px rgba(0,0,0,0.12)',
-                  transition: 'box-shadow 0.2s ease',
-                }}
-                onMouseEnter={e => {
-                  if (isCenter) (e.currentTarget as HTMLElement).style.boxShadow = '0 12px 40px rgba(91,74,138,0.45), 0 2px 8px rgba(0,0,0,0.15)';
-                }}
-                onMouseLeave={e => {
-                  (e.currentTarget as HTMLElement).style.boxShadow = '0 8px 32px rgba(0,0,0,0.22), 0 2px 8px rgba(0,0,0,0.12)';
                 }}
               />
-              {/* Subtle "tap to visit" hint on center card */}
-              {isCenter && (
-                <div style={{
-                  position:  'absolute',
-                  bottom:    10,
-                  left:      '50%',
-                  transform: 'translateX(-50%)',
-                  background: 'rgba(0,0,0,0.45)',
-                  backdropFilter: 'blur(6px)',
-                  borderRadius: 20,
-                  padding: '3px 10px',
-                  fontSize: '10px',
-                  letterSpacing: '0.08em',
-                  color: 'rgba(255,255,255,0.75)',
-                  fontFamily: "'DM Sans', sans-serif",
-                  whiteSpace: 'nowrap',
-                  pointerEvents: 'none',
-                }}>
-                  Explore ↗
-                </div>
-              )}
             </div>
           );
         })}
