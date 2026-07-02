@@ -4,9 +4,7 @@ import { useEffect, useRef } from 'react';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 
-const TEAL = '#5DCCA0';
-
-// ─── Fibonacci sphere ─────────────────────────────────────────────────
+// ─── Fibonacci sphere (card 1) ────────────────────────────────────────
 
 function fibonacciSphere(n: number): [number, number, number][] {
   const phi = Math.PI * (3 - Math.sqrt(5));
@@ -23,35 +21,28 @@ const SPHERE_PTS = fibonacciSphere(19);
 function buildEdges(pts: [number, number, number][], k: number): [number, number][] {
   const edges: [number, number][] = [];
   for (let i = 0; i < pts.length; i++) {
-    const sorted = pts
-      .map((p, j) => ({
-        j,
-        d: Math.hypot(p[0] - pts[i][0], p[1] - pts[i][1], p[2] - pts[i][2]),
-      }))
+    pts
+      .map((p, j) => ({ j, d: Math.hypot(p[0]-pts[i][0], p[1]-pts[i][1], p[2]-pts[i][2]) }))
       .filter(x => x.j !== i)
       .sort((a, b) => a.d - b.d)
-      .slice(0, k);
-    for (const { j } of sorted) {
-      if (j > i) edges.push([i, j]);
-    }
+      .slice(0, k)
+      .forEach(({ j }) => { if (j > i) edges.push([i, j]); });
   }
   return edges;
 }
 
 const SPHERE_EDGES = buildEdges(SPHERE_PTS, 3);
 
-// ─── Sphere canvas ────────────────────────────────────────────────────
-
 function SphereCanvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const rafRef = useRef<number>(0);
-  const angleRef = useRef(0);
+  const rafRef    = useRef<number>(0);
+  const angleRef  = useRef(0);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext('2d')!;
-    const W = 72, cx = 36, cy = 36, R = 26;
+    const W = 60, cx = 30, cy = 30, R = 22;
 
     const draw = () => {
       ctx.clearRect(0, 0, W, W);
@@ -61,19 +52,17 @@ function SphereCanvas() {
       const proj = SPHERE_PTS.map(([x, y, z]) => {
         const rx = x * cosA - z * sinA;
         const rz = x * sinA + z * cosA;
-        const fov = 2.5;
-        const s = fov / (fov + rz);
+        const fov = 2.5, s = fov / (fov + rz);
         return { sx: cx + rx * R * s, sy: cy - y * R * s, z: rz };
       });
 
-      // Edges
       for (const [i, j] of SPHERE_EDGES) {
         const avgZ = (proj[i].z + proj[j].z) / 2;
-        const alpha = Math.max(0.06, 0.08 + ((avgZ + 1) / 2) * 0.28);
+        const alpha = Math.max(0.05, 0.07 + ((avgZ + 1) / 2) * 0.25);
         ctx.save();
         ctx.globalAlpha = alpha;
-        ctx.strokeStyle = TEAL;
-        ctx.lineWidth = 0.75;
+        ctx.strokeStyle = '#5B4A8A';
+        ctx.lineWidth = 0.7;
         ctx.beginPath();
         ctx.moveTo(proj[i].sx, proj[i].sy);
         ctx.lineTo(proj[j].sx, proj[j].sy);
@@ -81,19 +70,20 @@ function SphereCanvas() {
         ctx.restore();
       }
 
-      // Nodes back-to-front
-      const sorted = proj.map((p, idx) => ({ ...p, idx })).sort((a, b) => a.z - b.z);
-      for (const { sx, sy, z } of sorted) {
-        const alpha = Math.min(1, 0.3 + ((z + 1) / 2) * 0.7);
-        const r = Math.max(0.8, 1.1 + ((z + 1) / 2) * 2.0);
-        ctx.save();
-        ctx.globalAlpha = alpha;
-        ctx.fillStyle = TEAL;
-        ctx.beginPath();
-        ctx.arc(sx, sy, r, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.restore();
-      }
+      [...proj]
+        .map((p, idx) => ({ ...p, idx }))
+        .sort((a, b) => a.z - b.z)
+        .forEach(({ sx, sy, z }) => {
+          const alpha = Math.min(1, 0.3 + ((z + 1) / 2) * 0.7);
+          const r     = Math.max(0.8, 1.0 + ((z + 1) / 2) * 1.8);
+          ctx.save();
+          ctx.globalAlpha = alpha;
+          ctx.fillStyle = '#5B4A8A';
+          ctx.beginPath();
+          ctx.arc(sx, sy, r, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+        });
 
       angleRef.current += 0.005;
       rafRef.current = requestAnimationFrame(draw);
@@ -104,61 +94,60 @@ function SphereCanvas() {
   }, []);
 
   return (
-    <canvas ref={canvasRef} width={72} height={72} aria-hidden="true" style={{ display: 'block' }} />
+    <canvas ref={canvasRef} width={60} height={60} aria-hidden="true" style={{ display: 'block' }} />
   );
 }
 
-// ─── 19 dot grid ─────────────────────────────────────────────────────
+// ─── 19 dot grid (card 2) ────────────────────────────────────────────
 
 function DotGrid() {
-  const COLS = 4, ROWS = 5, GAP = 13, R = 2.5, PAD = 6;
-  const total = COLS * ROWS;
-  const dots = Array.from({ length: total }, (_, i) => i).filter(i => i < total - 1);
-  const W = PAD * 2 + (COLS - 1) * GAP + R * 2;
-  const H = PAD * 2 + (ROWS - 1) * GAP + R * 2;
-
+  // squareGridPoints(19, 9): 4-col rounded square
+  const pts: [number, number][] = [
+    [18,18],[18,9],[9,18],[27,18],[18,27],
+    [9,9],[27,9],[9,27],[27,27],[0,18],
+    [36,18],[18,0],[18,36],[0,9],[36,9],
+    [0,27],[36,27],[9,0],[27,0],
+  ];
+  const W = 48, H = 48;
   return (
     <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`} aria-hidden="true">
-      {dots.map(i => {
-        const col = i % COLS;
-        const row = Math.floor(i / COLS);
-        const cx = PAD + R + col * GAP;
-        const cy = PAD + R + row * GAP;
-        const opacity = 0.35 + (row / (ROWS - 1)) * 0.55;
-        return <circle key={i} cx={cx} cy={cy} r={R} fill={TEAL} opacity={opacity} />;
-      })}
+      {pts.map(([x, y], i) => (
+        <circle key={i} cx={x + 6} cy={y + 6} r={2.5} fill="#5DCCA0" opacity={0.55 + (i / pts.length) * 0.4} />
+      ))}
     </svg>
   );
 }
 
-// ─── Diameter icon ────────────────────────────────────────────────────
+// ─── Diameter circle (card 3) ────────────────────────────────────────
 
 function DiameterIcon() {
   return (
-    <svg width="72" height="72" viewBox="0 0 72 72" fill="none" aria-hidden="true">
-      <circle cx="36" cy="36" r="27" stroke={TEAL} strokeWidth="1.3" strokeOpacity="0.4" />
-      <line x1="9" y1="36" x2="63" y2="36" stroke={TEAL} strokeWidth="1.9" strokeDasharray="5 3.5" />
-      <line x1="9"  y1="30" x2="9"  y2="42" stroke={TEAL} strokeWidth="1.4" strokeOpacity="0.6" />
-      <line x1="63" y1="30" x2="63" y2="42" stroke={TEAL} strokeWidth="1.4" strokeOpacity="0.6" />
+    <svg width="60" height="60" viewBox="0 0 60 60" fill="none" aria-hidden="true">
+      <circle cx="30" cy="30" r="24" stroke="#ae84ea" strokeWidth="2.2" strokeOpacity="0.5" />
+      <line x1="6" y1="30" x2="54" y2="30" stroke="#ae84ea" strokeWidth="1.8" strokeDasharray="4.5 3" />
+      <line x1="6"  y1="24" x2="6"  y2="36" stroke="#ae84ea" strokeWidth="1.8" strokeOpacity="0.7" />
+      <line x1="54" y1="24" x2="54" y2="36" stroke="#ae84ea" strokeWidth="1.8" strokeOpacity="0.7" />
     </svg>
   );
 }
 
-// ─── Dalahäst — original colours, 80% bigger ─────────────────────────
+// ─── Dalahäst with red duotone (card 4) ──────────────────────────────
+// Two filter strengths — swap constant to switch
+// A = bolder duotone, B = subtler (keeps more texture)
+const DALA_FILTER_A = 'grayscale(1) sepia(1) hue-rotate(320deg) saturate(3) brightness(0.88)';
+const DALA_FILTER_B = 'grayscale(0.7) sepia(0.8) hue-rotate(315deg) saturate(2.2) brightness(0.93)';
+const DALA_FILTER   = DALA_FILTER_A; // ← swap to B for lighter tint
 
 function DalaIcon() {
-  // Original was 66×43 px; ×1.8 = 119×77 px
   return (
-    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <Image
-        src="/images/DALAHÄST.png"
-        alt=""
-        width={119}
-        height={77}
-        style={{ objectFit: 'contain' }}
-        aria-hidden="true"
-      />
-    </div>
+    <Image
+      src="/images/DALAHÄST.png?v=2"
+      alt=""
+      width={110}
+      height={71}
+      style={{ objectFit: 'contain', filter: DALA_FILTER }}
+      aria-hidden="true"
+    />
   );
 }
 
@@ -169,29 +158,41 @@ export default function WildStats() {
 
   const cards = [
     {
-      icon: <SphereCanvas />,
-      text: t('formations'),
-      label: null,
+      icon:         <SphereCanvas />,
+      value:        t('formations'),
+      valueColor:   '#5B4A8A',
+      label:        null as string | null,
+      valueSz:      'clamp(1rem, 2vw, 1.4rem)',
+      labelDisplay: false,
     },
     {
-      icon: <DotGrid />,
-      text: t('characters'),
-      label: null,
+      icon:         <DotGrid />,
+      value:        '19',
+      valueColor:   '#5DCCA0',
+      label:        t('characters') as string | null,
+      valueSz:      'clamp(2.2rem, 4.5vw, 3rem)',
+      labelDisplay: true,
     },
     {
-      icon: <DiameterIcon />,
-      text: t('diameter'),
-      label: null,
+      icon:         <DiameterIcon />,
+      value:        '~30 cm',
+      valueColor:   '#ae84ea',
+      label:        t('diameter') as string | null,
+      valueSz:      'clamp(1.6rem, 3.2vw, 2.2rem)',
+      labelDisplay: true,
     },
     {
-      icon: <DalaIcon />,
-      text: t('sweden'),
-      label: null,
+      icon:         <DalaIcon />,
+      value:        t('sweden'),
+      valueColor:   '#e81317',
+      label:        null as string | null,
+      valueSz:      'clamp(1rem, 2.2vw, 1.4rem)',
+      labelDisplay: false,
     },
   ];
 
   return (
-    <section style={{ background: '#FFFBF5', padding: '0 0 80px' }}>
+    <section style={{ background: '#FFFBF5', padding: '0 0 72px' }}>
       <div style={{ maxWidth: 960, margin: '0 auto', padding: '0 16px' }}>
         <div className="grid grid-cols-2 md:grid-cols-4">
           {cards.map((card, i) => (
@@ -201,42 +202,43 @@ export default function WildStats() {
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
-                gap: 14,
-                padding: 'clamp(16px, 2.5vw, 28px) clamp(12px, 3vw, 28px)',
+                gap: 12,
+                padding: 'clamp(20px, 3vw, 36px) clamp(10px, 2vw, 24px)',
               }}
             >
-              {/* Icon */}
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 80 }}>
+              <div style={{ minHeight: 68, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 {card.icon}
               </div>
 
-              {/* Main text */}
-              <div
-                style={{
-                  fontFamily: "'eight-condensed', Georgia, serif",
-                  fontWeight: 900,
-                  fontSize: 'clamp(1.15rem, 2.4vw, 1.65rem)',
-                  letterSpacing: '0.04em',
-                  color: TEAL,
-                  textAlign: 'center',
-                  lineHeight: 1.15,
-                }}
-              >
-                {card.text}
+              <div style={{
+                fontFamily: "'eight-condensed', Georgia, serif",
+                fontWeight: 900,
+                fontSize: card.valueSz,
+                letterSpacing: '0.03em',
+                color: card.valueColor,
+                textAlign: 'center',
+                lineHeight: 1.05,
+              }}>
+                {card.value}
               </div>
 
-              {/* Small label (card 4 only) */}
               {card.label && (
-                <div
-                  style={{
-                    fontSize: '0.68rem',
-                    letterSpacing: '0.13em',
-                    textTransform: 'uppercase',
-                    color: TEAL,
-                    opacity: 0.55,
-                    textAlign: 'center',
-                  }}
-                >
+                <div style={card.labelDisplay ? {
+                  fontFamily: "'eight-condensed', Georgia, serif",
+                  fontWeight: 900,
+                  fontSize: 'clamp(0.85rem, 1.6vw, 1.05rem)',
+                  letterSpacing: '0.04em',
+                  color: 'rgba(28,25,23,0.45)',
+                  textAlign: 'center',
+                  lineHeight: 1.3,
+                } : {
+                  fontSize: '0.66rem',
+                  letterSpacing: '0.13em',
+                  textTransform: 'uppercase' as const,
+                  color: 'rgba(28,25,23,0.4)',
+                  textAlign: 'center' as const,
+                  lineHeight: 1.4,
+                }}>
                   {card.label}
                 </div>
               )}
