@@ -21,6 +21,7 @@ const PALETTE = [
   { hex: '#1A3A4A', name: 'Navy' },
   { hex: '#F8F060', name: 'Gul' },
   { hex: '#ae84ea', name: 'Primär lila' },
+  { hex: '#FFFBF5', name: 'Bakgrund' },
 ];
 
 const PALETTE_WILD = [
@@ -340,7 +341,7 @@ export default function BrandPage() {
           <h2 style={sh}>Färger</h2>
           <div style={{ display: 'flex', gap: '1.25rem', flexWrap: 'wrap' }}>
             {PALETTE.map(c => {
-              const isYellow = c.hex === '#F8F060';
+              const isYellow = ['#F8F060', '#FFFBF5'].includes(c.hex);
               return (
                 <div
                   key={c.hex}
