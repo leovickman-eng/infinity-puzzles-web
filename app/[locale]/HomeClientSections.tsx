@@ -46,3 +46,47 @@ export const ThreeImageGrid = dynamic(
   () => import('@/components/three-image-grid/ThreeImageGrid'),
   { ssr: false },
 );
+
+export function BuyButton({ label }: { label: string }) {
+  const scrollToShop = () => {
+    const el = document.getElementById('shop');
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
+  };
+  return (
+    <>
+      <style>{`
+        @keyframes buy-pulse {
+          0%   { box-shadow: 0 0 0 0   rgba(174,132,234,0.75), 0 4px 20px rgba(174,132,234,0.35); }
+          60%  { box-shadow: 0 0 0 28px rgba(174,132,234,0),   0 4px 20px rgba(174,132,234,0.35); }
+          100% { box-shadow: 0 0 0 0   rgba(174,132,234,0),    0 4px 20px rgba(174,132,234,0.35); }
+        }
+        .buy-btn-float { animation: buy-pulse 2.2s ease-out infinite; }
+        .buy-btn-float:hover {
+          animation: none;
+          background: #c09ef0 !important;
+          transform: translateY(-2px) scale(1.04);
+          box-shadow: 0 6px 28px rgba(174,132,234,0.55) !important;
+        }
+      `}</style>
+      <button
+        className="buy-btn-float"
+        onClick={scrollToShop}
+        style={{
+          fontFamily: "'eight-condensed', sans-serif",
+          fontSize: 'clamp(1.1rem, 2.4vw, 1.5rem)',
+          letterSpacing: '0.18em',
+          color: '#fff',
+          background: '#ae84ea',
+          border: 'none',
+          borderRadius: '9999px',
+          padding: 'clamp(13px, 2vw, 18px) clamp(28px, 3.5vw, 42px)',
+          cursor: 'pointer',
+          transition: 'background 0.2s, transform 0.2s, box-shadow 0.2s',
+          whiteSpace: 'nowrap',
+        }}
+      >
+        {label}
+      </button>
+    </>
+  );
+}

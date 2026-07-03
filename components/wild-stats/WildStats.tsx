@@ -127,7 +127,7 @@ function DotGrid() {
       const now = performance.now() / 1000;
       pts.forEach(([x, y], i) => {
         const alpha = blinkAlpha(now, i);
-        ctx.fillStyle = `rgba(93,204,160,${alpha.toFixed(2)})`;
+        ctx.fillStyle = `rgba(91,74,138,${alpha.toFixed(2)})`;
         ctx.beginPath(); ctx.arc(x + 6, y + 6, 2.5, 0, Math.PI * 2); ctx.fill();
       });
       rafRef.current = requestAnimationFrame(draw);
@@ -156,14 +156,14 @@ function DiameterIcon() {
 
       // Thick outer ring
       ctx.save();
-      ctx.strokeStyle = 'rgba(174,132,234,0.55)';
+      ctx.strokeStyle = 'rgba(91,74,138,0.55)';
       ctx.lineWidth = 3.5;
       ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI * 2); ctx.stroke();
       ctx.restore();
 
       // End tick marks
       ctx.save();
-      ctx.strokeStyle = 'rgba(174,132,234,0.7)';
+      ctx.strokeStyle = 'rgba(91,74,138,0.7)';
       ctx.lineWidth = 1.8;
       ctx.beginPath(); ctx.moveTo(cx - R, cy - 6); ctx.lineTo(cx - R, cy + 6); ctx.stroke();
       ctx.beginPath(); ctx.moveTo(cx + R, cy - 6); ctx.lineTo(cx + R, cy + 6); ctx.stroke();
@@ -173,7 +173,7 @@ function DiameterIcon() {
       for (let i = 0; i < DOT_N; i++) {
         const x = (cx - R) + (2 * R) * (i / (DOT_N - 1));
         const alpha = blinkAlpha(now, i);
-        ctx.fillStyle = `rgba(174,132,234,${alpha.toFixed(2)})`;
+        ctx.fillStyle = `rgba(91,74,138,${alpha.toFixed(2)})`;
         ctx.beginPath(); ctx.arc(x, cy, 1.8, 0, Math.PI * 2); ctx.fill();
       }
 
@@ -191,7 +191,7 @@ function DiameterIcon() {
 // A = bolder duotone, B = subtler (keeps more texture)
 const DALA_FILTER_A = 'grayscale(1) sepia(1) hue-rotate(320deg) saturate(3) brightness(0.88)';
 const DALA_FILTER_B = 'grayscale(0.7) sepia(0.8) hue-rotate(315deg) saturate(2.2) brightness(0.93)';
-const DALA_FILTER   = DALA_FILTER_A; // ← swap to B for lighter tint
+const DALA_FILTER   = 'grayscale(1) sepia(1) hue-rotate(225deg) saturate(2.5) brightness(0.75)'; // #5B4A8A lila
 
 function DalaIcon() {
   return (
@@ -224,7 +224,7 @@ export default function WildStats() {
     {
       icon:         <DotGrid />,
       value:        t('characters'),
-      valueColor:   '#5DCCA0',
+      valueColor:   '#5B4A8A',
       label:        null as string | null,
       valueSz:      'clamp(1rem, 2vw, 1.4rem)',
       labelDisplay: false,
@@ -232,7 +232,7 @@ export default function WildStats() {
     {
       icon:         <DiameterIcon />,
       value:        '30 cm diameter',
-      valueColor:   '#ae84ea',
+      valueColor:   '#5B4A8A',
       label:        null as string | null,
       valueSz:      'clamp(1rem, 2vw, 1.4rem)',
       labelDisplay: false,
@@ -240,11 +240,11 @@ export default function WildStats() {
     {
       icon:         <DalaIcon />,
       value:        t('sweden'),
-      valueColor:   '#e81317',
+      valueColor:   '#5B4A8A',
       label:        t('wood') as string | null,
       valueSz:      'clamp(1rem, 2.2vw, 1.4rem)',
       labelDisplay: true,
-      labelColor:   '#e81317' as string | undefined,
+      labelColor:   '#5B4A8A' as string | undefined,
     },
   ];
 

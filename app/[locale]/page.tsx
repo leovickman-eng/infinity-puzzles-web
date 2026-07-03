@@ -3,6 +3,7 @@ import Image from 'next/image';
 import Script from 'next/script';
 import type { Metadata } from 'next';
 import {
+  BuyButton,
   CharacterCarousel,
   FormationMorph,
   HeroPhotoSection,
@@ -53,6 +54,13 @@ export default async function HomePage() {
 
       {/* ── S2: Formation morph — sticky canvas, scrolls away into S3 ── */}
       <FormationMorph />
+
+      {/* ── Buy button floating at S2/Stats seam ── */}
+      <div style={{ position: 'relative', height: 0, zIndex: 5, display: 'flex', justifyContent: 'center' }}>
+        <div style={{ position: 'absolute', top: 0, transform: 'translateY(-50%)' }}>
+          <BuyButton label={t('hero.cta')} />
+        </div>
+      </div>
 
       {/* ── S2.5: Stats — pull up to overlap S2 ── */}
       <div style={{ marginTop: '-72px', position: 'relative', zIndex: 2 }}>

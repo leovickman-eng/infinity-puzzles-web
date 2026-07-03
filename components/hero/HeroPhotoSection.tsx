@@ -102,9 +102,9 @@ export default function HeroPhotoSection() {
             background: 'linear-gradient(to bottom, rgba(0,0,0,0.15) 0%, transparent 20%, transparent 70%, rgba(255,251,245,0.6) 100%)',
           }} />
 
-          {/* Buy button */}
+          {/* Buy button — 75% from top (lower quarter) */}
           <div className="hero-buy-wrap" style={{
-            position: 'absolute', top: '50%', left: '50%',
+            position: 'absolute', top: '75%', left: '50%',
             transform: 'translate(-50%, -50%)', zIndex: 5,
           }}>
             <button
