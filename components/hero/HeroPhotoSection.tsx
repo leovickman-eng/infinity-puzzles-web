@@ -32,10 +32,10 @@ export default function HeroPhotoSection() {
   };
 
   const aspectRatio = isMobile ? '1000 / 1500' : '1500 / 1000';
-  const src = isMobile
+  const webmSrc = isMobile
     ? '/api/video/WILD_stopmotion_standing.webm'
     : '/api/video/WILD_stopmotion_landscape.webm';
-  const mp4 = isMobile
+  const mp4Src = isMobile
     ? '/api/video/WILD_stopmotion_standing.mp4'
     : '/api/video/WILD_stopmotion_landscape.mp4';
 
@@ -75,7 +75,7 @@ export default function HeroPhotoSection() {
 
           <video
             ref={videoRef}
-            key={src}
+            key={webmSrc}
             autoPlay
             muted
             loop
@@ -88,8 +88,8 @@ export default function HeroPhotoSection() {
               display: 'block',
             }}
           >
-            <source src={src} type="video/webm" />
-            <source src={mp4} type="video/mp4" />
+            <source src={webmSrc} type="video/webm" />
+            <source src={mp4Src}  type="video/mp4" />
           </video>
 
           {/* Gradient: subtle dark top, fade to cream at very bottom */}

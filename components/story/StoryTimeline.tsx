@@ -28,28 +28,28 @@ export default function StoryTimeline() {
       title: t('chapter1.title'),
       period: t('chapter1.period'),
       text: t('chapter1.text'),
-      image: '/images/story/chapter1.jpg',
+      image: '/images/story/chapter1.webp',
     },
     {
       number: t('chapter2.number'),
       title: t('chapter2.title'),
       period: t('chapter2.period'),
       text: t('chapter2.text'),
-      image: '/images/story/chapter2.jpg',
+      image: '/images/story/chapter2.webp',
     },
     {
       number: t('chapter3.number'),
       title: t('chapter3.title'),
       period: t('chapter3.period'),
       text: t('chapter3.text'),
-      image: '/images/story/chapter3.jpg',
+      image: '/images/story/chapter3.webp',
     },
     {
       number: t('chapter4.number'),
       title: t('chapter4.title'),
       period: t('chapter4.period'),
       text: t('chapter4.text'),
-      image: '/images/story/chapter4.jpg',
+      image: '/images/story/chapter4.webp',
     },
   ];
 
