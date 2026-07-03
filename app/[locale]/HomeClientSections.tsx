@@ -47,7 +47,7 @@ export const ThreeImageGrid = dynamic(
   { ssr: false },
 );
 
-export function BuyButton({ label }: { label: string }) {
+export function BuyButton({ label, small }: { label: string; small?: boolean }) {
   const scrollToShop = () => {
     const el = document.getElementById('shop');
     if (el) el.scrollIntoView({ behavior: 'smooth' });
@@ -73,13 +73,15 @@ export function BuyButton({ label }: { label: string }) {
         onClick={scrollToShop}
         style={{
           fontFamily: "'eight-condensed', sans-serif",
-          fontSize: 'clamp(1.1rem, 2.4vw, 1.5rem)',
+          fontSize: small ? 'clamp(0.85rem, 1.8vw, 1.15rem)' : 'clamp(1.1rem, 2.4vw, 1.5rem)',
           letterSpacing: '0.18em',
           color: '#fff',
           background: '#ae84ea',
           border: 'none',
           borderRadius: '9999px',
-          padding: 'clamp(13px, 2vw, 18px) clamp(28px, 3.5vw, 42px)',
+          padding: small
+            ? 'clamp(10px, 1.5vw, 14px) clamp(21px, 2.6vw, 32px)'
+            : 'clamp(13px, 2vw, 18px) clamp(28px, 3.5vw, 42px)',
           cursor: 'pointer',
           transition: 'background 0.2s, transform 0.2s, box-shadow 0.2s',
           whiteSpace: 'nowrap',

@@ -46,7 +46,7 @@ function hexToRgb(hex: string): [number, number, number] {
 function DotsAlone() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const rafRef    = useRef<number>(0);
-  const [r, g, b] = hexToRgb('#0d8137');
+  const [r, g, b] = hexToRgb('#ae84ea');
   const maxX = Math.max(...PTS_19.map(p => p[0]));
   const maxY = Math.max(...PTS_19.map(p => p[1]));
   const W = maxX + 12, H = maxY + 12;
@@ -77,7 +77,7 @@ function DotsSplit() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const rafRef    = useRef<number>(0);
   const [r9, g9, b9]    = hexToRgb('#ae84ea'); // vänster kluster — lila
-  const [r10, g10, b10] = hexToRgb('#dac1ff'); // höger kluster — ljus lila
+  const [r10, g10, b10] = hexToRgb('#ae84ea'); // höger kluster
 
   const max9X  = Math.max(...PTS_9.map(p => p[0]));
   const max9Y  = Math.max(...PTS_9.map(p => p[1]));
@@ -135,7 +135,7 @@ const BAND_TOT = BAND_N * BAND_SP;
 const BAND_W   = 120;
 const BAND_H   = 14;
 const BAND_FADE = BAND_W * 0.28;
-const [BR, BG, BB] = hexToRgb('#544550');
+const [BR, BG, BB] = hexToRgb('#ae84ea');
 
 function DotsChain() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -174,9 +174,9 @@ export default function PlayModes() {
   const t = useTranslations('playModes');
 
   const cols = [
-    { symbol: <DotsAlone />, text: t('alone'), color: '#0d8137' },
-    { symbol: <DotsSplit />, text: t('split'), color: '#dac1ff' },
-    { symbol: <DotsChain />, text: t('chain'), color: '#544550' },
+    { symbol: <DotsAlone />, text: t('alone'), color: '#ae84ea' },
+    { symbol: <DotsSplit />, text: t('split'), color: '#ae84ea' },
+    { symbol: <DotsChain />, text: t('chain'), color: '#ae84ea' },
   ];
 
   return (

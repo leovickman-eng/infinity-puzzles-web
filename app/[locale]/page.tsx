@@ -55,10 +55,10 @@ export default async function HomePage() {
       {/* ── S2: Formation morph — sticky canvas, scrolls away into S3 ── */}
       <FormationMorph />
 
-      {/* ── Buy button floating at S2/Stats seam ── */}
+      {/* ── Buy button floating above Stats (sits in FormationMorph tail) ── */}
       <div style={{ position: 'relative', height: 0, zIndex: 5, display: 'flex', justifyContent: 'center' }}>
-        <div style={{ position: 'absolute', top: 0, transform: 'translateY(-50%)' }}>
-          <BuyButton label={t('hero.cta')} />
+        <div style={{ position: 'absolute', bottom: '100px' }}>
+          <BuyButton label={t('hero.cta')} small />
         </div>
       </div>
 
