@@ -8,7 +8,7 @@ export default function HeroPhotoSection() {
   const locale = (params?.locale as string) ?? 'en';
   const isSv = locale === 'sv';
 
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState<boolean | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
@@ -71,26 +71,30 @@ export default function HeroPhotoSection() {
 
       {/* ── Full-width video ── */}
       <section style={{ position: 'relative', width: '100%', background: '#FFFBF5', lineHeight: 0 }}>
-        <div style={{ position: 'relative', width: '100%', aspectRatio }}>
+        {/* aspectRatio stays neutral (landscape) until isMobile resolves to avoid layout shift */}
+        <div style={{ position: 'relative', width: '100%', aspectRatio: isMobile === null ? '1500 / 1000' : aspectRatio }}>
 
-          <video
-            ref={videoRef}
-            key={webmSrc}
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="auto"
-            style={{
-              position: 'absolute', inset: 0,
-              width: '100%', height: '100%',
-              objectFit: 'cover', objectPosition: 'center',
-              display: 'block',
-            }}
-          >
-            <source src={webmSrc} type="video/webm" />
-            <source src={mp4Src}  type="video/mp4" />
-          </video>
+          {/* Only mount video once we know mobile vs desktop — prevents iOS autoplay breaking on remount */}
+          {isMobile !== null && (
+            <video
+              ref={videoRef}
+              key={webmSrc}
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="auto"
+              style={{
+                position: 'absolute', inset: 0,
+                width: '100%', height: '100%',
+                objectFit: 'cover', objectPosition: 'center',
+                display: 'block',
+              }}
+            >
+              <source src={webmSrc} type="video/webm" />
+              <source src={mp4Src}  type="video/mp4" />
+            </video>
+          )}
 
           {/* Gradient: subtle dark top, fade to cream at very bottom */}
           <div style={{
