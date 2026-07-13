@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
-import { useRef, useState, useMemo } from 'react';
+import { useRef, useState, useMemo, useEffect, useCallback } from 'react';
 import { CHARACTERS } from '../page';
 import { getCharacterData } from '@/lib/characters-data';
 
@@ -60,13 +60,14 @@ interface AudioPlayerProps {
   light: boolean;
 }
 
-function AudioPlayer({ url, label, accentColor, mutedColor, light }: AudioPlayerProps) {
-  const audioRef   = useRef<HTMLAudioElement>(null);
-  const waveRef    = useRef<HTMLDivElement>(null);
+function AudioPlayer({ url, label, accentColor, mutedColor }: AudioPlayerProps) {
+  const audioRef    = useRef<HTMLAudioElement>(null);
+  const waveRef     = useRef<HTMLDivElement>(null);
+  const draggingRef = useRef(false);   // ref, not state — no async lag
+
   const [playing, setPlaying]   = useState(false);
   const [current, setCurrent]   = useState(0);
   const [duration, setDuration] = useState(0);
-  const [dragging, setDragging] = useState(false);
 
   const pct      = duration > 0 ? current / duration : 0;
   const waveform = useMemo(() => generateWaveform(url, WAVEFORM_BARS), [url]);
@@ -77,25 +78,43 @@ function AudioPlayer({ url, label, accentColor, mutedColor, light }: AudioPlayer
     playing ? (a.pause(), setPlaying(false)) : (a.play(), setPlaying(true));
   };
 
-  const seekFromEvent = (clientX: number) => {
+  const seekTo = useCallback((clientX: number) => {
     const a = audioRef.current; const el = waveRef.current;
     if (!a || !el || !duration) return;
     const rect = el.getBoundingClientRect();
-    const p = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
+    const p    = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
     a.currentTime = p * duration;
     setCurrent(p * duration);
-  };
+  }, [duration]);
 
-  const onMouseDown = (e: React.MouseEvent) => { setDragging(true); seekFromEvent(e.clientX); };
-  const onMouseMove = (e: React.MouseEvent) => { if (dragging) seekFromEvent(e.clientX); };
-  const onMouseUp   = () => setDragging(false);
-  const onTouchStart = (e: React.TouchEvent) => seekFromEvent(e.touches[0].clientX);
-  const onTouchMove  = (e: React.TouchEvent) => seekFromEvent(e.touches[0].clientX);
+  // Global mouse listeners so dragging works even outside the element
+  useEffect(() => {
+    const onMove = (e: MouseEvent) => { if (draggingRef.current) seekTo(e.clientX); };
+    const onUp   = () => { draggingRef.current = false; };
+    window.addEventListener('mousemove', onMove);
+    window.addEventListener('mouseup',   onUp);
+    return () => {
+      window.removeEventListener('mousemove', onMove);
+      window.removeEventListener('mouseup',   onUp);
+    };
+  }, [seekTo]);
 
-  const btnBg      = light ? `${accentColor}18` : `${accentColor}18`;
-  const btnBgHover = light ? `${accentColor}30` : `${accentColor}30`;
-  const btnBorder  = `${accentColor}60`;
-  const unplayed   = light ? `${accentColor}28` : `${accentColor}28`;
+  // Non-passive touchmove so we can preventDefault (prevent scroll while scrubbing)
+  useEffect(() => {
+    const el = waveRef.current;
+    if (!el) return;
+    const onTouchMove = (e: TouchEvent) => {
+      if (!draggingRef.current) return;
+      e.preventDefault();
+      seekTo(e.touches[0].clientX);
+    };
+    el.addEventListener('touchmove', onTouchMove, { passive: false });
+    return () => el.removeEventListener('touchmove', onTouchMove);
+  }, [seekTo]);
+
+  const btnBg      = `${accentColor}18`;
+  const btnBgHover = `${accentColor}30`;
+  const unplayed   = `${accentColor}28`;
 
   return (
     <div style={{ marginBottom: '20px' }}>
@@ -107,21 +126,22 @@ function AudioPlayer({ url, label, accentColor, mutedColor, light }: AudioPlayer
         {label}
       </div>
 
+      {/* preload="metadata" loads duration immediately without buffering the file */}
       <audio
-        ref={audioRef} src={url}
-        onTimeUpdate={e => { if (!dragging) setCurrent(e.currentTarget.currentTime); }}
+        ref={audioRef} src={url} preload="metadata"
+        onTimeUpdate={e => { if (!draggingRef.current) setCurrent(e.currentTarget.currentTime); }}
         onLoadedMetadata={e => setDuration(e.currentTarget.duration)}
         onEnded={() => { setPlaying(false); setCurrent(0); }}
       />
 
       <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
 
-        {/* Play / pause button */}
+        {/* Play / pause */}
         <button
           onClick={toggle}
           style={{
             flexShrink: 0, width: '40px', height: '40px', borderRadius: '50%',
-            background: btnBg, border: `1px solid ${btnBorder}`,
+            background: btnBg, border: `1px solid ${accentColor}60`,
             color: accentColor, fontSize: '13px', cursor: 'pointer',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             transition: 'background 0.15s',
@@ -134,17 +154,12 @@ function AudioPlayer({ url, label, accentColor, mutedColor, light }: AudioPlayer
 
         {/* Waveform + time */}
         <div style={{ flex: 1, minWidth: 0 }}>
-
           {/* Waveform bars */}
           <div
             ref={waveRef}
-            onMouseDown={onMouseDown}
-            onMouseMove={onMouseMove}
-            onMouseUp={onMouseUp}
-            onMouseLeave={onMouseUp}
-            onTouchStart={onTouchStart}
-            onTouchMove={onTouchMove}
-            onTouchEnd={onMouseUp}
+            onMouseDown={e => { draggingRef.current = true; seekTo(e.clientX); }}
+            onTouchStart={e => { draggingRef.current = true; seekTo(e.touches[0].clientX); }}
+            onTouchEnd={() => { draggingRef.current = false; }}
             style={{
               display: 'flex', alignItems: 'center', gap: '2px',
               height: '44px', cursor: 'pointer', userSelect: 'none',
@@ -153,25 +168,23 @@ function AudioPlayer({ url, label, accentColor, mutedColor, light }: AudioPlayer
             {waveform.map((h, i) => {
               const barPct = i / WAVEFORM_BARS;
               const played = barPct < pct;
-              // near playhead — slightly taller & brighter
-              const atHead = Math.abs(barPct - pct) < 0.02;
+              const atHead = pct > 0 && Math.abs(barPct - pct) < 0.018;
               return (
                 <div
                   key={i}
                   style={{
                     flex: 1,
-                    height: `${Math.max(8, (atHead ? Math.min(1, h + 0.15) : h) * 100)}%`,
+                    height: `${Math.max(8, (atHead ? Math.min(1, h + 0.18) : h) * 100)}%`,
                     borderRadius: '2px',
                     background: played ? accentColor : unplayed,
                     transition: 'background 0.04s',
-                    transformOrigin: 'center',
                   }}
                 />
               );
             })}
           </div>
 
-          {/* Time row */}
+          {/* Time */}
           <div style={{
             display: 'flex', justifyContent: 'space-between', marginTop: '5px',
             fontSize: '10px', color: mutedColor,
