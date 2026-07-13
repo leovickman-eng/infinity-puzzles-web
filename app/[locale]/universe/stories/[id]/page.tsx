@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { useRef, useState } from 'react';
 import { CHARACTERS } from '../page';
+import { getCharacterData } from '@/lib/characters-data';
 
 const AUDIO_MAP: Record<number, { url: string; label: string }[]> = {
   4:  [{ url: 'https://res.cloudinary.com/dk3ftfygx/video/upload/q_auto/f_auto/v1779967173/Ziggue_Lou_01_zvkgdw.mp3', label: 'Ziggy-Lou' }],
@@ -60,7 +61,7 @@ function AudioPlayer({ url, label }: { url: string; label: string }) {
     <div style={{ marginBottom: '20px' }}>
       <div style={{
         fontSize: '10px', letterSpacing: '2px', textTransform: 'uppercase',
-        color: 'rgba(240,234,248,0.3)', fontFamily: "'DM Sans', sans-serif",
+        color: 'rgba(240,234,248,0.4)', fontFamily: "'DM Sans', sans-serif",
         marginBottom: '10px',
       }}>
         {label}
@@ -124,7 +125,6 @@ function AudioPlayer({ url, label }: { url: string; label: string }) {
   );
 }
 
-// Returns true if hex color is light (needs dark text)
 function isLight(hex: string): boolean {
   const r = parseInt(hex.slice(1, 3), 16) / 255;
   const g = parseInt(hex.slice(3, 5), 16) / 255;
@@ -141,23 +141,29 @@ const BG: Record<number, string> = {
 };
 
 export default function CharacterPage() {
-  const params   = useParams();
-  const locale   = (params?.locale as string) ?? 'en';
-  const id       = Number(params?.id);
-  const ch       = CHARACTERS.find(c => c.id === id);
-  const audios   = AUDIO_MAP[id] ?? [];
-  const chapter  = CHAPTER_MAP[id];
-  const bg       = BG[id] ?? '#0d0a12';
-  const light    = isLight(bg);
-  const textColor  = light ? '#1C1917'              : '#f0eaf8';
-  const mutedColor = light ? 'rgba(28,25,23,0.5)'   : 'rgba(240,234,248,0.4)';
-  const accentColor = light ? '#5B4A8A'             : '#ae84ea';
+  const params  = useParams();
+  const locale  = (params?.locale as string) ?? 'en';
+  const isSv    = locale === 'sv';
+  const id      = Number(params?.id);
+  const ch      = CHARACTERS.find(c => c.id === id);
+  const data    = getCharacterData(id);
+  const audios  = AUDIO_MAP[id] ?? [];
+  const chapter = CHAPTER_MAP[id];
+  const bg      = BG[id] ?? '#0d0a12';
+  const light   = isLight(bg);
 
-  if (!ch) return (
+  const textColor   = light ? '#1C1917'            : '#f0eaf8';
+  const mutedColor  = light ? 'rgba(28,25,23,0.5)' : 'rgba(240,234,248,0.4)';
+  const accentColor = light ? '#5B4A8A'             : '#ae84ea';
+  const dividerColor = light ? 'rgba(28,25,23,0.1)' : 'rgba(240,234,248,0.1)';
+
+  if (!ch || !data) return (
     <div style={{ minHeight: '100svh', background: '#0d0a12', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#f0eaf8' }}>
       Karaktär hittades inte.
     </div>
   );
+
+  const animalLabel = isSv ? data.animal.sv : data.animal.en;
 
   return (
     <div style={{ minHeight: '100svh', background: bg, color: textColor }}>
@@ -173,74 +179,198 @@ export default function CharacterPage() {
           color: mutedColor, fontSize: '13px', textDecoration: 'none',
           fontFamily: "'DM Sans', sans-serif", letterSpacing: '0.06em', transition: 'color 0.15s',
         }}
-          onMouseEnter={e => (e.currentTarget.style.color = '#ae84ea')}
-          onMouseLeave={e => (e.currentTarget.style.color = 'rgba(240,234,248,0.4)')}
+          onMouseEnter={e => (e.currentTarget.style.color = accentColor)}
+          onMouseLeave={e => (e.currentTarget.style.color = mutedColor)}
         >
-          ← Stories
+          ← {isSv ? 'Alla karaktärer' : 'All characters'}
         </Link>
+        <span style={{
+          fontSize: '11px', letterSpacing: '2px', textTransform: 'uppercase',
+          color: mutedColor, fontFamily: "'DM Sans', sans-serif",
+        }}>
+          № {id}
+        </span>
       </div>
 
-      {/* Poster — full width, fade to dark */}
-      <div style={{ position: 'relative', width: '100%', maxWidth: '480px', margin: '0 auto', borderRadius: '14px', overflow: 'hidden' }}>
+      {/* Character image — centered, no background */}
+      <div style={{
+        paddingTop: '72px',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'flex-end',
+      }}>
         <img
-          src={`/images/posters/poster_${String(id).padStart(2, '0')}.webp`}
+          src={`/images/character-png/${id}.webp`}
           alt={ch.name}
-          style={{ width: '100%', display: 'block' }}
+          style={{
+            width: 'min(72vw, 320px)',
+            height: 'auto',
+            display: 'block',
+            objectFit: 'contain',
+            filter: 'drop-shadow(0 8px 32px rgba(0,0,0,0.22))',
+          }}
         />
       </div>
 
       {/* Content */}
-      <div style={{ maxWidth: '480px', margin: '0 auto', padding: '0 28px 80px' }}>
+      <div style={{ maxWidth: '520px', margin: '0 auto', padding: '32px 28px 80px' }}>
 
-        {/* Name + animal */}
-        <div style={{ marginBottom: '28px' }}>
-          <div style={{
-            fontSize: '10px', letterSpacing: '2.5px', textTransform: 'uppercase',
-            color: mutedColor, fontFamily: "'DM Sans', sans-serif", marginBottom: '8px',
-          }}>
-            {ch.animal}
-          </div>
-          <h1 style={{
-            fontFamily: "'eight-condensed', sans-serif",
-            fontSize: 'clamp(2.2rem, 8vw, 3.5rem)',
-            fontWeight: 400, color: accentColor,
-            margin: 0, letterSpacing: '0.03em', lineHeight: 1,
-          }}>
-            {ch.name}
-          </h1>
+        {/* Animal type */}
+        <div style={{
+          fontSize: '10px', letterSpacing: '2.5px', textTransform: 'uppercase',
+          color: mutedColor, fontFamily: "'DM Sans', sans-serif", marginBottom: '8px',
+        }}>
+          {animalLabel}
         </div>
+
+        {/* Name */}
+        <h1 style={{
+          fontFamily: "'eight-condensed', sans-serif",
+          fontSize: 'clamp(2.4rem, 9vw, 4rem)',
+          fontWeight: 400, color: accentColor,
+          margin: '0 0 6px', letterSpacing: '0.03em', lineHeight: 1,
+        }}>
+          {ch.name}
+        </h1>
+
+        {/* Superpower */}
+        <p style={{
+          fontFamily: "'DM Sans', sans-serif",
+          fontSize: 'clamp(0.8rem, 2.2vw, 0.92rem)',
+          letterSpacing: '0.12em', textTransform: 'uppercase',
+          color: accentColor, opacity: 0.75,
+          margin: '0 0 20px',
+        }}>
+          {isSv ? data.superpower.sv : data.superpower.en}
+        </p>
+
+        {/* Tagline */}
+        <p style={{
+          fontFamily: "'eight-condensed', sans-serif",
+          fontSize: 'clamp(1.1rem, 3.5vw, 1.4rem)',
+          color: textColor, opacity: 0.85,
+          margin: '0 0 28px', lineHeight: 1.35,
+          fontStyle: 'italic',
+        }}>
+          {isSv ? data.tagline.sv : data.tagline.en}
+        </p>
+
+        <div style={{ height: '1px', background: dividerColor, margin: '0 0 28px' }} />
 
         {/* Audio */}
         {audios.length > 0 && (
           <div style={{
             padding: '20px',
-            background: 'rgba(255,255,255,0.35)',
-            backdropFilter: 'blur(12px)',
-            WebkitBackdropFilter: 'blur(12px)',
-            border: '1px solid rgba(255,255,255,0.25)',
+            background: light ? 'rgba(0,0,0,0.06)' : 'rgba(255,255,255,0.08)',
+            border: `1px solid ${light ? 'rgba(0,0,0,0.1)' : 'rgba(255,255,255,0.12)'}`,
             borderRadius: '14px',
-            marginBottom: '24px',
+            marginBottom: '28px',
           }}>
             {audios.map(a => <AudioPlayer key={a.url} url={a.url} label={a.label} />)}
           </div>
         )}
 
+        {/* Description / story */}
+        <div style={{ marginBottom: '28px' }}>
+          {(isSv ? data.description.sv : data.description.en).split('\n\n').map((para, i) => (
+            <p key={i} style={{
+              fontFamily: "'DM Sans', sans-serif",
+              fontSize: 'clamp(0.95rem, 2.5vw, 1.05rem)',
+              lineHeight: 1.75, color: textColor, opacity: 0.9,
+              margin: i === 0 ? '0 0 16px' : '0',
+            }}>
+              {para}
+            </p>
+          ))}
+        </div>
+
+        <div style={{ height: '1px', background: dividerColor, margin: '0 0 28px' }} />
+
+        {/* Aura */}
+        <div style={{ marginBottom: '28px' }}>
+          <div style={{
+            fontSize: '10px', letterSpacing: '2.5px', textTransform: 'uppercase',
+            color: mutedColor, fontFamily: "'DM Sans', sans-serif", marginBottom: '10px',
+          }}>
+            {isSv ? 'Aura' : 'Aura'}
+          </div>
+          <p style={{
+            fontFamily: "'DM Sans', sans-serif",
+            fontSize: 'clamp(0.92rem, 2.4vw, 1rem)',
+            lineHeight: 1.7, color: textColor, opacity: 0.75,
+            margin: 0, fontStyle: 'italic',
+          }}>
+            {isSv ? data.aura.sv : data.aura.en}
+          </p>
+        </div>
+
+        <div style={{ height: '1px', background: dividerColor, margin: '0 0 28px' }} />
+
+        {/* Neighbors */}
+        <div style={{ marginBottom: '28px' }}>
+          <div style={{
+            fontSize: '10px', letterSpacing: '2.5px', textTransform: 'uppercase',
+            color: mutedColor, fontFamily: "'DM Sans', sans-serif", marginBottom: '12px',
+          }}>
+            {isSv ? 'Grannar' : 'Neighbors'}
+          </div>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+            {data.neighbors.map(name => {
+              const neighbor = CHARACTERS.find(c => c.name === name);
+              return neighbor ? (
+                <Link
+                  key={name}
+                  href={`/${locale}/universe/stories/${neighbor.id}`}
+                  style={{
+                    fontFamily: "'DM Sans', sans-serif",
+                    fontSize: '13px',
+                    color: accentColor,
+                    textDecoration: 'none',
+                    padding: '5px 12px',
+                    borderRadius: '20px',
+                    border: `1px solid ${accentColor}40`,
+                    background: `${accentColor}10`,
+                    transition: 'background 0.15s',
+                    whiteSpace: 'nowrap',
+                  }}
+                  onMouseEnter={e => (e.currentTarget.style.background = `${accentColor}22`)}
+                  onMouseLeave={e => (e.currentTarget.style.background = `${accentColor}10`)}
+                >
+                  {name}
+                </Link>
+              ) : (
+                <span key={name} style={{
+                  fontFamily: "'DM Sans', sans-serif",
+                  fontSize: '13px', color: mutedColor,
+                  padding: '5px 12px', borderRadius: '20px',
+                  border: `1px solid ${dividerColor}`,
+                }}>
+                  {name}
+                </span>
+              );
+            })}
+          </div>
+        </div>
+
         {/* Chapter link */}
         {chapter && (
-          <Link href={`/${locale}${chapter}`} style={{
-            display: 'inline-flex', alignItems: 'center', gap: '8px',
-            padding: '12px 22px', borderRadius: '10px',
-            background: 'rgba(174,132,234,0.08)',
-            border: '1px solid rgba(174,132,234,0.35)',
-            color: accentColor, textDecoration: 'none',
-            fontSize: '13px', fontFamily: "'DM Sans', sans-serif",
-            letterSpacing: '0.05em', transition: 'background 0.2s',
-          }}
-            onMouseEnter={e => (e.currentTarget.style.background = 'rgba(174,132,234,0.16)')}
-            onMouseLeave={e => (e.currentTarget.style.background = 'rgba(174,132,234,0.08)')}
-          >
-            📖 Läs kapitel 1
-          </Link>
+          <>
+            <div style={{ height: '1px', background: dividerColor, margin: '0 0 28px' }} />
+            <Link href={`/${locale}${chapter}`} style={{
+              display: 'inline-flex', alignItems: 'center', gap: '8px',
+              padding: '12px 22px', borderRadius: '10px',
+              background: `${accentColor}10`,
+              border: `1px solid ${accentColor}40`,
+              color: accentColor, textDecoration: 'none',
+              fontSize: '13px', fontFamily: "'DM Sans', sans-serif",
+              letterSpacing: '0.05em', transition: 'background 0.2s',
+            }}
+              onMouseEnter={e => (e.currentTarget.style.background = `${accentColor}22`)}
+              onMouseLeave={e => (e.currentTarget.style.background = `${accentColor}10`)}
+            >
+              📖 {isSv ? 'Läs kapitel 1' : 'Read chapter 1'}
+            </Link>
+          </>
         )}
       </div>
     </div>
