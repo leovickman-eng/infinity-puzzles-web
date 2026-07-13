@@ -8,8 +8,8 @@ export const CHARACTERS = [
   { id: 2,  name: 'Zuki',          animal: 'Rådjur',     audio: false },
   { id: 3,  name: 'Mani',          animal: 'Tukan',      audio: false },
   { id: 4,  name: 'Ziggy-Lou',     animal: 'Räv',        audio: true  },
-  { id: 5,  name: 'Lana Manana',   animal: 'Lama',       audio: true  },
-  { id: 6,  name: 'Tarah',         animal: 'Tiger',      audio: false },
+  { id: 5,  name: 'Lana',           animal: 'Lama',       audio: true  },
+  { id: 6,  name: 'Tanya',         animal: 'Tiger',      audio: false },
   { id: 7,  name: 'Mambo Viento',  animal: 'Drake',      audio: true  },
   { id: 8,  name: 'Dali',          animal: 'Kamelont',   audio: true  },
   { id: 9,  name: 'Pinto',         animal: 'Leopard',    audio: true  },
@@ -20,9 +20,9 @@ export const CHARACTERS = [
   { id: 14, name: 'Pepe',          animal: 'Pingvin',    audio: false },
   { id: 15, name: 'Ronda',         animal: 'Krokodil',   audio: true  },
   { id: 16, name: 'Rumi',          animal: 'Papegoja',   audio: true  },
-  { id: 17, name: 'Daffy Thunder', animal: 'Giraff',     audio: false },
+  { id: 17, name: 'Daffy Giraffy', animal: 'Giraff',     audio: false },
   { id: 18, name: 'Jerry',         animal: 'Hund',       audio: false },
-  { id: 19, name: 'Silvana',       animal: 'Kamel',      audio: false },
+  { id: 19, name: 'Mira',          animal: 'Kamel',      audio: false },
 ];
 
 export default function StoriesPage() {
