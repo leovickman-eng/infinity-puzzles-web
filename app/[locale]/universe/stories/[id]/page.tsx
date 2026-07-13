@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
-import { useRef, useState } from 'react';
+import { useRef, useState, useMemo } from 'react';
 import { CHARACTERS } from '../page';
 import { getCharacterData } from '@/lib/characters-data';
 
@@ -32,14 +32,44 @@ function fmt(s: number) {
   return `${m}:${sec.toString().padStart(2, '0')}`;
 }
 
-function AudioPlayer({ url, label }: { url: string; label: string }) {
-  const audioRef = useRef<HTMLAudioElement>(null);
-  const barRef   = useRef<HTMLDivElement>(null);
+// Seeded pseudo-random waveform — consistent per URL
+function generateWaveform(url: string, bars: number): number[] {
+  let seed = 0;
+  for (let i = 0; i < url.length; i++) seed = (seed * 31 + url.charCodeAt(i)) % 1_000_000;
+  const raw = Array.from({ length: bars }, (_, i) => {
+    const x = Math.sin(seed + i * 127.1) * 43758.5453;
+    const r = x - Math.floor(x);
+    const s = Math.abs(Math.sin(i * 0.28)) * 0.35;
+    return 0.08 + r * 0.62 + s;
+  });
+  // one-pass smooth
+  return raw.map((h, i) => {
+    const p = raw[i - 1] ?? h;
+    const n = raw[i + 1] ?? h;
+    return Math.min(1, (p * 0.2 + h * 0.6 + n * 0.2));
+  });
+}
+
+const WAVEFORM_BARS = 72;
+
+interface AudioPlayerProps {
+  url: string;
+  label: string;
+  accentColor: string;
+  mutedColor: string;
+  light: boolean;
+}
+
+function AudioPlayer({ url, label, accentColor, mutedColor, light }: AudioPlayerProps) {
+  const audioRef   = useRef<HTMLAudioElement>(null);
+  const waveRef    = useRef<HTMLDivElement>(null);
   const [playing, setPlaying]   = useState(false);
   const [current, setCurrent]   = useState(0);
   const [duration, setDuration] = useState(0);
   const [dragging, setDragging] = useState(false);
-  const pct = duration > 0 ? (current / duration) * 100 : 0;
+
+  const pct      = duration > 0 ? current / duration : 0;
+  const waveform = useMemo(() => generateWaveform(url, WAVEFORM_BARS), [url]);
 
   const toggle = () => {
     const a = audioRef.current;
@@ -47,73 +77,104 @@ function AudioPlayer({ url, label }: { url: string; label: string }) {
     playing ? (a.pause(), setPlaying(false)) : (a.play(), setPlaying(true));
   };
 
-  const seek = (e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>) => {
-    const a = audioRef.current; const bar = barRef.current;
-    if (!a || !bar || !duration) return;
-    const rect = bar.getBoundingClientRect();
-    const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
+  const seekFromEvent = (clientX: number) => {
+    const a = audioRef.current; const el = waveRef.current;
+    if (!a || !el || !duration) return;
+    const rect = el.getBoundingClientRect();
     const p = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
     a.currentTime = p * duration;
     setCurrent(p * duration);
   };
 
+  const onMouseDown = (e: React.MouseEvent) => { setDragging(true); seekFromEvent(e.clientX); };
+  const onMouseMove = (e: React.MouseEvent) => { if (dragging) seekFromEvent(e.clientX); };
+  const onMouseUp   = () => setDragging(false);
+  const onTouchStart = (e: React.TouchEvent) => seekFromEvent(e.touches[0].clientX);
+  const onTouchMove  = (e: React.TouchEvent) => seekFromEvent(e.touches[0].clientX);
+
+  const btnBg      = light ? `${accentColor}18` : `${accentColor}18`;
+  const btnBgHover = light ? `${accentColor}30` : `${accentColor}30`;
+  const btnBorder  = `${accentColor}60`;
+  const unplayed   = light ? `${accentColor}28` : `${accentColor}28`;
+
   return (
     <div style={{ marginBottom: '20px' }}>
+      {/* Label */}
       <div style={{
         fontSize: '10px', letterSpacing: '2px', textTransform: 'uppercase',
-        color: 'rgba(240,234,248,0.4)', fontFamily: "'DM Sans', sans-serif",
-        marginBottom: '10px',
+        color: mutedColor, fontFamily: "'DM Sans', sans-serif", marginBottom: '12px',
       }}>
         {label}
       </div>
+
       <audio
         ref={audioRef} src={url}
         onTimeUpdate={e => { if (!dragging) setCurrent(e.currentTarget.currentTime); }}
         onLoadedMetadata={e => setDuration(e.currentTarget.duration)}
         onEnded={() => { setPlaying(false); setCurrent(0); }}
       />
-      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-        <button onClick={toggle} style={{
-          flexShrink: 0, width: '38px', height: '38px', borderRadius: '50%',
-          background: 'rgba(174,132,234,0.12)', border: '1px solid rgba(174,132,234,0.4)',
-          color: '#ae84ea', fontSize: '13px', cursor: 'pointer',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          transition: 'background 0.15s',
-        }}
-          onMouseEnter={e => (e.currentTarget.style.background = 'rgba(174,132,234,0.25)')}
-          onMouseLeave={e => (e.currentTarget.style.background = 'rgba(174,132,234,0.12)')}
+
+      <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+
+        {/* Play / pause button */}
+        <button
+          onClick={toggle}
+          style={{
+            flexShrink: 0, width: '40px', height: '40px', borderRadius: '50%',
+            background: btnBg, border: `1px solid ${btnBorder}`,
+            color: accentColor, fontSize: '13px', cursor: 'pointer',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            transition: 'background 0.15s',
+          }}
+          onMouseEnter={e => (e.currentTarget.style.background = btnBgHover)}
+          onMouseLeave={e => (e.currentTarget.style.background = btnBg)}
         >
           {playing ? '⏸' : '▶'}
         </button>
-        <div style={{ flex: 1 }}>
-          <div ref={barRef} onClick={seek}
-            onMouseDown={() => setDragging(true)}
-            onMouseMove={e => { if (dragging) seek(e); }}
-            onMouseUp={() => setDragging(false)}
-            onMouseLeave={() => setDragging(false)}
-            onTouchStart={seek} onTouchMove={seek}
+
+        {/* Waveform + time */}
+        <div style={{ flex: 1, minWidth: 0 }}>
+
+          {/* Waveform bars */}
+          <div
+            ref={waveRef}
+            onMouseDown={onMouseDown}
+            onMouseMove={onMouseMove}
+            onMouseUp={onMouseUp}
+            onMouseLeave={onMouseUp}
+            onTouchStart={onTouchStart}
+            onTouchMove={onTouchMove}
+            onTouchEnd={onMouseUp}
             style={{
-              height: '3px', background: 'rgba(255,255,255,0.1)',
-              borderRadius: '2px', cursor: 'pointer', position: 'relative',
+              display: 'flex', alignItems: 'center', gap: '2px',
+              height: '44px', cursor: 'pointer', userSelect: 'none',
             }}
           >
-            <div style={{
-              position: 'absolute', left: 0, top: 0, height: '100%',
-              width: `${pct}%`, background: '#ae84ea', borderRadius: '2px',
-              transition: dragging ? 'none' : 'width 0.1s linear',
-            }} />
-            <div style={{
-              position: 'absolute', top: '50%', left: `${pct}%`,
-              transform: 'translate(-50%, -50%)',
-              width: '10px', height: '10px', borderRadius: '50%',
-              background: '#ae84ea',
-              opacity: playing || pct > 0 ? 1 : 0,
-              transition: 'opacity 0.2s',
-            }} />
+            {waveform.map((h, i) => {
+              const barPct = i / WAVEFORM_BARS;
+              const played = barPct < pct;
+              // near playhead — slightly taller & brighter
+              const atHead = Math.abs(barPct - pct) < 0.02;
+              return (
+                <div
+                  key={i}
+                  style={{
+                    flex: 1,
+                    height: `${Math.max(8, (atHead ? Math.min(1, h + 0.15) : h) * 100)}%`,
+                    borderRadius: '2px',
+                    background: played ? accentColor : unplayed,
+                    transition: 'background 0.04s',
+                    transformOrigin: 'center',
+                  }}
+                />
+              );
+            })}
           </div>
+
+          {/* Time row */}
           <div style={{
-            display: 'flex', justifyContent: 'space-between', marginTop: '4px',
-            fontSize: '10px', color: 'rgba(240,234,248,0.3)',
+            display: 'flex', justifyContent: 'space-between', marginTop: '5px',
+            fontSize: '10px', color: mutedColor,
             fontFamily: "'DM Sans', sans-serif", letterSpacing: '0.05em',
           }}>
             <span>{fmt(current)}</span>
@@ -266,7 +327,7 @@ export default function CharacterPage() {
             borderRadius: '14px',
             marginBottom: '28px',
           }}>
-            {audios.map(a => <AudioPlayer key={a.url} url={a.url} label={a.label} />)}
+            {audios.map(a => <AudioPlayer key={a.url} url={a.url} label={a.label} accentColor={accentColor} mutedColor={mutedColor} light={light} />)}
           </div>
         )}
 
