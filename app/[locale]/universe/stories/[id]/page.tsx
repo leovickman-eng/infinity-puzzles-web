@@ -140,16 +140,26 @@ function AudioPlayer({ url, label, accentColor, mutedColor }: AudioPlayerProps) 
         <button
           onClick={toggle}
           style={{
-            flexShrink: 0, width: '40px', height: '40px', borderRadius: '50%',
+            flexShrink: 0, width: '44px', height: '44px', borderRadius: '50%',
             background: btnBg, border: `1px solid ${accentColor}60`,
-            color: accentColor, fontSize: '13px', cursor: 'pointer',
+            color: accentColor, cursor: 'pointer',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             transition: 'background 0.15s',
+            padding: 0,
           }}
           onMouseEnter={e => (e.currentTarget.style.background = btnBgHover)}
           onMouseLeave={e => (e.currentTarget.style.background = btnBg)}
         >
-          {playing ? '⏸' : '▶'}
+          {playing ? (
+            <svg width="12" height="14" viewBox="0 0 12 14" fill="currentColor">
+              <rect x="0" y="0" width="4" height="14" rx="1"/>
+              <rect x="8" y="0" width="4" height="14" rx="1"/>
+            </svg>
+          ) : (
+            <svg width="12" height="14" viewBox="0 0 12 14" fill="currentColor" style={{ marginLeft: '2px' }}>
+              <polygon points="0,0 12,7 0,14"/>
+            </svg>
+          )}
         </button>
 
         {/* Waveform + time */}
