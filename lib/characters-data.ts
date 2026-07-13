@@ -36,7 +36,7 @@ export const CHARACTER_DATA: CharacterData[] = [
     id: 2,
     name: 'Zuki',
     animal: { sv: 'Rådjur', en: 'Deer' },
-    neighbors: ['Dolores', 'Tanya', 'Mambo', 'Mani', 'Daffy Giraffy', 'Rumi', 'Ronda'],
+    neighbors: ['Dolores', 'Tanya', 'Mambo Viento', 'Mani', 'Daffy Giraffy', 'Rumi', 'Ronda'],
     superpower: {
       sv: 'Ser världen som om det är första gången.',
       en: 'Sees the world as if for the first time.',
@@ -58,7 +58,7 @@ export const CHARACTER_DATA: CharacterData[] = [
     id: 3,
     name: 'Mani',
     animal: { sv: 'Tukan', en: 'Toucan' },
-    neighbors: ['Zuki', 'Ziggy-Lou', 'Mambo', 'Daffy Giraffy', 'Jerry'],
+    neighbors: ['Zuki', 'Ziggy-Lou', 'Mambo Viento', 'Daffy Giraffy', 'Jerry'],
     superpower: {
       sv: 'Lyssnar på det ingen annan hör.',
       en: 'Listens to what nobody else can hear.',
@@ -124,7 +124,7 @@ export const CHARACTER_DATA: CharacterData[] = [
     id: 6,
     name: 'Tanya',
     animal: { sv: 'Tiger', en: 'Tiger' },
-    neighbors: ['Dolores', 'Zuki', 'Lana', 'Mambo', 'Sixten', 'Mira'],
+    neighbors: ['Dolores', 'Zuki', 'Lana', 'Mambo Viento', 'Sixten', 'Mira'],
     superpower: {
       sv: 'Vet alltid vart hon ska.',
       en: 'Always knows where she\'s going.',
@@ -168,7 +168,7 @@ export const CHARACTER_DATA: CharacterData[] = [
     id: 8,
     name: 'Dali',
     animal: { sv: 'Kamelont', en: 'Chameleon' },
-    neighbors: ['Mambo', 'Coco', 'Mona Moon', 'Pinto', 'Ziggy-Lou'],
+    neighbors: ['Mambo Viento', 'Coco', 'Mona Moon', 'Pinto', 'Ziggy-Lou'],
     superpower: {
       sv: 'Galen nog att vara ett geni.',
       en: 'Mad enough to be a genius.',
@@ -212,7 +212,7 @@ export const CHARACTER_DATA: CharacterData[] = [
     id: 10,
     name: 'Sixten',
     animal: { sv: 'Katt', en: 'Cat' },
-    neighbors: ['Ziggy-Lou', 'Lana', 'Tanya', 'Mambo', 'Pinto', 'Coco', 'Ronda', 'Rumi'],
+    neighbors: ['Ziggy-Lou', 'Lana', 'Tanya', 'Mambo Viento', 'Pinto', 'Coco', 'Ronda', 'Rumi'],
     superpower: {
       sv: 'Ser det bästa i alla — alltid.',
       en: 'Sees the best in everyone — always.',
@@ -234,7 +234,7 @@ export const CHARACTER_DATA: CharacterData[] = [
     id: 11,
     name: 'Coco',
     animal: { sv: 'Fågel', en: 'Bird' },
-    neighbors: ['Mambo', 'Dali', 'Sixten', 'Mona Moon', 'Rumi'],
+    neighbors: ['Mambo Viento', 'Dali', 'Sixten', 'Mona Moon', 'Rumi'],
     superpower: {
       sv: 'Är alltid där utan att märkas.',
       en: 'Is always there without being noticed.',
