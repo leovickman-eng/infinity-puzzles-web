@@ -200,13 +200,13 @@ export default function PlayModes() {
                 {symbol}
               </div>
               <p style={{
-                fontFamily: "'eight-condensed', Georgia, serif",
-                fontWeight: 900,
-                fontSize: 'clamp(1rem, 2vw, 1.4rem)',
+                fontFamily: "'DM Sans', sans-serif",
+                fontWeight: 500,
+                fontSize: 'clamp(0.85rem, 1.6vw, 1.05rem)',
                 color,
                 margin: 0,
-                letterSpacing: '0.03em',
-                lineHeight: 1.05,
+                letterSpacing: '0.01em',
+                lineHeight: 1.4,
                 textAlign: 'center',
               }}>
                 {text}
