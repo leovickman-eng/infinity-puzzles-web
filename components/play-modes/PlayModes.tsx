@@ -174,9 +174,9 @@ export default function PlayModes() {
   const t = useTranslations('playModes');
 
   const cols = [
-    { symbol: <DotsAlone />, text: t('alone'), color: '#ae84ea' },
-    { symbol: <DotsSplit />, text: t('split'), color: '#ae84ea' },
-    { symbol: <DotsChain />, text: t('chain'), color: '#ae84ea' },
+    { symbol: <DotsAlone />, text: t('alone'), color: '#5B4A8A' },
+    { symbol: <DotsSplit />, text: t('split'), color: '#5B4A8A' },
+    { symbol: <DotsChain />, text: t('chain'), color: '#5B4A8A' },
   ];
 
   return (
