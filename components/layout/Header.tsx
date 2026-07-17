@@ -173,8 +173,8 @@ export default function Header({ locale }: Props) {
       <div className="relative flex items-center gap-2 w-full">
         {/* Infinity knot — home link */}
         <Link
-          href={`/${locale}`}
-          aria-label="Home"
+          href={`/${locale}/universe`}
+          aria-label="Universe"
           className="flex items-center justify-center p-1 opacity-90 hover:opacity-100 transition-opacity"
         >
           <InfinityKnot />
