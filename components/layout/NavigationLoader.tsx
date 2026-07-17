@@ -6,10 +6,14 @@ import Lottie from 'lottie-react';
 import animationData from '@/public/loading.json';
 
 export default function NavigationLoader() {
-  const pathname = usePathname();
-  const [visible, setVisible] = useState(false);
-  const [fading,  setFading]  = useState(false);
+  const pathname  = usePathname();
+  const [visible,  setVisible]  = useState(false);
+  const [fading,   setFading]   = useState(false);
+  const [destHref, setDestHref] = useState('');
   const prevPathRef = useRef(pathname);
+
+  const isUniverse = destHref.includes('/universe');
+  const bg         = isUniverse ? '#0d0a12' : '#FFFBF5';
 
   // Pathname ändrades → fade-out och dölj
   useEffect(() => {
@@ -29,6 +33,7 @@ export default function NavigationLoader() {
       const href = a.getAttribute('href') ?? '';
       if (!href || href.startsWith('http') || href.startsWith('#') || href.startsWith('mailto')) return;
       if (href === pathname || href === window.location.pathname) return;
+      setDestHref(href);
       setFading(false);
       setVisible(true);
     };
@@ -41,7 +46,7 @@ export default function NavigationLoader() {
   return (
     <div style={{
       position: 'fixed', inset: 0, zIndex: 9999,
-      background: '#FFFBF5',
+      background: bg,
       display: 'flex', alignItems: 'center', justifyContent: 'center',
       transition: 'opacity 0.3s ease',
       opacity: fading ? 0 : 1,
