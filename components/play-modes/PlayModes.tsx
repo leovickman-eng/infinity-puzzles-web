@@ -200,9 +200,9 @@ export default function PlayModes() {
                 {symbol}
               </div>
               <p style={{
-                fontFamily: "'DM Sans', sans-serif",
-                fontWeight: 500,
-                fontSize: 'clamp(0.85rem, 1.6vw, 1.05rem)',
+                fontFamily: '"counterpress", sans-serif',
+                fontWeight: 400,
+                fontSize: 'clamp(0.85rem, 1.6vw, 1rem)',
                 color,
                 margin: 0,
                 letterSpacing: '0.01em',

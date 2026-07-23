@@ -268,8 +268,8 @@ export default function WildStats() {
               </div>
 
               <div style={{
-                fontFamily: "'eight-condensed', Georgia, serif",
-                fontWeight: 900,
+                fontFamily: ""counterpress", sans-serif",
+                fontWeight: 700,
                 fontSize: card.valueSz,
                 letterSpacing: '0.03em',
                 color: card.valueColor,
@@ -281,8 +281,8 @@ export default function WildStats() {
 
               {card.label && (
                 <div style={card.labelDisplay ? {
-                  fontFamily: "'eight-condensed', Georgia, serif",
-                  fontWeight: 900,
+                  fontFamily: ""counterpress", sans-serif",
+                  fontWeight: 700,
                   fontSize: 'clamp(0.85rem, 1.6vw, 1.05rem)',
                   letterSpacing: '0.04em',
                   color: (card as {labelColor?: string}).labelColor ?? 'rgba(28,25,23,0.45)',
