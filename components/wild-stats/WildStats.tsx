@@ -268,7 +268,7 @@ export default function WildStats() {
               </div>
 
               <div style={{
-                fontFamily: ""counterpress", sans-serif",
+                fontFamily: 'counterpress, sans-serif',
                 fontWeight: 700,
                 fontSize: card.valueSz,
                 letterSpacing: '0.03em',
@@ -281,7 +281,7 @@ export default function WildStats() {
 
               {card.label && (
                 <div style={card.labelDisplay ? {
-                  fontFamily: ""counterpress", sans-serif",
+                  fontFamily: 'counterpress, sans-serif',
                   fontWeight: 700,
                   fontSize: 'clamp(0.85rem, 1.6vw, 1.05rem)',
                   letterSpacing: '0.04em',
