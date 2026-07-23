@@ -35,10 +35,6 @@ export default function Header({ locale }: Props) {
   const itemCount = cart?.totalQuantity ?? 0;
   const otherLocale = locale === 'en' ? 'sv' : 'en';
   const pathname = usePathname();
-
-  // Hide header on /universe routes — feels like a standalone app
-  if (pathname.includes('/universe')) return null;
-
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const triggerRef = useRef<HTMLButtonElement>(null);
@@ -58,6 +54,9 @@ export default function Header({ locale }: Props) {
     document.addEventListener('pointerdown', handlePointerDown);
     return () => document.removeEventListener('pointerdown', handlePointerDown);
   }, [open]);
+
+  // Hide header on /universe routes — hooks must all be called above this line
+  if (pathname.includes('/universe')) return null;
 
   const scrollTo = (id: string) => {
     setOpen(false);
