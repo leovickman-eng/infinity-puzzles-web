@@ -10,7 +10,8 @@ const BASE        = '/formations/GASP/F1';
 const BASE_MOBILE = '/formations/GASP/F1-mobile';
 const BREAKPOINT  = 768;
 
-const PX_PER_F1    = 6;
+const PX_PER_F1    = 6;   // px stagger between each piece starting (timing)
+const F1_FADE_PX   = 50;  // px each piece takes to fully fade in (animation speed)
 const F1_PAUSE     = 100;
 const PX_PER_F2    = 60;
 const POST_F2_HOLD = 200;
@@ -173,7 +174,7 @@ export default function FormationMorph() {
       const f1Progresses = f1Srcs.map((_, i) => {
         if (i === 0) return 1; // always visible from the start
         const start = P0_SCROLL + (i - 1) * PX_PER_F1;
-        return Math.min(1, Math.max(0, (scrolledF1 - start) / PX_PER_F1));
+        return Math.min(1, Math.max(0, (scrolledF1 - start) / F1_FADE_PX));
       });
 
       let f2Step = -1, f2Progress = 0;
