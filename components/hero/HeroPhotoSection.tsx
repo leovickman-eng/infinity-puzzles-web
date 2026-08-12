@@ -102,10 +102,11 @@ export default function HeroPhotoSection() {
             background: 'linear-gradient(to bottom, rgba(0,0,0,0.15) 0%, transparent 20%, transparent 70%, rgba(255,251,245,0.6) 100%)',
           }} />
 
-          {/* Buy button — 75% from top (lower quarter) */}
+          {/* Buy button + logo — 75% from top (lower quarter) */}
           <div className="hero-buy-wrap" style={{
             position: 'absolute', top: '75%', left: '50%',
             transform: 'translate(-50%, -50%)', zIndex: 5,
+            display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '14px',
           }}>
             <button
               className="hero-buy-btn"
@@ -126,6 +127,17 @@ export default function HeroPhotoSection() {
             >
               {isSv ? 'KÖP DITT' : 'GET YOURS'}
             </button>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/images/SVG/infinity-puzzles-logo-400px (1).png"
+              alt="Infinity Puzzles"
+              style={{
+                width: 'clamp(110px, 26vw, 160px)',
+                opacity: 0.88,
+                mixBlendMode: 'multiply',
+                display: 'block',
+              }}
+            />
           </div>
         </div>
       </section>
