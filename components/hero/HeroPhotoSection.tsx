@@ -129,7 +129,7 @@ export default function HeroPhotoSection() {
             </button>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="/images/SVG/infinity-puzzles-logo-400px (1).png"
+              src="/images/SVG/infinity-puzzles-logo.png"
               alt="Infinity Puzzles"
               style={{
                 width: 'clamp(110px, 26vw, 160px)',
