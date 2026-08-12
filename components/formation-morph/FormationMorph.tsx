@@ -14,13 +14,13 @@ const PX_PER_F1    = 6;
 const F1_PAUSE     = 100;
 const PX_PER_F2    = 60;
 const POST_F2_HOLD = 200;
-const P0_SCROLL    = 5;
+const P0_SCROLL    = 80;  // px after section enters viewport before pieces start
 const SLIDE_P0     = 250;
 const SLIDE_PX     = 80;
 
-const F1_SCROLL  = P0_SCROLL + 18 * PX_PER_F1 + F1_PAUSE;
+// F1 now runs pre-sticky (triggered by viewport entry), F2 runs during sticky
 const F2_SCROLL  = 19 * PX_PER_F2;
-const TOTAL_ANIM = F1_SCROLL + F2_SCROLL + POST_F2_HOLD;
+const TOTAL_ANIM = F2_SCROLL + POST_F2_HOLD;
 
 function easeOut(t: number) { return 1 - (1 - t) ** 2; }
 
@@ -161,21 +161,24 @@ export default function FormationMorph() {
       const wrapper = wrapperRef.current;
       if (!overlay || !wrap || !wrapper) return;
 
-      const scrolled = -wrapper.getBoundingClientRect().top;
+      const rect       = wrapper.getBoundingClientRect();
+      const scrolledF1 = innerHeightRef.current - rect.top; // 0 when section enters viewport
+      const scrolled   = -rect.top;                         // 0 when sticky pins (for F2)
 
       overlay.style.opacity = '1';
 
-      const inF2 = scrolled >= F1_SCROLL;
+      const inF2 = scrolled >= 0;
 
+      // F1: piece entry triggered as section enters viewport (pre-sticky)
       const f1Progresses = f1Srcs.map((_, i) => {
         if (i === 0) return 1; // always visible from the start
         const start = P0_SCROLL + (i - 1) * PX_PER_F1;
-        return Math.min(1, Math.max(0, (scrolled - start) / PX_PER_F1));
+        return Math.min(1, Math.max(0, (scrolledF1 - start) / PX_PER_F1));
       });
 
       let f2Step = -1, f2Progress = 0;
       if (inF2) {
-        f2Progress = Math.min(1, (scrolled - F1_SCROLL) / F2_SCROLL);
+        f2Progress = Math.min(1, scrolled / F2_SCROLL);
         f2Step     = Math.min(18, Math.floor(f2Progress * 19));
       }
 
