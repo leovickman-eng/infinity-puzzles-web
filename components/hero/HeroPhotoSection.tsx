@@ -41,8 +41,8 @@ export default function HeroPhotoSection() {
         .hero-arrow:nth-child(2) { animation-delay: 0.18s; }
         .hero-arrow:nth-child(3) { animation-delay: 0.36s; }
 
-        .hero-img-wrap { aspect-ratio: 1920 / 1280; }
-        @media (max-width: 767px) { .hero-img-wrap { aspect-ratio: 900 / 1200; } }
+        .hero-img-wrap { aspect-ratio: 2048 / 1365; }
+        @media (max-width: 767px) { .hero-img-wrap { aspect-ratio: 1771 / 2048; } }
       `}</style>
 
       {/* ── Full-width photo ── */}
@@ -50,11 +50,11 @@ export default function HeroPhotoSection() {
         <div className="hero-img-wrap" style={{ position: 'relative', width: '100%', overflow: 'hidden' }}>
 
           <picture style={{ display: 'block', width: '100%', height: '100%' }}>
-            <source media="(max-width: 767px)" srcSet="/images/hero/hero-cr5-mobile.webp" />
-            <source srcSet="/images/hero/hero-cr5-desktop.webp" />
+            <source media="(max-width: 767px)" srcSet="/images/hero/hero-h1-mobile.webp" />
+            <source srcSet="/images/hero/hero-h1-desktop.webp" />
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="/images/hero/hero-cr5-desktop.webp"
+              src="/images/hero/hero-h1-desktop.webp"
               alt="Infinity Puzzles Wild"
               style={{
                 position: 'absolute', inset: 0,
