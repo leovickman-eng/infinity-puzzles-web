@@ -73,9 +73,9 @@ export default function HeroPhotoSection() {
 
           {/* Buy button + logo */}
           <div className="hero-buy-wrap" style={{
-            position: 'absolute', top: '75%', left: '50%',
+            position: 'absolute', top: '50%', left: '50%',
             transform: 'translate(-50%, -50%)', zIndex: 5,
-            display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '14px',
+            display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '28px',
           }}>
             <button
               className="hero-buy-btn"
