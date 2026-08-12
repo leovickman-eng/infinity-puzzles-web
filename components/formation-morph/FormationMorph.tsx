@@ -10,11 +10,11 @@ const BASE        = '/formations/GASP/F1';
 const BASE_MOBILE = '/formations/GASP/F1-mobile';
 const BREAKPOINT  = 768;
 
-const PX_PER_F1    = 28;
-const F1_PAUSE     = 150;
+const PX_PER_F1    = 16;
+const F1_PAUSE     = 100;
 const PX_PER_F2    = 60;
 const POST_F2_HOLD = 200;
-const P0_SCROLL    = 10;
+const P0_SCROLL    = 5;
 const SLIDE_P0     = 250;
 const SLIDE_PX     = 80;
 
