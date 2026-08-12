@@ -1,43 +1,16 @@
 'use client';
 
 import { useParams } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
 
 export default function HeroPhotoSection() {
   const params = useParams();
   const locale = (params?.locale as string) ?? 'en';
-  const isSv = locale === 'sv';
-
-  const [isMobile, setIsMobile] = useState<boolean | null>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
-
-  useEffect(() => {
-    const mq = window.matchMedia('(max-width: 767px)');
-    setIsMobile(mq.matches);
-    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
-    mq.addEventListener('change', handler);
-    return () => mq.removeEventListener('change', handler);
-  }, []);
-
-  useEffect(() => {
-    const v = videoRef.current;
-    if (!v) return;
-    v.muted = true;
-    v.play().catch(() => {});
-  }, [isMobile]);
+  const isSv   = locale === 'sv';
 
   const scrollToShop = () => {
     const el = document.getElementById('shop');
     if (el) el.scrollIntoView({ behavior: 'smooth' });
   };
-
-  const aspectRatio = isMobile ? '1000 / 1500' : '1500 / 1000';
-  const webmSrc = isMobile
-    ? '/api/video/WILD_stopmotion_standing.webm'
-    : '/api/video/WILD_stopmotion_landscape.webm';
-  const mp4Src = isMobile
-    ? '/api/video/WILD_stopmotion_standing.mp4'
-    : '/api/video/WILD_stopmotion_landscape.mp4';
 
   return (
     <>
@@ -67,42 +40,38 @@ export default function HeroPhotoSection() {
         .hero-arrow { animation: hero-scroll-bounce 1.4s ease-in-out infinite; }
         .hero-arrow:nth-child(2) { animation-delay: 0.18s; }
         .hero-arrow:nth-child(3) { animation-delay: 0.36s; }
+
+        .hero-img-wrap { aspect-ratio: 1920 / 1280; }
+        @media (max-width: 767px) { .hero-img-wrap { aspect-ratio: 900 / 1200; } }
       `}</style>
 
-      {/* ── Full-width video ── */}
-      <section style={{ position: 'relative', width: '100%', background: '#FFFBF5', lineHeight: 0 }}>
-        {/* aspectRatio stays neutral (landscape) until isMobile resolves to avoid layout shift */}
-        <div style={{ position: 'relative', width: '100%', aspectRatio: isMobile === null ? '1500 / 1000' : aspectRatio }}>
+      {/* ── Full-width photo ── */}
+      <section style={{ position: 'relative', width: '100%', background: '#1a1208', lineHeight: 0 }}>
+        <div className="hero-img-wrap" style={{ position: 'relative', width: '100%', overflow: 'hidden' }}>
 
-          {/* Only mount video once we know mobile vs desktop — prevents iOS autoplay breaking on remount */}
-          {isMobile !== null && (
-            <video
-              ref={videoRef}
-              key={webmSrc}
-              autoPlay
-              muted
-              loop
-              playsInline
-              preload="auto"
+          <picture style={{ display: 'block', width: '100%', height: '100%' }}>
+            <source media="(max-width: 767px)" srcSet="/images/hero/hero-cr5-mobile.webp" />
+            <source srcSet="/images/hero/hero-cr5-desktop.webp" />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/images/hero/hero-cr5-desktop.webp"
+              alt="Infinity Puzzles Wild"
               style={{
                 position: 'absolute', inset: 0,
                 width: '100%', height: '100%',
                 objectFit: 'cover', objectPosition: 'center',
                 display: 'block',
               }}
-            >
-              <source src={webmSrc} type="video/webm" />
-              <source src={mp4Src}  type="video/mp4" />
-            </video>
-          )}
+            />
+          </picture>
 
-          {/* Gradient: subtle dark top, fade to cream at very bottom */}
+          {/* Gradient overlay */}
           <div style={{
             position: 'absolute', inset: 0, pointerEvents: 'none',
             background: 'linear-gradient(to bottom, rgba(0,0,0,0.15) 0%, transparent 20%, transparent 70%, rgba(255,251,245,0.6) 100%)',
           }} />
 
-          {/* Buy button + logo — 75% from top (lower quarter) */}
+          {/* Buy button + logo */}
           <div className="hero-buy-wrap" style={{
             position: 'absolute', top: '75%', left: '50%',
             transform: 'translate(-50%, -50%)', zIndex: 5,
