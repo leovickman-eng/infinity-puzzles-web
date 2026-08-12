@@ -8,6 +8,7 @@ import { CartProvider } from '@/components/shop/CartContext';
 import Header from '@/components/layout/HeaderClient';
 import Footer from '@/components/layout/Footer';
 import CartDrawer from '@/components/shop/CartDrawer';
+import NavigationLoader from '@/components/layout/NavigationLoader';
 import '@/app/globals.css';
 
 const syne = Syne({
@@ -60,8 +61,8 @@ export const metadata: Metadata = {
     template: '%s | Infinity Puzzles',
   },
   icons: {
-    icon: '/favicon.svg',
-    shortcut: '/favicon.svg',
+    icon: '/icon.png',
+    shortcut: '/icon.png',
   },
   description: 'Infinity Puzzle Wild — 19 handcrafted wooden characters with endless formations. No right answer. Just creativity, flow, and play.',
   metadataBase: new URL('https://infinity-puzzle.com'),
@@ -70,9 +71,9 @@ export const metadata: Metadata = {
     type: 'website',
     images: [
       {
-        url: '/images/hero/og-image.png',
-        width: 1376,
-        height: 768,
+        url: '/images/hero/og-image.jpg',
+        width: 1200,
+        height: 630,
         alt: 'Infinity Puzzle Wild — 19 wooden characters',
       },
     ],
@@ -112,6 +113,7 @@ export default async function LocaleLayout({ children, params }: Props) {
       <body className="bg-background text-foreground antialiased">
         <NextIntlClientProvider messages={messages}>
           <CartProvider>
+            <NavigationLoader />
             <Header locale={locale} />
             <main>{children}</main>
             <Footer />
