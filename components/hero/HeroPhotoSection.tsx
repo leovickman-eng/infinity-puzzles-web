@@ -42,7 +42,7 @@ export default function HeroPhotoSection() {
         .hero-arrow:nth-child(3) { animation-delay: 0.36s; }
 
         .hero-img-wrap { aspect-ratio: 2048 / 1365; }
-        @media (max-width: 767px) { .hero-img-wrap { aspect-ratio: 1771 / 2048; } }
+        @media (max-width: 767px) { .hero-img-wrap { aspect-ratio: 3422 / 5464; } }
       `}</style>
 
       {/* ── Full-width photo ── */}
