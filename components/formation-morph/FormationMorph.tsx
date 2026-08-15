@@ -37,6 +37,7 @@ export default function FormationMorph() {
   const isMobileRef     = useRef(false);
   const innerHeightRef  = useRef(0);
   const prevF2          = useRef(-1);
+  const f2ClaimedF1     = useRef<Set<number>>(new Set());
   const frameSkipRef    = useRef(0);
   const prevTranslateY  = useRef<number | null>(null);
   const bgCanvasRef     = useRef<HTMLCanvasElement>(null);
@@ -211,25 +212,16 @@ export default function FormationMorph() {
       );
 
       if (!skipFrame) {
-        if (inF1Anim) {
-          for (let i = 0; i < 19; i++) {
-            const el = f1ImgRefs.current[i];
-            if (!el) continue;
-            const raw   = f1Progresses[i] ?? 0;
-            const e     = easeOut(Math.max(0, Math.min(1, raw)));
-            const slide = i === 0 ? SLIDE_P0 : SLIDE_PX;
-            el.style.opacity   = raw <= 0 ? '0' : String(e);
-            el.style.transform = raw >= 1 ? 'translateY(0px)' : `translateY(${(1 - e) * slide}px)`;
-          }
-        } else if (prevF2.current === -1) {
-          // First frame of F2 — snap all F1 pieces to final state so none are frozen mid-animation
-          for (let i = 0; i < 19; i++) {
-            const el = f1ImgRefs.current[i];
-            if (!el) continue;
-            el.style.opacity   = '1';
-            el.style.transform = 'translateY(0px)';
-            el.style.transition = '';
-          }
+        // F1: always update pieces not yet claimed by F2
+        for (let i = 0; i < 19; i++) {
+          if (f2ClaimedF1.current.has(i)) continue;
+          const el = f1ImgRefs.current[i];
+          if (!el) continue;
+          const raw   = f1Progresses[i] ?? 0;
+          const e     = easeOut(Math.max(0, Math.min(1, raw)));
+          const slide = i === 0 ? SLIDE_P0 : SLIDE_PX;
+          el.style.opacity   = raw <= 0 ? '0' : String(e);
+          el.style.transform = raw >= 1 ? 'translateY(0px)' : `translateY(${(1 - e) * slide}px)`;
         }
 
         if (f2Changed) {
@@ -243,8 +235,15 @@ export default function FormationMorph() {
             if (removeIdx !== undefined) {
               const f1El = f1ImgRefs.current[removeIdx];
               if (f1El) {
-                f1El.style.transition = done ? 'opacity 0.3s ease' : '';
-                f1El.style.opacity    = done ? '0' : '1';
+                if (done) {
+                  f2ClaimedF1.current.add(removeIdx);
+                  f1El.style.transition = 'opacity 0.3s ease';
+                  f1El.style.opacity    = '0';
+                } else {
+                  f2ClaimedF1.current.delete(removeIdx);
+                  f1El.style.transition = '';
+                  f1El.style.opacity    = '1';
+                }
               }
             }
           }
