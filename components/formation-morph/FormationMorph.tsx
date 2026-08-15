@@ -209,7 +209,8 @@ export default function FormationMorph() {
                 } else {
                   f2ClaimedF1.current.delete(removeIdx);
                   f1El.style.transition = '';
-                  f1El.style.opacity    = '1';
+                  // Let F1 set correct opacity on next frame — don't force '1' here
+                  // (forcing '1' causes a flash if F1 hasn't started this piece yet)
                 }
               }
             }
