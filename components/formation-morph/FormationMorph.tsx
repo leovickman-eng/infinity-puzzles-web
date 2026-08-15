@@ -10,12 +10,12 @@ const BASE        = '/formations/GASP/F1';
 const BASE_MOBILE = '/formations/GASP/F1-mobile';
 const BREAKPOINT  = 768;
 
-const PX_PER_F1    = 40;  // px stagger between each piece starting (timing)
-const F1_FADE_PX   = 130; // px each piece takes to fully fade in (animation speed)
+const PX_PER_F1    = 20;  // px stagger between each piece starting (timing)
+const F1_FADE_PX   = 150; // px each piece takes to fully fade in (animation speed)
 const F1_PAUSE     = 100;
 const PX_PER_F2    = 60;
 const POST_F2_HOLD = 200;
-const P0_SCROLL    = 300; // px after section enters viewport before pieces start
+const P0_SCROLL    = 200; // px after section enters viewport before pieces start
 const SLIDE_P0     = 250;
 const SLIDE_PX     = 80;
 
@@ -220,6 +220,15 @@ export default function FormationMorph() {
             const slide = i === 0 ? SLIDE_P0 : SLIDE_PX;
             el.style.opacity   = raw <= 0 ? '0' : String(e);
             el.style.transform = raw >= 1 ? 'translateY(0px)' : `translateY(${(1 - e) * slide}px)`;
+          }
+        } else if (prevF2.current === -1) {
+          // First frame of F2 — snap all F1 pieces to final state so none are frozen mid-animation
+          for (let i = 0; i < 19; i++) {
+            const el = f1ImgRefs.current[i];
+            if (!el) continue;
+            el.style.opacity   = '1';
+            el.style.transform = 'translateY(0px)';
+            el.style.transition = '';
           }
         }
 
