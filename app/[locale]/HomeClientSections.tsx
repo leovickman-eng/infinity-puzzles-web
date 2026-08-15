@@ -2,6 +2,11 @@
 
 import dynamic from 'next/dynamic';
 
+export const KarusellSection = dynamic(
+  () => import('@/components/karusell/KarusellSection'),
+  { ssr: false },
+);
+
 export const FormationMorph = dynamic(
   () => import('@/components/formation-morph/FormationMorph'),
   { ssr: false },
