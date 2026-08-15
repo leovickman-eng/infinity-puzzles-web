@@ -40,7 +40,7 @@ export default function FormationMorph() {
   const f2ClaimedF1     = useRef<Set<number>>(new Set());
   const frameSkipRef    = useRef(0);
   const prevTranslateY  = useRef<number | null>(null);
-  const bgCanvasRef     = useRef<HTMLCanvasElement>(null);
+  const bgCanvasRef     = useRef<HTMLImageElement>(null);
   const [scale, setScale] = useState(1);
   const [isMobile, setIsMobile] = useState(
     () => typeof window !== 'undefined' && window.innerWidth < BREAKPOINT
@@ -97,40 +97,7 @@ export default function FormationMorph() {
     return () => window.removeEventListener('resize', compute);
   }, []);
 
-  useEffect(() => {
-    const canvas = bgCanvasRef.current;
-    if (!canvas) return;
-
-    const EXTRA = 400; // extra buffer below viewport to cover translateY movement
-
-    function draw() {
-      if (!canvas) return;
-      const W = window.innerWidth;
-      const H = window.innerHeight + EXTRA;
-      canvas.width = W;
-      canvas.height = H;
-      canvas.style.width  = '100%';
-      canvas.style.height = `calc(100% + ${EXTRA}px)`;
-      const ctx = canvas.getContext('2d');
-      if (!ctx) return;
-      ctx.clearRect(0, 0, W, H);
-      const count = Math.round((W * H) / 4000);
-      for (let i = 0; i < count; i++) {
-        const x = Math.random() * W;
-        const y = Math.random() * H;
-        const r = 0.8 + Math.random() * 1.8;
-        const a = 0.06 + Math.random() * 0.14;
-        ctx.beginPath();
-        ctx.arc(x, y, r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(83,63,126,${a})`;
-        ctx.fill();
-      }
-    }
-
-    draw();
-    window.addEventListener('resize', draw);
-    return () => window.removeEventListener('resize', draw);
-  }, []);
+  // Background image — no canvas drawing needed
 
   // Load F2 images lazily — only when the section is approaching the viewport.
   // (loading="lazy" is unreliable for opacity:0/position:absolute elements)
@@ -285,14 +252,19 @@ export default function FormationMorph() {
           zIndex: 5,
         }}
       >
-        {/* Full-viewport dot background */}
-        <canvas
+        {/* Full-viewport photo background */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
           ref={bgCanvasRef}
+          src="/images/hero/s2-bg.webp"
+          alt=""
           style={{
             position: 'absolute',
             inset: 0,
             width: '100%',
             height: '100%',
+            objectFit: 'cover',
+            objectPosition: 'center',
             zIndex: 0,
             pointerEvents: 'none',
           }}
