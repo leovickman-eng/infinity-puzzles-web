@@ -10,8 +10,8 @@ const BASE        = '/formations/GASP/F1';
 const BASE_MOBILE = '/formations/GASP/F1-mobile';
 const BREAKPOINT  = 768;
 
-const PX_PER_F1    = 20;  // px stagger between each piece starting (timing)
-const F1_FADE_PX   = 150; // px each piece takes to fully fade in (animation speed)
+const PX_PER_F1    = 40;  // px stagger between each piece starting (timing)
+const F1_FADE_PX   = 75;  // px each piece takes to fully fade in (animation speed)
 const F1_PAUSE     = 100;
 const PX_PER_F2    = 60;
 const POST_F2_HOLD = 200;
