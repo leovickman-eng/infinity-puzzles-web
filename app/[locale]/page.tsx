@@ -7,7 +7,6 @@ import {
   CharacterCarousel,
   FormationMorph,
   HeroPhotoSection,
-  KarusellSection,
   PlayModes,
   ProductSection,
   StoryTimeline,
@@ -99,9 +98,6 @@ export default async function HomePage() {
           />
         </div>
       </section>
-
-      {/* ── S4: Karusell showcase ── */}
-      <KarusellSection />
 
       {/* ── S6: Shop ── */}
       <section id="shop" className="py-24 px-6 bg-background">

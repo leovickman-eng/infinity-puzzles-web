@@ -1,11 +1,46 @@
 'use client';
 
 import { useParams } from 'next/navigation';
+import { useState, useEffect } from 'react';
+
+const DESKTOP_SLIDES = [
+  '/images/hero/karusell/d1.webp',
+  '/images/hero/karusell/d2.webp',
+  '/images/hero/karusell/d3-c.webp',
+  '/images/hero/karusell/d4-c.webp',
+];
+
+const MOBILE_SLIDES = [
+  '/images/hero/karusell/m1.webp',
+  '/images/hero/karusell/m2.webp',
+  '/images/hero/karusell/m3.webp',
+];
+
+const SLIDE_MS = 5000;
+const FADE_MS  = 1000;
 
 export default function HeroPhotoSection() {
-  const params = useParams();
-  const locale = (params?.locale as string) ?? 'en';
-  const isSv   = locale === 'sv';
+  const params  = useParams();
+  const locale  = (params?.locale as string) ?? 'en';
+  const isSv    = locale === 'sv';
+
+  const [isMobile, setIsMobile] = useState(false);
+  const [current, setCurrent]   = useState(0);
+
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 767px)');
+    setIsMobile(mq.matches);
+    const h = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    mq.addEventListener('change', h);
+    return () => mq.removeEventListener('change', h);
+  }, []);
+
+  const slides = isMobile ? MOBILE_SLIDES : DESKTOP_SLIDES;
+
+  useEffect(() => {
+    const id = setInterval(() => setCurrent(c => (c + 1) % slides.length), SLIDE_MS);
+    return () => clearInterval(id);
+  }, [slides.length]);
 
   const scrollToShop = () => {
     const el = document.getElementById('shop');
@@ -15,6 +50,12 @@ export default function HeroPhotoSection() {
   return (
     <>
       <style>{`
+        /* Ken Burns variants */
+        @keyframes kb-zoom-in   { from { transform: scale(1);    } to { transform: scale(1.08); } }
+        @keyframes kb-pan-right { from { transform: scale(1.04) translate(-1.5%,0); } to { transform: scale(1.08) translate(1.5%,0); } }
+        @keyframes kb-zoom-out  { from { transform: scale(1.08); } to { transform: scale(1);    } }
+        @keyframes kb-pan-left  { from { transform: scale(1.04) translate(1.5%,0); } to { transform: scale(1.08) translate(-1.5%,0); } }
+
         @keyframes hero-pulse {
           0%   { box-shadow: 0 0 0 0   rgba(174,132,234,0.75), 0 4px 20px rgba(174,132,234,0.35); }
           60%  { box-shadow: 0 0 0 28px rgba(174,132,234,0),   0 4px 20px rgba(174,132,234,0.35); }
@@ -28,11 +69,26 @@ export default function HeroPhotoSection() {
           box-shadow: 0 6px 28px rgba(174,132,234,0.55) !important;
         }
         @keyframes hero-bounce-in {
-          0%   { opacity: 0; transform: translate(-50%, calc(-50% + 16px)); }
-          60%  { opacity: 1; transform: translate(-50%, calc(-50% - 4px)); }
-          100% { opacity: 1; transform: translate(-50%, -50%); }
+          0%   { opacity: 0; transform: translateX(-50%) translateY(calc(-50% + 16px)); }
+          60%  { opacity: 1; transform: translateX(-50%) translateY(calc(-50% - 4px)); }
+          100% { opacity: 1; transform: translateX(-50%) translateY(-50%); }
         }
-        .hero-buy-wrap { animation: hero-bounce-in 0.7s cubic-bezier(0.34,1.56,0.64,1) 0.5s both; }
+        .hero-btn-wrap {
+          position: absolute; top: 45%; left: 50%;
+          transform: translateX(-50%) translateY(-50%);
+          animation: hero-bounce-in 0.7s cubic-bezier(0.34,1.56,0.64,1) 0.5s both;
+          z-index: 5;
+        }
+        @keyframes hero-bounce-in-logo {
+          0%   { opacity: 0; transform: translateX(-50%) translateY(12px); }
+          100% { opacity: 0.88; transform: translateX(-50%) translateY(0); }
+        }
+        .hero-logo-wrap {
+          position: absolute; bottom: 6%; left: 50%;
+          transform: translateX(-50%);
+          animation: hero-bounce-in-logo 0.8s ease-out 0.8s both;
+          z-index: 5;
+        }
         @keyframes hero-scroll-bounce {
           0%, 100% { transform: translateY(0); opacity: 0.45; }
           50%       { transform: translateY(6px); opacity: 0.85; }
@@ -41,42 +97,55 @@ export default function HeroPhotoSection() {
         .hero-arrow:nth-child(2) { animation-delay: 0.18s; }
         .hero-arrow:nth-child(3) { animation-delay: 0.36s; }
 
-        .hero-img-wrap { aspect-ratio: 2048 / 1365; }
-        @media (max-width: 767px) { .hero-img-wrap { aspect-ratio: 3422 / 5464; } }
+        .hero-wrap { position: relative; width: 100%; height: 85vh; overflow: hidden; }
+        @media (max-width: 767px) { .hero-wrap { height: 90svh; } }
+
+        .hero-slide {
+          position: absolute; inset: 0;
+          opacity: 0;
+          transition: opacity ${FADE_MS}ms ease-in-out;
+        }
+        .hero-slide.active { opacity: 1; }
+        .hero-slide img {
+          width: 100%; height: 100%;
+          object-fit: cover; object-position: center;
+          display: block;
+        }
+        .hero-slide[data-kb="0"] img { animation: kb-zoom-in   ${SLIDE_MS + FADE_MS}ms ease-out both; }
+        .hero-slide[data-kb="1"] img { animation: kb-pan-right ${SLIDE_MS + FADE_MS}ms ease-out both; }
+        .hero-slide[data-kb="2"] img { animation: kb-zoom-out  ${SLIDE_MS + FADE_MS}ms ease-out both; }
+        .hero-slide[data-kb="3"] img { animation: kb-pan-left  ${SLIDE_MS + FADE_MS}ms ease-out both; }
       `}</style>
 
-      {/* ── Full-width photo ── */}
+      {/* ── S1: Hero karusell ── */}
       <section style={{ position: 'relative', width: '100%', background: '#1a1208', lineHeight: 0 }}>
-        <div className="hero-img-wrap" style={{ position: 'relative', width: '100%', overflow: 'hidden' }}>
+        <div className="hero-wrap">
 
-          <picture style={{ display: 'block', width: '100%', height: '100%' }}>
-            <source media="(max-width: 767px)" srcSet="/images/hero/hero-h1-mobile.webp" />
-            <source srcSet="/images/hero/hero-h1-desktop.webp" />
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/images/hero/hero-h1-desktop.webp"
-              alt="Infinity Puzzles Wild"
-              style={{
-                position: 'absolute', inset: 0,
-                width: '100%', height: '100%',
-                objectFit: 'cover', objectPosition: 'center',
-                display: 'block',
-              }}
-            />
-          </picture>
+          {/* Slides */}
+          {slides.map((src, i) => (
+            <div
+              key={src}
+              className={`hero-slide${i === current ? ' active' : ''}`}
+              data-kb={String(i % 4)}
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                key={i === current ? `${src}-on` : `${src}-off`}
+                src={src}
+                alt="Infinity Puzzles Wild"
+                loading={i === 0 ? 'eager' : 'lazy'}
+              />
+            </div>
+          ))}
 
           {/* Gradient overlay */}
           <div style={{
-            position: 'absolute', inset: 0, pointerEvents: 'none',
-            background: 'linear-gradient(to bottom, rgba(0,0,0,0.15) 0%, transparent 20%, transparent 70%, rgba(255,251,245,0.6) 100%)',
+            position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 2,
+            background: 'linear-gradient(to bottom, rgba(0,0,0,0.15) 0%, transparent 20%, transparent 65%, rgba(0,0,0,0.25) 100%)',
           }} />
 
-          {/* Buy button + logo */}
-          <div className="hero-buy-wrap" style={{
-            position: 'absolute', top: '50%', left: '50%',
-            transform: 'translate(-50%, -50%)', zIndex: 5,
-            display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '28px',
-          }}>
+          {/* Buy button — centered */}
+          <div className="hero-btn-wrap">
             <button
               className="hero-buy-btn"
               onClick={scrollToShop}
@@ -96,6 +165,10 @@ export default function HeroPhotoSection() {
             >
               {isSv ? 'KÖP DITT' : 'GET YOURS'}
             </button>
+          </div>
+
+          {/* Logo — bottom of hero */}
+          <div className="hero-logo-wrap">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/images/SVG/infinity-puzzles-logo.png"
@@ -108,6 +181,7 @@ export default function HeroPhotoSection() {
               }}
             />
           </div>
+
         </div>
       </section>
 
