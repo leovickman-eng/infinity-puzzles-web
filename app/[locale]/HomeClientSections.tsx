@@ -52,6 +52,11 @@ export const ThreeImageGrid = dynamic(
   { ssr: false },
 );
 
+export const NewsletterSection = dynamic(
+  () => import('@/components/newsletter/NewsletterSection'),
+  { ssr: false },
+);
+
 export function BuyButton({ label, small }: { label: string; small?: boolean }) {
   const scrollToShop = () => {
     const el = document.getElementById('shop');

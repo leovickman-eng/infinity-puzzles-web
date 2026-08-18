@@ -104,6 +104,15 @@
     "split": "Share with a friend.",
     "chain": "Or try the impossible chain."
   },
+  "newsletter": {
+    "eyebrow": "Newsletter",
+    "title": "Stay in the loop.",
+    "body": "One email a week — honest, unfiltered, and occasionally a little chaotic. Just how we like it. Be the first to know about new releases and good offers.",
+    "placeholder": "your@email.com",
+    "cta": "Subscribe",
+    "success": "You're in. Talk soon.",
+    "error": "Something went wrong. Try again."
+  },
   "footer": {
     "tagline": "Infinite formations. One universe.",
     "links": {

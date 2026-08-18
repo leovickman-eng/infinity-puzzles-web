@@ -7,6 +7,7 @@ import {
   CharacterCarousel,
   FormationMorph,
   HeroPhotoSection,
+  NewsletterSection,
   PlayModes,
   ProductSection,
   StoryTimeline,
@@ -110,6 +111,9 @@ export default async function HomePage() {
           <ProductSection />
         </div>
       </section>
+
+      {/* ── Newsletter ── */}
+      <NewsletterSection />
 
       {/* ── S4: Characters ── */}
       <section className="py-24 px-6 bg-background">

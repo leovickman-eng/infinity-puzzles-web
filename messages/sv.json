@@ -104,6 +104,15 @@
     "split": "Dela med en vän.",
     "chain": "Eller försök med den omöjliga kedjan."
   },
+  "newsletter": {
+    "eyebrow": "Nyhetsbrev",
+    "title": "Häng med.",
+    "body": "Ett mejl i veckan — ärligt, ofiltrerat och ibland lite kaotiskt. Precis som vi gillar det. Bli den första att veta om nya släpp och bra erbjudanden.",
+    "placeholder": "din@email.com",
+    "cta": "Prenumerera",
+    "success": "Du är med. Hörs snart.",
+    "error": "Något gick fel. Försök igen."
+  },
   "footer": {
     "tagline": "Oändliga formationer. Ett universum.",
     "links": {
