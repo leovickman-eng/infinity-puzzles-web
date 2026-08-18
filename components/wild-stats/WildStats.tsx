@@ -69,7 +69,7 @@ function SphereCanvas() {
         const alpha = Math.max(0.05, 0.07 + ((avgZ + 1) / 2) * 0.25);
         ctx.save();
         ctx.globalAlpha = alpha;
-        ctx.strokeStyle = '#5B4A8A';
+        ctx.strokeStyle = '#FFFBF5';
         ctx.lineWidth = 0.7;
         ctx.beginPath();
         ctx.moveTo(proj[i].sx, proj[i].sy);
@@ -86,7 +86,7 @@ function SphereCanvas() {
           const r     = Math.max(0.8, 1.0 + ((z + 1) / 2) * 1.8);
           ctx.save();
           ctx.globalAlpha = alpha;
-          ctx.fillStyle = '#5B4A8A';
+          ctx.fillStyle = '#FFFBF5';
           ctx.beginPath();
           ctx.arc(sx, sy, r, 0, Math.PI * 2);
           ctx.fill();
@@ -127,7 +127,7 @@ function DotGrid() {
       const now = performance.now() / 1000;
       pts.forEach(([x, y], i) => {
         const alpha = blinkAlpha(now, i);
-        ctx.fillStyle = `rgba(91,74,138,${alpha.toFixed(2)})`;
+        ctx.fillStyle = `rgba(255,251,245,${alpha.toFixed(2)})`;
         ctx.beginPath(); ctx.arc(x + 6, y + 6, 2.5, 0, Math.PI * 2); ctx.fill();
       });
       rafRef.current = requestAnimationFrame(draw);
@@ -156,14 +156,14 @@ function DiameterIcon() {
 
       // Thick outer ring
       ctx.save();
-      ctx.strokeStyle = 'rgba(91,74,138,0.55)';
+      ctx.strokeStyle = 'rgba(255,251,245,0.55)';
       ctx.lineWidth = 3.5;
       ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI * 2); ctx.stroke();
       ctx.restore();
 
       // End tick marks
       ctx.save();
-      ctx.strokeStyle = 'rgba(91,74,138,0.7)';
+      ctx.strokeStyle = 'rgba(255,251,245,0.7)';
       ctx.lineWidth = 1.8;
       ctx.beginPath(); ctx.moveTo(cx - R, cy - 6); ctx.lineTo(cx - R, cy + 6); ctx.stroke();
       ctx.beginPath(); ctx.moveTo(cx + R, cy - 6); ctx.lineTo(cx + R, cy + 6); ctx.stroke();
@@ -173,7 +173,7 @@ function DiameterIcon() {
       for (let i = 0; i < DOT_N; i++) {
         const x = (cx - R) + (2 * R) * (i / (DOT_N - 1));
         const alpha = blinkAlpha(now, i);
-        ctx.fillStyle = `rgba(91,74,138,${alpha.toFixed(2)})`;
+        ctx.fillStyle = `rgba(255,251,245,${alpha.toFixed(2)})`;
         ctx.beginPath(); ctx.arc(x, cy, 1.8, 0, Math.PI * 2); ctx.fill();
       }
 
@@ -191,7 +191,7 @@ function DiameterIcon() {
 // A = bolder duotone, B = subtler (keeps more texture)
 const DALA_FILTER_A = 'grayscale(1) sepia(1) hue-rotate(320deg) saturate(3) brightness(0.88)';
 const DALA_FILTER_B = 'grayscale(0.7) sepia(0.8) hue-rotate(315deg) saturate(2.2) brightness(0.93)';
-const DALA_FILTER   = 'grayscale(1) sepia(1) hue-rotate(225deg) saturate(2.5) brightness(0.75)'; // #5B4A8A lila
+const DALA_FILTER   = 'brightness(10) saturate(0)'; // #FFFBF5 vit
 
 function DalaIcon() {
   return (
@@ -216,7 +216,7 @@ export default function WildStats() {
     {
       icon:         <SphereCanvas />,
       value:        t('formations'),
-      valueColor:   '#5B4A8A',
+      valueColor:   '#FFFBF5',
       label:        null as string | null,
       valueSz:      'clamp(1rem, 2vw, 1.4rem)',
       labelDisplay: false,
@@ -224,7 +224,7 @@ export default function WildStats() {
     {
       icon:         <DotGrid />,
       value:        t('characters'),
-      valueColor:   '#5B4A8A',
+      valueColor:   '#FFFBF5',
       label:        null as string | null,
       valueSz:      'clamp(1rem, 2vw, 1.4rem)',
       labelDisplay: false,
@@ -232,7 +232,7 @@ export default function WildStats() {
     {
       icon:         <DiameterIcon />,
       value:        '30 cm diameter',
-      valueColor:   '#5B4A8A',
+      valueColor:   '#FFFBF5',
       label:        null as string | null,
       valueSz:      'clamp(1rem, 2vw, 1.4rem)',
       labelDisplay: false,
@@ -240,16 +240,16 @@ export default function WildStats() {
     {
       icon:         <DalaIcon />,
       value:        t('sweden'),
-      valueColor:   '#5B4A8A',
+      valueColor:   '#FFFBF5',
       label:        t('wood') as string | null,
       valueSz:      'clamp(1rem, 2.2vw, 1.4rem)',
       labelDisplay: true,
-      labelColor:   '#5B4A8A' as string | undefined,
+      labelColor:   '#FFFBF5' as string | undefined,
     },
   ];
 
   return (
-    <section style={{ background: '#FFFBF5', padding: '0 0 8px' }}>
+    <section style={{ background: '#5B4A8A', padding: '0 0 8px' }}>
       <div style={{ maxWidth: 960, margin: '0 auto', padding: '0 16px' }}>
         <div className="grid grid-cols-2 md:grid-cols-4">
           {cards.map((card, i) => (
