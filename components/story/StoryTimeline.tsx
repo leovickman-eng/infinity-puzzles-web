@@ -10,7 +10,6 @@ function extractTeaser(text: string, sentenceCount = 3): string {
 }
 
 export default function StoryTimeline() {
-  const t  = useTranslations('story');
   const tp = useTranslations('physical');
   const tc = useTranslations('catalog');
   const [expanded, setExpanded] = useState<Set<number>>(new Set());
@@ -22,34 +21,6 @@ export default function StoryTimeline() {
       period: tc('collection'),
       text:   tp('body'),
       image:  '/images/story/portrait_leo_vickman_infinity-puzzle.webp',
-    },
-    {
-      number: t('chapter1.number'),
-      title: t('chapter1.title'),
-      period: t('chapter1.period'),
-      text: t('chapter1.text'),
-      image: '/images/story/chapter1.webp',
-    },
-    {
-      number: t('chapter2.number'),
-      title: t('chapter2.title'),
-      period: t('chapter2.period'),
-      text: t('chapter2.text'),
-      image: '/images/story/chapter2.webp',
-    },
-    {
-      number: t('chapter3.number'),
-      title: t('chapter3.title'),
-      period: t('chapter3.period'),
-      text: t('chapter3.text'),
-      image: '/images/story/chapter3.webp',
-    },
-    {
-      number: t('chapter4.number'),
-      title: t('chapter4.title'),
-      period: t('chapter4.period'),
-      text: t('chapter4.text'),
-      image: '/images/story/chapter4.webp',
     },
   ];
 
@@ -65,23 +36,7 @@ export default function StoryTimeline() {
 
   return (
     <div>
-      {/* Section header */}
-      <section className="py-20 px-6 bg-background">
-        <div className="max-w-[680px] mx-auto">
-          <p className="font-body uppercase tracking-widest text-primary mb-4" style={{ fontSize: '11px' }}>
-            {t('eyebrow')}
-          </p>
-          <h2
-            className="text-foreground leading-tight"
-            style={{ ...trykkerBold, fontSize: 'clamp(26px, 4vw, 40px)' }}
-          >
-            {t('title')}
-          </h2>
-          <div className="mt-10 h-px bg-foreground/10" />
-        </div>
-      </section>
-
-      {/* Chapters */}
+      {/* Single chapter */}
       <section className="px-6 pb-24 bg-background">
         <div className="max-w-[680px] mx-auto flex flex-col gap-0">
           {chapters.map((ch, i) => {

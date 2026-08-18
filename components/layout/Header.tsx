@@ -72,8 +72,8 @@ export default function Header({ locale }: Props) {
     { href: string; label: string; scrollTo?: undefined } |
     { scrollTo: string; label: string; href?: undefined }
   > = [
-    { scrollTo: 'shop',  label: 'Shop' },
-    { scrollTo: 'story', label: t('story') },
+    { scrollTo: 'shop',                   label: 'Shop' },
+    { href: `/${locale}/journey`,          label: t('journey') },
   ];
 
   const dropdown = (
