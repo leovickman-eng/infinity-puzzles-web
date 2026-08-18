@@ -46,7 +46,7 @@ function hexToRgb(hex: string): [number, number, number] {
 function DotsAlone() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const rafRef    = useRef<number>(0);
-  const [r, g, b] = hexToRgb('#FFFBF5');
+  const [r, g, b] = hexToRgb('#ae84ea');
   const maxX = Math.max(...PTS_19.map(p => p[0]));
   const maxY = Math.max(...PTS_19.map(p => p[1]));
   const W = maxX + 12, H = maxY + 12;
@@ -76,8 +76,8 @@ function DotsAlone() {
 function DotsSplit() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const rafRef    = useRef<number>(0);
-  const [r9, g9, b9]    = hexToRgb('#FFFBF5'); // vänster kluster — lila
-  const [r10, g10, b10] = hexToRgb('#FFFBF5'); // höger kluster
+  const [r9, g9, b9]    = hexToRgb('#ae84ea'); // vänster kluster — lila
+  const [r10, g10, b10] = hexToRgb('#ae84ea'); // höger kluster
 
   const max9X  = Math.max(...PTS_9.map(p => p[0]));
   const max9Y  = Math.max(...PTS_9.map(p => p[1]));
@@ -102,7 +102,7 @@ function DotsSplit() {
       // Streckad mittlinje
       const divX = max9X + 12 + GAP / 2;
       ctx.save();
-      ctx.strokeStyle = 'rgba(255,251,245,0.25)';
+      ctx.strokeStyle = 'rgba(35,30,34,0.15)';
       ctx.lineWidth = 0.6;
       ctx.setLineDash([2, 2]);
       ctx.beginPath(); ctx.moveTo(divX, 3); ctx.lineTo(divX, H - 3); ctx.stroke();
@@ -135,7 +135,7 @@ const BAND_TOT = BAND_N * BAND_SP;
 const BAND_W   = 120;
 const BAND_H   = 14;
 const BAND_FADE = BAND_W * 0.28;
-const [BR, BG, BB] = hexToRgb('#FFFBF5');
+const [BR, BG, BB] = hexToRgb('#ae84ea'); // module-level, used in DotsChain
 
 function DotsChain() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -174,13 +174,13 @@ export default function PlayModes() {
   const t = useTranslations('playModes');
 
   const cols = [
-    { symbol: <DotsAlone />, text: t('alone'), color: '#FFFBF5' },
-    { symbol: <DotsSplit />, text: t('split'), color: '#FFFBF5' },
-    { symbol: <DotsChain />, text: t('chain'), color: '#FFFBF5' },
+    { symbol: <DotsAlone />, text: t('alone'), color: '#5B4A8A' },
+    { symbol: <DotsSplit />, text: t('split'), color: '#5B4A8A' },
+    { symbol: <DotsChain />, text: t('chain'), color: '#5B4A8A' },
   ];
 
   return (
-    <section style={{ background: '#5B4A8A', padding: '0 0 72px' }}>
+    <section style={{ background: '#FFFBF5', padding: '0 0 72px' }}>
       <div style={{ maxWidth: 960, margin: '0 auto', padding: '0 16px' }}>
         {/* Mobile: 2 kolumner, sista centrerad på egen rad. Desktop: 3 kolumner */}
         <div className="grid grid-cols-2 sm:grid-cols-3">
