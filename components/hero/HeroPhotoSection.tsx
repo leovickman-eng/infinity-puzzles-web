@@ -110,11 +110,16 @@ export default function HeroPhotoSection() {
           width: 100%; height: 100%;
           object-fit: cover; object-position: center;
           display: block;
+          /* Animation name is set when slide is active — restarts naturally when class toggles */
+          animation-duration: ${SLIDE_MS + FADE_MS}ms;
+          animation-timing-function: ease-out;
+          animation-fill-mode: both;
+          animation-name: none;
         }
-        .hero-slide[data-kb="0"] img { animation: kb-zoom-in   ${SLIDE_MS + FADE_MS}ms ease-out both; }
-        .hero-slide[data-kb="1"] img { animation: kb-pan-right ${SLIDE_MS + FADE_MS}ms ease-out both; }
-        .hero-slide[data-kb="2"] img { animation: kb-zoom-out  ${SLIDE_MS + FADE_MS}ms ease-out both; }
-        .hero-slide[data-kb="3"] img { animation: kb-pan-left  ${SLIDE_MS + FADE_MS}ms ease-out both; }
+        .hero-slide[data-kb="0"].active img { animation-name: kb-zoom-in;   }
+        .hero-slide[data-kb="1"].active img { animation-name: kb-pan-right; }
+        .hero-slide[data-kb="2"].active img { animation-name: kb-zoom-out;  }
+        .hero-slide[data-kb="3"].active img { animation-name: kb-pan-left;  }
       `}</style>
 
       {/* ── S1: Hero karusell ── */}
@@ -130,7 +135,6 @@ export default function HeroPhotoSection() {
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                key={i === current ? `${src}-on` : `${src}-off`}
                 src={src}
                 alt="Infinity Puzzles Wild"
                 loading={i === 0 ? 'eager' : 'lazy'}
