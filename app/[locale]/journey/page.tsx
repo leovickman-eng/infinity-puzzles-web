@@ -115,8 +115,8 @@ export default function JourneyPage() {
                   boxShadow: '0 0 0 3px #FFFBF5, 0 0 14px rgba(174,132,234,0.55)',
                 }} />
 
-                {/* Year — large display */}
-                <p style={{ ...font, fontSize: 'clamp(52px, 10vw, 80px)', color: 'rgba(174,132,234,0.13)', lineHeight: 1, margin: '0 0 -16px', letterSpacing: '-0.02em' }}>
+                {/* Year — small, sits above image with breathing room */}
+                <p style={{ ...font, fontSize: 13, color: '#ae84ea', letterSpacing: '0.12em', margin: '0 0 14px' }}>
                   {ch.period}
                 </p>
 
@@ -133,7 +133,7 @@ export default function JourneyPage() {
                 </div>
 
                 {/* Meta */}
-                <p style={{ ...font, fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#ae84ea', margin: '0 0 10px' }}>
+                <p style={{ ...font, fontSize: 17, letterSpacing: '0.06em', textTransform: 'uppercase', color: '#ae84ea', margin: '0 0 10px' }}>
                   {ch.number} · {ch.place}
                 </p>
 
