@@ -9,6 +9,8 @@ import {
   type ReactNode,
 } from 'react';
 import type { ShopifyCart } from '@/lib/shopify/types';
+import { trackAddedToCart } from '@/lib/omnisend';
+import { sendGTMEvent } from '@next/third-parties/google';
 
 type CartState = {
   cart: ShopifyCart | null;
@@ -88,6 +90,33 @@ export function CartProvider({ children }: { children: ReactNode }) {
       storeCartId(data.cart.id);
       dispatch({ type: 'SET_CART', cart: data.cart });
       dispatch({ type: 'OPEN_CART' });
+      // Omnisend cart event
+      trackAddedToCart({
+        cartID: data.cart.id,
+        value: parseFloat(data.cart.cost.totalAmount.amount),
+        currency: data.cart.cost.totalAmount.currencyCode,
+        abandonedCheckoutURL: data.cart.checkoutUrl,
+        lineItems: data.cart.lines.nodes.map((line) => ({
+          productID: line.merchandise.id,
+          productTitle: line.merchandise.product.title,
+          productPrice: parseFloat(line.merchandise.price.amount),
+          productQuantity: line.quantity,
+          productImageURL: line.merchandise.product.featuredImage?.url,
+          productURL: `https://infinity-puzzle.com/en/products/${line.merchandise.product.handle}`,
+        })),
+      });
+      // GA4 / Meta / TikTok via GTM
+      sendGTMEvent({
+        event: 'add_to_cart',
+        value: parseFloat(data.cart.cost.totalAmount.amount),
+        currency: data.cart.cost.totalAmount.currencyCode,
+        items: data.cart.lines.nodes.map((line) => ({
+          item_id: line.merchandise.id,
+          item_name: line.merchandise.product.title,
+          price: parseFloat(line.merchandise.price.amount),
+          quantity: line.quantity,
+        })),
+      });
     } finally {
       dispatch({ type: 'SET_LOADING', isLoading: false });
     }

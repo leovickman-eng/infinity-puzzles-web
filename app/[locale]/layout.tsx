@@ -3,12 +3,15 @@ import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { Syne, DM_Sans, Playfair_Display, Trykker, Bebas_Neue, Cormorant_Garamond } from 'next/font/google';
 import type { Metadata } from 'next';
+import Script from 'next/script';
+import { GoogleTagManager } from '@next/third-parties/google';
 import { routing } from '@/i18n/routing';
 import { CartProvider } from '@/components/shop/CartContext';
 import Header from '@/components/layout/HeaderClient';
 import Footer from '@/components/layout/Footer';
 import CartDrawer from '@/components/shop/CartDrawer';
 import NavigationLoader from '@/components/layout/NavigationLoader';
+import CookieBanner from '@/components/consent/CookieBanner';
 import '@/app/globals.css';
 
 const syne = Syne({
@@ -107,6 +110,23 @@ export default async function LocaleLayout({ children, params }: Props) {
 
   return (
     <html lang={locale} className={`${syne.variable} ${dmSans.variable} ${playfair.variable} ${trykker.variable} ${bebasNeue.variable} ${cormorant.variable}`}>
+      {/* Consent Mode v2 — must run BEFORE GTM */}
+      <Script id="consent-default" strategy="beforeInteractive">
+        {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('consent', 'default', {
+            analytics_storage: 'denied',
+            ad_storage: 'denied',
+            ad_user_data: 'denied',
+            ad_personalization: 'denied',
+            functionality_storage: 'denied',
+            security_storage: 'granted',
+            wait_for_update: 500
+          });
+        `}
+      </Script>
+      <GoogleTagManager gtmId="GTM-T5MWRQBH" />
       <head>
         <link rel="stylesheet" href="https://use.typekit.net/mnz1cmc.css" />
       </head>
@@ -118,6 +138,7 @@ export default async function LocaleLayout({ children, params }: Props) {
             <main>{children}</main>
             <Footer />
             <CartDrawer />
+            <CookieBanner locale={locale} />
           </CartProvider>
         </NextIntlClientProvider>
       </body>

@@ -4,6 +4,8 @@ import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { useCart } from './CartContext';
 import { formatMoney } from '@/lib/shopify';
+import { trackStartedCheckout } from '@/lib/omnisend';
+import { sendGTMEvent } from '@next/third-parties/google';
 
 export default function CartDrawer() {
   const t = useTranslations('shop');
@@ -103,6 +105,36 @@ export default function CartDrawer() {
             </div>
             <a
               href={cart.checkoutUrl}
+              onClick={() => {
+                const items = cart.lines.nodes.map((line) => ({
+                  productID: line.merchandise.id,
+                  productTitle: line.merchandise.product.title,
+                  productPrice: parseFloat(line.merchandise.price.amount),
+                  productQuantity: line.quantity,
+                  productImageURL: line.merchandise.product.featuredImage?.url,
+                  productURL: `https://infinity-puzzle.com/en/products/${line.merchandise.product.handle}`,
+                }));
+                // Omnisend
+                trackStartedCheckout({
+                  cartID: cart.id,
+                  value: parseFloat(cart.cost.totalAmount.amount),
+                  currency: cart.cost.totalAmount.currencyCode,
+                  abandonedCheckoutURL: cart.checkoutUrl,
+                  lineItems: items,
+                });
+                // GA4 / Meta / TikTok via GTM
+                sendGTMEvent({
+                  event: 'begin_checkout',
+                  value: parseFloat(cart.cost.totalAmount.amount),
+                  currency: cart.cost.totalAmount.currencyCode,
+                  items: cart.lines.nodes.map((line) => ({
+                    item_id: line.merchandise.id,
+                    item_name: line.merchandise.product.title,
+                    price: parseFloat(line.merchandise.price.amount),
+                    quantity: line.quantity,
+                  })),
+                });
+              }}
               className="
                 block text-center
                 px-8 py-4 rounded-full
