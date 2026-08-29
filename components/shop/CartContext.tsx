@@ -110,7 +110,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         event: 'add_to_cart',
         value: parseFloat(data.cart.cost.totalAmount.amount),
         currency: data.cart.cost.totalAmount.currencyCode,
-        items: data.cart.lines.nodes.map((line) => ({
+        items: data.cart.lines.nodes.map((line: ShopifyCartLine) => ({
           item_id: line.merchandise.id,
           item_name: line.merchandise.product.title,
           price: parseFloat(line.merchandise.price.amount),
