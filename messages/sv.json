@@ -111,7 +111,8 @@
     "placeholder": "din@email.com",
     "cta": "Prenumerera",
     "success": "Du är med. Hörs snart.",
-    "error": "Något gick fel. Försök igen."
+    "error": "Något gick fel. Försök igen.",
+    "consentLabel": "Jag godkänner att ta emot mejl från Infinity Puzzles. Du kan avregistrera dig när som helst."
   },
   "footer": {
     "tagline": "Oändliga formationer. Ett universum.",

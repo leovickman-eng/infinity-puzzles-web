@@ -111,7 +111,8 @@
     "placeholder": "your@email.com",
     "cta": "Subscribe",
     "success": "You're in. Talk soon.",
-    "error": "Something went wrong. Try again."
+    "error": "Something went wrong. Try again.",
+    "consentLabel": "I agree to receive emails from Infinity Puzzles. You can unsubscribe at any time."
   },
   "footer": {
     "tagline": "Infinite formations. One universe.",

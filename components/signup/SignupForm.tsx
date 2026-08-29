@@ -117,6 +117,7 @@ export default function SignupForm() {
   const [dragX, setDragX]       = useState(0);
   const [snapped, setSnapped]   = useState(false);
   const [email, setEmail]       = useState('');
+  const [consent, setConsent]   = useState(false);
   const [status, setStatus]     = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [isMobile, setIsMobile] = useState(false);
 
@@ -287,7 +288,7 @@ export default function SignupForm() {
       const res = await fetch('/api/subscribe', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email, consent }),
       });
       setStatus(res.ok ? 'success' : 'error');
     } catch {
@@ -399,9 +400,22 @@ export default function SignupForm() {
                   cursor: snapped ? 'text' : 'not-allowed',
                 }}
               />
+              <label className="flex items-start gap-3 cursor-pointer">
+                <input
+                  type="checkbox"
+                  required
+                  checked={consent}
+                  onChange={(e) => setConsent(e.target.checked)}
+                  disabled={!snapped}
+                  style={{ marginTop: 3, accentColor: '#ae84ea', flexShrink: 0 }}
+                />
+                <span style={{ fontFamily: 'var(--font-trykker)', fontSize: '0.8rem', color: 'rgba(255,251,245,0.5)', lineHeight: 1.5 }}>
+                  I agree to receive emails from Infinity Puzzles. You can unsubscribe at any time.
+                </span>
+              </label>
               <button
                 type="submit"
-                disabled={!snapped || status === 'loading'}
+                disabled={!snapped || !consent || status === 'loading'}
                 className="w-full py-4 rounded-xl bg-foreground text-background transition-all duration-300 disabled:opacity-30 disabled:cursor-not-allowed hover:bg-foreground/90"
                 style={{ fontFamily: 'var(--font-trykker)', fontSize: '1.1rem', letterSpacing: '0.03em' }}
               >
