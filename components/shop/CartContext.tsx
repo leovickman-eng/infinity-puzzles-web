@@ -8,7 +8,7 @@ import {
   useCallback,
   type ReactNode,
 } from 'react';
-import type { ShopifyCart } from '@/lib/shopify/types';
+import type { ShopifyCart, ShopifyCartLine } from '@/lib/shopify/types';
 import { trackAddedToCart } from '@/lib/omnisend';
 import { sendGTMEvent } from '@next/third-parties/google';
 
@@ -96,7 +96,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         value: parseFloat(data.cart.cost.totalAmount.amount),
         currency: data.cart.cost.totalAmount.currencyCode,
         abandonedCheckoutURL: data.cart.checkoutUrl,
-        lineItems: data.cart.lines.nodes.map((line) => ({
+        lineItems: data.cart.lines.nodes.map((line: ShopifyCartLine) => ({
           productID: line.merchandise.id,
           productTitle: line.merchandise.product.title,
           productPrice: parseFloat(line.merchandise.price.amount),

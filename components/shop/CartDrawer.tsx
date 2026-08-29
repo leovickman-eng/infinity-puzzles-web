@@ -4,6 +4,7 @@ import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { useCart } from './CartContext';
 import { formatMoney } from '@/lib/shopify';
+import type { ShopifyCartLine } from '@/lib/shopify/types';
 import { trackStartedCheckout } from '@/lib/omnisend';
 import { sendGTMEvent } from '@next/third-parties/google';
 
@@ -106,7 +107,7 @@ export default function CartDrawer() {
             <a
               href={cart.checkoutUrl}
               onClick={() => {
-                const items = cart.lines.nodes.map((line) => ({
+                const items = cart.lines.nodes.map((line: ShopifyCartLine) => ({
                   productID: line.merchandise.id,
                   productTitle: line.merchandise.product.title,
                   productPrice: parseFloat(line.merchandise.price.amount),
