@@ -3,7 +3,7 @@
 import { useParams } from 'next/navigation';
 import { useEffect, useRef } from 'react';
 
-const NAV = [
+const NAV: { key: string; label: string; sub: string; href: string; color: string; border: string; bg: string; external?: boolean }[] = [
   {
     key: 'cheat',
     label: 'CHEAT',
@@ -30,6 +30,16 @@ const NAV = [
     color: '#FFD23F',
     border: 'rgba(255,210,63,0.45)',
     bg: 'rgba(255,210,63,0.07)',
+  },
+  {
+    key: 'instagram',
+    label: 'INSTAGRAM',
+    sub: '@infinitypuzzles',
+    href: 'https://www.instagram.com/infinitypuzzles/',
+    color: '#F06292',
+    border: 'rgba(240,98,146,0.45)',
+    bg: 'rgba(240,98,146,0.07)',
+    external: true,
   },
 ];
 
@@ -160,10 +170,12 @@ export default function UniversePage() {
         display: 'flex', flexDirection: 'column', gap: '16px',
         width: '100%', maxWidth: '360px', position: 'relative', zIndex: 2,
       }}>
-        {NAV.map(({ key, label, sub, href, color, border, bg }) => (
+        {NAV.map(({ key, label, sub, href, color, border, bg, external }) => (
           <a
             key={key}
-            href={`/${locale}${href}`}
+            href={external ? href : `/${locale}${href}`}
+            target={external ? '_blank' : undefined}
+            rel={external ? 'noopener noreferrer' : undefined}
             style={{
               display: 'flex', alignItems: 'center', justifyContent: 'space-between',
               padding: '20px 28px', background: bg, border: `1px solid ${border}`,
