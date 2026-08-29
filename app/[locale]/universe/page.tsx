@@ -2,25 +2,27 @@
 
 import { useParams } from 'next/navigation';
 import { useEffect, useRef } from 'react';
+import Image from 'next/image';
 
-const NAV: { key: string; label: string; sub: string; href: string; color: string; border: string; bg: string; external?: boolean }[] = [
+const NAV: {
+  key: string; label: string; sub: string; href: string;
+  color: string; glow: string; external?: boolean;
+}[] = [
   {
     key: 'cheat',
     label: 'CHEAT',
     sub: 'Utforska nätverket',
     href: '/WILD_NETWORK',
     color: '#ae84ea',
-    border: 'rgba(174,132,234,0.45)',
-    bg: 'rgba(174,132,234,0.08)',
+    glow: 'rgba(174,132,234,0.5)',
   },
   {
     key: 'stories',
     label: 'STORIES',
     sub: 'Möt karaktärerna',
     href: '/universe/stories',
-    color: '#0EC7B4',
-    border: 'rgba(14,199,180,0.45)',
-    bg: 'rgba(14,199,180,0.07)',
+    color: '#5DCCA0',
+    glow: 'rgba(93,204,160,0.5)',
   },
   {
     key: 'shop',
@@ -28,8 +30,7 @@ const NAV: { key: string; label: string; sub: string; href: string; color: strin
     sub: 'Infinity Puzzles',
     href: '/',
     color: '#FFD23F',
-    border: 'rgba(255,210,63,0.45)',
-    bg: 'rgba(255,210,63,0.07)',
+    glow: 'rgba(255,210,63,0.5)',
   },
   {
     key: 'instagram',
@@ -37,8 +38,7 @@ const NAV: { key: string; label: string; sub: string; href: string; color: strin
     sub: '@infinitypuzzles',
     href: 'https://www.instagram.com/infinitypuzzles/',
     color: '#F06292',
-    border: 'rgba(240,98,146,0.45)',
-    bg: 'rgba(240,98,146,0.07)',
+    glow: 'rgba(240,98,146,0.5)',
     external: true,
   },
 ];
@@ -135,6 +135,106 @@ function StarCanvas() {
   );
 }
 
+// ─── Planet button ────────────────────────────────────────────────────────────
+function Planet({
+  color, glow, label, sub, href, external, locale,
+}: {
+  color: string; glow: string; label: string; sub: string;
+  href: string; external?: boolean; locale: string;
+}) {
+  const D = 100; // planet diameter
+  const RW = 180, RH = 28; // ring dimensions
+
+  return (
+    <a
+      href={external ? href : `/${locale}${href}`}
+      target={external ? '_blank' : undefined}
+      rel={external ? 'noopener noreferrer' : undefined}
+      style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 14, textDecoration: 'none', cursor: 'pointer' }}
+    >
+      {/* Planet + ring wrapper */}
+      <div style={{ position: 'relative', width: RW, height: D, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+
+        {/* Ring — back half (behind planet) */}
+        <svg
+          style={{ position: 'absolute', inset: 0, zIndex: 1, pointerEvents: 'none' }}
+          width={RW} height={D} viewBox={`0 0 ${RW} ${D}`}
+        >
+          <ellipse
+            cx={RW / 2} cy={D / 2}
+            rx={RW / 2 - 4} ry={RH / 2}
+            fill="none"
+            stroke={color}
+            strokeWidth="3"
+            strokeOpacity="0.45"
+            strokeDasharray={`${Math.PI * RW * 0.5} ${Math.PI * RW * 0.5}`}
+            strokeDashoffset={Math.PI * RW * 0.25}
+          />
+        </svg>
+
+        {/* Planet sphere */}
+        <div style={{
+          width: D, height: D, borderRadius: '50%', position: 'relative', zIndex: 2, flexShrink: 0,
+          background: `radial-gradient(circle at 38% 32%, ${color}ff 0%, ${color}bb 40%, ${color}55 75%, ${color}22 100%)`,
+          boxShadow: `0 0 32px ${glow}, 0 0 8px ${glow}, inset -8px -8px 20px rgba(0,0,0,0.4)`,
+          transition: 'transform 0.25s, box-shadow 0.25s',
+        }}
+          onMouseEnter={e => {
+            (e.currentTarget as HTMLDivElement).style.transform = 'scale(1.08)';
+            (e.currentTarget as HTMLDivElement).style.boxShadow = `0 0 48px ${glow}, 0 0 16px ${glow}, inset -8px -8px 20px rgba(0,0,0,0.4)`;
+          }}
+          onMouseLeave={e => {
+            (e.currentTarget as HTMLDivElement).style.transform = 'scale(1)';
+            (e.currentTarget as HTMLDivElement).style.boxShadow = `0 0 32px ${glow}, 0 0 8px ${glow}, inset -8px -8px 20px rgba(0,0,0,0.4)`;
+          }}
+        >
+          {/* Surface detail — highlight */}
+          <div style={{
+            position: 'absolute', top: '18%', left: '22%',
+            width: '35%', height: '20%', borderRadius: '50%',
+            background: 'rgba(255,255,255,0.18)',
+            filter: 'blur(4px)',
+          }} />
+        </div>
+
+        {/* Ring — front half (in front of planet) */}
+        <svg
+          style={{ position: 'absolute', inset: 0, zIndex: 3, pointerEvents: 'none' }}
+          width={RW} height={D} viewBox={`0 0 ${RW} ${D}`}
+        >
+          <ellipse
+            cx={RW / 2} cy={D / 2}
+            rx={RW / 2 - 4} ry={RH / 2}
+            fill="none"
+            stroke={color}
+            strokeWidth="3"
+            strokeOpacity="0.75"
+            strokeDasharray={`${Math.PI * RW * 0.5} ${Math.PI * RW * 0.5}`}
+            strokeDashoffset={-Math.PI * RW * 0.25}
+          />
+        </svg>
+      </div>
+
+      {/* Label */}
+      <div style={{ textAlign: 'center' }}>
+        <div style={{
+          fontFamily: "'eight-condensed', sans-serif",
+          fontSize: '1.25rem', color, letterSpacing: '0.07em', lineHeight: 1, marginBottom: 4,
+        }}>
+          {label}
+        </div>
+        <div style={{
+          fontSize: '10px', color: 'rgba(240,234,248,0.35)',
+          letterSpacing: '0.1em', textTransform: 'uppercase',
+        }}>
+          {sub}
+        </div>
+      </div>
+    </a>
+  );
+}
+
+// ─── Page ─────────────────────────────────────────────────────────────────────
 export default function UniversePage() {
   const params = useParams();
   const locale = (params?.locale as string) ?? 'en';
@@ -144,10 +244,12 @@ export default function UniversePage() {
       minHeight: '100svh', background: '#0d0a12',
       display: 'flex', flexDirection: 'column',
       alignItems: 'center', justifyContent: 'center',
-      padding: '40px 24px', fontFamily: "'DM Sans', sans-serif",
+      padding: '60px 24px 40px', fontFamily: "'DM Sans', sans-serif",
       overflow: 'hidden', position: 'relative',
     }}>
       <StarCanvas />
+
+      {/* Nebula glow */}
       <div style={{
         position: 'absolute', top: '30%', left: '50%',
         transform: 'translate(-50%, -50%)',
@@ -155,7 +257,9 @@ export default function UniversePage() {
         background: 'radial-gradient(ellipse, rgba(174,132,234,0.09) 0%, transparent 70%)',
         pointerEvents: 'none', zIndex: 1,
       }} />
-      <div style={{ textAlign: 'center', marginBottom: '64px', position: 'relative', zIndex: 2 }}>
+
+      {/* Header */}
+      <div style={{ textAlign: 'center', marginBottom: '52px', position: 'relative', zIndex: 2 }}>
         <h1 style={{
           fontFamily: "'eight-condensed', sans-serif",
           fontSize: 'clamp(2.8rem, 10vw, 6rem)',
@@ -164,55 +268,33 @@ export default function UniversePage() {
         }}>
           WILD UNIVERSE
         </h1>
-        <div style={{ width: '48px', height: '1px', background: 'rgba(174,132,234,0.3)', margin: '24px auto 0' }} />
+        <div style={{ width: '48px', height: '1px', background: 'rgba(174,132,234,0.3)', margin: '20px auto 24px' }} />
+        {/* Logo */}
+        <Image
+          src="/images/SVG/infinity-puzzles-logo-200px.png"
+          alt="Infinity Puzzles"
+          width={120}
+          height={40}
+          style={{ opacity: 0.55, filter: 'brightness(0) invert(1)' }}
+          unoptimized
+        />
       </div>
+
+      {/* Planets grid */}
       <div style={{
-        display: 'flex', flexDirection: 'column', gap: '16px',
-        width: '100%', maxWidth: '360px', position: 'relative', zIndex: 2,
+        display: 'grid',
+        gridTemplateColumns: 'repeat(2, 1fr)',
+        gap: '48px 32px',
+        position: 'relative', zIndex: 2,
+        maxWidth: 480,
+        width: '100%',
+        justifyItems: 'center',
       }}>
-        {NAV.map(({ key, label, sub, href, color, border, bg, external }) => (
-          <a
-            key={key}
-            href={external ? href : `/${locale}${href}`}
-            target={external ? '_blank' : undefined}
-            rel={external ? 'noopener noreferrer' : undefined}
-            style={{
-              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-              padding: '20px 28px', background: bg, border: `1px solid ${border}`,
-              borderRadius: '14px', textDecoration: 'none',
-              transition: 'background 0.2s, border-color 0.2s, transform 0.15s',
-              cursor: 'pointer', backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)',
-            }}
-            onMouseEnter={e => {
-              const el = e.currentTarget;
-              el.style.background = bg.replace('0.07', '0.14').replace('0.08', '0.16');
-              el.style.transform = 'translateY(-2px)';
-            }}
-            onMouseLeave={e => {
-              const el = e.currentTarget;
-              el.style.background = bg;
-              el.style.transform = 'translateY(0)';
-            }}
-          >
-            <div>
-              <div style={{
-                fontFamily: "'eight-condensed', sans-serif",
-                fontSize: '1.5rem', color, letterSpacing: '0.06em',
-                lineHeight: 1, marginBottom: '4px',
-              }}>
-                {label}
-              </div>
-              <div style={{
-                fontSize: '11px', color: 'rgba(240,234,248,0.35)',
-                letterSpacing: '0.08em', textTransform: 'uppercase',
-              }}>
-                {sub}
-              </div>
-            </div>
-            <div style={{ color, opacity: 0.6, fontSize: '18px' }}>→</div>
-          </a>
+        {NAV.map((item) => (
+          <Planet key={item.key} locale={locale} {...item} />
         ))}
       </div>
+
       <div style={{
         position: 'absolute', bottom: '24px',
         fontSize: '10px', color: 'rgba(240,234,248,0.15)',
