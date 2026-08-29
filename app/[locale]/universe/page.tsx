@@ -290,8 +290,8 @@ export default function UniversePage() {
         width: '100%',
         justifyItems: 'center',
       }}>
-        {NAV.map((item) => (
-          <Planet key={item.key} locale={locale} {...item} />
+        {NAV.map(({ key, ...item }) => (
+          <Planet key={key} locale={locale} {...item} />
         ))}
       </div>
 
