@@ -252,9 +252,13 @@ export default function UniversePage() {
         <Image
           src="/images/SVG/infinity-puzzles-logo-200px.png"
           alt="Infinity Puzzles"
-          width={140}
-          height={46}
-          style={{ opacity: 0.85 }}
+          width={90}
+          height={30}
+          style={{
+            display: 'block',
+            margin: '0 auto',
+            filter: 'brightness(0) invert(1) sepia(1) saturate(2) hue-rotate(218deg) brightness(0.82)',
+          }}
           unoptimized
         />
       </div>
