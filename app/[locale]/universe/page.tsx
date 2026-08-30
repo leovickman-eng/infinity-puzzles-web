@@ -9,6 +9,7 @@ const floatKeyframes = `
 @keyframes float1 { 0%,100%{transform:translateY(0px)} 50%{transform:translateY(-8px)} }
 @keyframes float2 { 0%,100%{transform:translateY(0px)} 50%{transform:translateY(-12px)} }
 @keyframes float3 { 0%,100%{transform:translateY(0px)} 50%{transform:translateY(-9px)} }
+footer { display: none !important; }
 `;
 
 const FLOAT_DURATIONS = ['6s', '7.5s', '5.8s', '8.2s'];
