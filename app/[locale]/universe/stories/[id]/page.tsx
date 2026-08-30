@@ -317,29 +317,7 @@ export default function CharacterPage() {
           {ch.name}
         </h1>
 
-        {/* Superpower */}
-        <p style={{
-          fontFamily: "'DM Sans', sans-serif",
-          fontSize: 'clamp(0.8rem, 2.2vw, 0.92rem)',
-          letterSpacing: '0.12em', textTransform: 'uppercase',
-          color: accentColor, opacity: 0.75,
-          margin: '0 0 20px',
-        }}>
-          {isSv ? data.superpower.sv : data.superpower.en}
-        </p>
-
-        {/* Tagline */}
-        <p style={{
-          fontFamily: "'eight-condensed', sans-serif",
-          fontSize: 'clamp(1.1rem, 3.5vw, 1.4rem)',
-          color: textColor, opacity: 0.85,
-          margin: '0 0 28px', lineHeight: 1.35,
-          fontStyle: 'italic',
-        }}>
-          {isSv ? data.tagline.sv : data.tagline.en}
-        </p>
-
-        <div style={{ height: '1px', background: dividerColor, margin: '0 0 28px' }} />
+        <div style={{ height: '1px', background: dividerColor, margin: '16px 0 28px' }} />
 
         {/* Audio */}
         {audios.length > 0 && (
@@ -355,18 +333,58 @@ export default function CharacterPage() {
         )}
 
         {/* Description / story */}
-        <div style={{ marginBottom: '28px' }}>
-          {(isSv ? data.description.sv : data.description.en).split('\n\n').map((para, i) => (
-            <p key={i} style={{
-              fontFamily: "'DM Sans', sans-serif",
-              fontSize: 'clamp(0.95rem, 2.5vw, 1.05rem)',
-              lineHeight: 1.75, color: textColor, opacity: 0.9,
-              margin: i === 0 ? '0 0 16px' : '0',
-            }}>
-              {para}
-            </p>
-          ))}
-        </div>
+        {(() => {
+          const raw = isSv ? data.description.sv : data.description.en;
+          const paras = raw.split('\n\n');
+          const unusualPrefix = isSv ? 'Det ovanliga:' : 'The unusual:';
+          const unusualIdx = paras.findIndex(p => p.startsWith(unusualPrefix));
+          const mainParas = unusualIdx >= 0 ? paras.slice(0, unusualIdx) : paras;
+          const unusualPara = unusualIdx >= 0 ? paras[unusualIdx] : null;
+          const unusualText = unusualPara ? unusualPara.slice(unusualPrefix.length).trim() : null;
+
+          return (
+            <>
+              <div style={{ marginBottom: unusualText ? '20px' : '28px' }}>
+                {mainParas.map((para, i) => (
+                  <p key={i} style={{
+                    fontFamily: "'DM Sans', sans-serif",
+                    fontSize: 'clamp(0.95rem, 2.5vw, 1.05rem)',
+                    lineHeight: 1.75, color: textColor, opacity: 0.9,
+                    margin: i < mainParas.length - 1 ? '0 0 16px' : '0',
+                  }}>
+                    {para}
+                  </p>
+                ))}
+              </div>
+
+              {unusualText && (
+                <div style={{
+                  marginBottom: '28px',
+                  padding: '16px 20px',
+                  border: `1px solid ${accentColor}45`,
+                  borderRadius: '10px',
+                  background: `${accentColor}09`,
+                }}>
+                  <div style={{
+                    fontSize: '9px', letterSpacing: '2.5px', textTransform: 'uppercase',
+                    color: accentColor, fontFamily: "'DM Sans', sans-serif",
+                    marginBottom: '8px', opacity: 0.8,
+                  }}>
+                    {isSv ? 'Det ovanliga' : 'The unusual'}
+                  </div>
+                  <p style={{
+                    fontFamily: "'DM Sans', sans-serif",
+                    fontSize: 'clamp(0.88rem, 2.3vw, 0.97rem)',
+                    lineHeight: 1.7, color: textColor, opacity: 0.8,
+                    margin: 0,
+                  }}>
+                    {unusualText}
+                  </p>
+                </div>
+              )}
+            </>
+          );
+        })()}
 
         <div style={{ height: '1px', background: dividerColor, margin: '0 0 28px' }} />
 
