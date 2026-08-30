@@ -4,6 +4,16 @@ import { useParams } from 'next/navigation';
 import { useEffect, useRef } from 'react';
 import Image from 'next/image';
 
+const floatKeyframes = `
+@keyframes float0 { 0%,100%{transform:translateY(0px)} 50%{transform:translateY(-10px)} }
+@keyframes float1 { 0%,100%{transform:translateY(0px)} 50%{transform:translateY(-8px)} }
+@keyframes float2 { 0%,100%{transform:translateY(0px)} 50%{transform:translateY(-12px)} }
+@keyframes float3 { 0%,100%{transform:translateY(0px)} 50%{transform:translateY(-9px)} }
+`;
+
+const FLOAT_DURATIONS = ['6s', '7.5s', '5.8s', '8.2s'];
+const FLOAT_DELAYS    = ['0s', '1.4s', '0.7s', '2.1s'];
+
 const NAV: {
   key: string; label: string; sub: string; href: string;
   color: string; glow: string; img: string; size: number; offset: number; external?: boolean;
@@ -149,11 +159,11 @@ function StarCanvas() {
 
 // ─── Planet button ────────────────────────────────────────────────────────────
 function Planet({
-  color, glow, label, sub, href, external, locale, img, size, offset,
+  color, glow, label, sub, href, external, locale, img, size, offset, floatIndex,
 }: {
   color: string; glow: string; label: string; sub: string;
   href: string; external?: boolean; locale: string;
-  img: string; size: number; offset: number;
+  img: string; size: number; offset: number; floatIndex: number;
 }) {
   return (
     <a
@@ -166,18 +176,17 @@ function Planet({
         marginTop: offset,
       }}
     >
-      {/* Planet image with glow */}
+      {/* Planet image with glow + float */}
       <div style={{
         width: size, height: size,
         filter: `drop-shadow(0 0 18px ${glow}) drop-shadow(0 0 6px ${glow})`,
-        transition: 'transform 0.25s, filter 0.25s',
+        transition: 'filter 0.25s',
+        animation: `float${floatIndex} ${FLOAT_DURATIONS[floatIndex]} ${FLOAT_DELAYS[floatIndex]} ease-in-out infinite`,
       }}
         onMouseEnter={e => {
-          (e.currentTarget as HTMLDivElement).style.transform = 'scale(1.08)';
           (e.currentTarget as HTMLDivElement).style.filter = `drop-shadow(0 0 28px ${glow}) drop-shadow(0 0 12px ${glow})`;
         }}
         onMouseLeave={e => {
-          (e.currentTarget as HTMLDivElement).style.transform = 'scale(1)';
           (e.currentTarget as HTMLDivElement).style.filter = `drop-shadow(0 0 18px ${glow}) drop-shadow(0 0 6px ${glow})`;
         }}
       >
@@ -216,6 +225,7 @@ export default function UniversePage() {
       padding: '60px 24px 40px', fontFamily: "'DM Sans', sans-serif",
       overflow: 'hidden', position: 'relative',
     }}>
+      <style>{floatKeyframes}</style>
       <StarCanvas />
 
       {/* Nebula glow */}
@@ -259,8 +269,8 @@ export default function UniversePage() {
         width: '100%',
         justifyItems: 'center',
       }}>
-        {NAV.map(({ key, img, size, offset, ...item }) => (
-          <Planet key={key} locale={locale} img={img} size={size} offset={offset} {...item} />
+        {NAV.map(({ key, img, size, offset, ...item }, i) => (
+          <Planet key={key} locale={locale} img={img} size={size} offset={offset} floatIndex={i} {...item} />
         ))}
       </div>
 
