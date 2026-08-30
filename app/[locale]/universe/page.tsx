@@ -6,7 +6,7 @@ import Image from 'next/image';
 
 const NAV: {
   key: string; label: string; sub: string; href: string;
-  color: string; glow: string; external?: boolean;
+  color: string; glow: string; img: string; size: number; offset: number; external?: boolean;
 }[] = [
   {
     key: 'cheat',
@@ -14,7 +14,10 @@ const NAV: {
     sub: 'Utforska nätverket',
     href: '/WILD_NETWORK',
     color: '#ae84ea',
-    glow: 'rgba(174,132,234,0.5)',
+    glow: 'rgba(174,132,234,0.55)',
+    img: '/images/planeter/P1.PNG',
+    size: 115,
+    offset: 0,
   },
   {
     key: 'stories',
@@ -22,7 +25,10 @@ const NAV: {
     sub: 'Möt karaktärerna',
     href: '/universe/stories',
     color: '#5DCCA0',
-    glow: 'rgba(93,204,160,0.5)',
+    glow: 'rgba(93,204,160,0.55)',
+    img: '/images/planeter/P2.PNG',
+    size: 104,
+    offset: 8,
   },
   {
     key: 'shop',
@@ -30,7 +36,10 @@ const NAV: {
     sub: 'Infinity Puzzles',
     href: '/',
     color: '#FFD23F',
-    glow: 'rgba(255,210,63,0.5)',
+    glow: 'rgba(255,210,63,0.55)',
+    img: '/images/planeter/P3.PNG',
+    size: 122,
+    offset: -6,
   },
   {
     key: 'instagram',
@@ -38,7 +47,10 @@ const NAV: {
     sub: '@infinitypuzzles',
     href: 'https://www.instagram.com/infinitypuzzles/',
     color: '#F06292',
-    glow: 'rgba(240,98,146,0.5)',
+    glow: 'rgba(240,98,146,0.55)',
+    img: '/images/planeter/P4.PNG',
+    size: 108,
+    offset: 4,
     external: true,
   },
 ];
@@ -137,82 +149,39 @@ function StarCanvas() {
 
 // ─── Planet button ────────────────────────────────────────────────────────────
 function Planet({
-  color, glow, label, sub, href, external, locale,
+  color, glow, label, sub, href, external, locale, img, size, offset,
 }: {
   color: string; glow: string; label: string; sub: string;
   href: string; external?: boolean; locale: string;
+  img: string; size: number; offset: number;
 }) {
-  const D = 100; // planet diameter
-  const RW = 180, RH = 28; // ring dimensions
-
   return (
     <a
       href={external ? href : `/${locale}${href}`}
       target={external ? '_blank' : undefined}
       rel={external ? 'noopener noreferrer' : undefined}
-      style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 14, textDecoration: 'none', cursor: 'pointer' }}
+      style={{
+        display: 'flex', flexDirection: 'column', alignItems: 'center',
+        gap: 14, textDecoration: 'none', cursor: 'pointer',
+        marginTop: offset,
+      }}
     >
-      {/* Planet + ring wrapper */}
-      <div style={{ position: 'relative', width: RW, height: D, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-
-        {/* Ring — back half (behind planet) */}
-        <svg
-          style={{ position: 'absolute', inset: 0, zIndex: 1, pointerEvents: 'none' }}
-          width={RW} height={D} viewBox={`0 0 ${RW} ${D}`}
-        >
-          <ellipse
-            cx={RW / 2} cy={D / 2}
-            rx={RW / 2 - 4} ry={RH / 2}
-            fill="none"
-            stroke={color}
-            strokeWidth="3"
-            strokeOpacity="0.45"
-            strokeDasharray={`${Math.PI * RW * 0.5} ${Math.PI * RW * 0.5}`}
-            strokeDashoffset={Math.PI * RW * 0.25}
-          />
-        </svg>
-
-        {/* Planet sphere */}
-        <div style={{
-          width: D, height: D, borderRadius: '50%', position: 'relative', zIndex: 2, flexShrink: 0,
-          background: `radial-gradient(circle at 38% 32%, ${color}ff 0%, ${color}bb 40%, ${color}55 75%, ${color}22 100%)`,
-          boxShadow: `0 0 32px ${glow}, 0 0 8px ${glow}, inset -8px -8px 20px rgba(0,0,0,0.4)`,
-          transition: 'transform 0.25s, box-shadow 0.25s',
+      {/* Planet image with glow */}
+      <div style={{
+        width: size, height: size,
+        filter: `drop-shadow(0 0 18px ${glow}) drop-shadow(0 0 6px ${glow})`,
+        transition: 'transform 0.25s, filter 0.25s',
+      }}
+        onMouseEnter={e => {
+          (e.currentTarget as HTMLDivElement).style.transform = 'scale(1.08)';
+          (e.currentTarget as HTMLDivElement).style.filter = `drop-shadow(0 0 28px ${glow}) drop-shadow(0 0 12px ${glow})`;
         }}
-          onMouseEnter={e => {
-            (e.currentTarget as HTMLDivElement).style.transform = 'scale(1.08)';
-            (e.currentTarget as HTMLDivElement).style.boxShadow = `0 0 48px ${glow}, 0 0 16px ${glow}, inset -8px -8px 20px rgba(0,0,0,0.4)`;
-          }}
-          onMouseLeave={e => {
-            (e.currentTarget as HTMLDivElement).style.transform = 'scale(1)';
-            (e.currentTarget as HTMLDivElement).style.boxShadow = `0 0 32px ${glow}, 0 0 8px ${glow}, inset -8px -8px 20px rgba(0,0,0,0.4)`;
-          }}
-        >
-          {/* Surface detail — highlight */}
-          <div style={{
-            position: 'absolute', top: '18%', left: '22%',
-            width: '35%', height: '20%', borderRadius: '50%',
-            background: 'rgba(255,255,255,0.18)',
-            filter: 'blur(4px)',
-          }} />
-        </div>
-
-        {/* Ring — front half (in front of planet) */}
-        <svg
-          style={{ position: 'absolute', inset: 0, zIndex: 3, pointerEvents: 'none' }}
-          width={RW} height={D} viewBox={`0 0 ${RW} ${D}`}
-        >
-          <ellipse
-            cx={RW / 2} cy={D / 2}
-            rx={RW / 2 - 4} ry={RH / 2}
-            fill="none"
-            stroke={color}
-            strokeWidth="3"
-            strokeOpacity="0.75"
-            strokeDasharray={`${Math.PI * RW * 0.5} ${Math.PI * RW * 0.5}`}
-            strokeDashoffset={-Math.PI * RW * 0.25}
-          />
-        </svg>
+        onMouseLeave={e => {
+          (e.currentTarget as HTMLDivElement).style.transform = 'scale(1)';
+          (e.currentTarget as HTMLDivElement).style.filter = `drop-shadow(0 0 18px ${glow}) drop-shadow(0 0 6px ${glow})`;
+        }}
+      >
+        <Image src={img} alt={label} width={size} height={size} style={{ width: '100%', height: '100%', objectFit: 'contain' }} unoptimized />
       </div>
 
       {/* Label */}
@@ -290,8 +259,8 @@ export default function UniversePage() {
         width: '100%',
         justifyItems: 'center',
       }}>
-        {NAV.map(({ key, ...item }) => (
-          <Planet key={key} locale={locale} {...item} />
+        {NAV.map(({ key, img, size, offset, ...item }) => (
+          <Planet key={key} locale={locale} img={img} size={size} offset={offset} {...item} />
         ))}
       </div>
 
