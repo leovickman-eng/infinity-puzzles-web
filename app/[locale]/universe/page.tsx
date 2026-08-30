@@ -15,13 +15,16 @@ const FLOAT_DURATIONS = ['6s', '7.5s', '5.8s', '8.2s'];
 const FLOAT_DELAYS    = ['0s', '1.4s', '0.7s', '2.1s'];
 
 const NAV: {
-  key: string; label: string; sub: string; href: string;
+  key: string;
+  label: { sv: string; en: string };
+  sub: { sv: string; en: string };
+  href: string;
   color: string; glow: string; img: string; size: number; offset: number; external?: boolean;
 }[] = [
   {
     key: 'cheat',
-    label: 'CHEAT',
-    sub: 'Utforska nätverket',
+    label: { sv: 'FUSK', en: 'CHEAT' },
+    sub: { sv: 'Utforska nätverket', en: 'Explore the network' },
     href: '/WILD_NETWORK',
     color: '#ae84ea',
     glow: 'rgba(174,132,234,0.55)',
@@ -31,8 +34,8 @@ const NAV: {
   },
   {
     key: 'stories',
-    label: 'STORIES',
-    sub: 'Möt karaktärerna',
+    label: { sv: 'SAGOR', en: 'STORIES' },
+    sub: { sv: 'Möt karaktärerna', en: 'Meet the characters' },
     href: '/universe/stories',
     color: '#5DCCA0',
     glow: 'rgba(93,204,160,0.55)',
@@ -42,8 +45,8 @@ const NAV: {
   },
   {
     key: 'shop',
-    label: 'SHOP',
-    sub: 'Infinity Puzzles',
+    label: { sv: 'SHOP', en: 'SHOP' },
+    sub: { sv: 'Infinity Puzzles', en: 'Infinity Puzzles' },
     href: '/',
     color: '#FFD23F',
     glow: 'rgba(255,210,63,0.55)',
@@ -53,8 +56,8 @@ const NAV: {
   },
   {
     key: 'instagram',
-    label: 'INSTAGRAM',
-    sub: '@infinitypuzzles',
+    label: { sv: 'INSTAGRAM', en: 'INSTAGRAM' },
+    sub: { sv: '@infinitypuzzles', en: '@infinitypuzzles' },
     href: 'https://www.instagram.com/infinitypuzzles/',
     color: '#F06292',
     glow: 'rgba(240,98,146,0.55)',
@@ -161,7 +164,7 @@ function StarCanvas() {
 function Planet({
   color, glow, label, sub, href, external, locale, img, size, offset, floatIndex,
 }: {
-  color: string; glow: string; label: string; sub: string;
+  color: string; glow: string; label: { sv: string; en: string }; sub: { sv: string; en: string };
   href: string; external?: boolean; locale: string;
   img: string; size: number; offset: number; floatIndex: number;
 }) {
@@ -190,7 +193,7 @@ function Planet({
           (e.currentTarget as HTMLDivElement).style.filter = `drop-shadow(0 0 18px ${glow}) drop-shadow(0 0 6px ${glow})`;
         }}
       >
-        <Image src={img} alt={label} width={size} height={size} style={{ width: '100%', height: '100%', objectFit: 'contain' }} unoptimized />
+        <Image src={img} alt={locale === 'sv' ? label.sv : label.en} width={size} height={size} style={{ width: '100%', height: '100%', objectFit: 'contain' }} unoptimized />
       </div>
 
       {/* Label */}
@@ -199,13 +202,13 @@ function Planet({
           fontFamily: "'eight-condensed', sans-serif",
           fontSize: '1.25rem', color, letterSpacing: '0.07em', lineHeight: 1, marginBottom: 4,
         }}>
-          {label}
+          {locale === 'sv' ? label.sv : label.en}
         </div>
         <div style={{
           fontSize: '10px', color: 'rgba(240,234,248,0.35)',
           letterSpacing: '0.1em', textTransform: 'uppercase',
         }}>
-          {sub}
+          {locale === 'sv' ? sub.sv : sub.en}
         </div>
       </div>
     </a>
@@ -217,6 +220,9 @@ export default function UniversePage() {
   const params = useParams();
   const locale = (params?.locale as string) ?? 'en';
 
+  const otherLocale = locale === 'sv' ? 'en' : 'sv';
+  const otherLabel  = locale === 'sv' ? 'ENG' : 'SWE';
+
   return (
     <div style={{
       minHeight: '100svh', background: '#0d0a12',
@@ -227,6 +233,32 @@ export default function UniversePage() {
     }}>
       <style>{floatKeyframes}</style>
       <StarCanvas />
+
+      {/* Language switcher */}
+      <a
+        href={`/${otherLocale}/universe`}
+        style={{
+          position: 'absolute', top: 20, right: 20, zIndex: 10,
+          fontFamily: "'DM Sans', sans-serif",
+          fontSize: '10px', letterSpacing: '2px',
+          color: 'rgba(240,234,248,0.4)',
+          textDecoration: 'none',
+          padding: '5px 10px',
+          border: '1px solid rgba(240,234,248,0.15)',
+          borderRadius: '20px',
+          transition: 'color 0.2s, border-color 0.2s',
+        }}
+        onMouseEnter={e => {
+          (e.currentTarget as HTMLAnchorElement).style.color = '#ae84ea';
+          (e.currentTarget as HTMLAnchorElement).style.borderColor = 'rgba(174,132,234,0.4)';
+        }}
+        onMouseLeave={e => {
+          (e.currentTarget as HTMLAnchorElement).style.color = 'rgba(240,234,248,0.4)';
+          (e.currentTarget as HTMLAnchorElement).style.borderColor = 'rgba(240,234,248,0.15)';
+        }}
+      >
+        {otherLabel}
+      </a>
 
       {/* Nebula glow */}
       <div style={{
