@@ -221,7 +221,7 @@ function Planet({
           {locale === 'sv' ? label.sv : label.en}
         </div>
         <div style={{
-          fontSize: '10px', color: 'rgba(240,234,248,0.35)',
+          fontSize: '10px', color, opacity: 0.55,
           letterSpacing: '0.1em', textTransform: 'uppercase',
         }}>
           {locale === 'sv' ? sub.sv : sub.en}
@@ -305,7 +305,6 @@ export default function UniversePage() {
           style={{
             display: 'block',
             margin: '0 auto',
-            filter: 'brightness(0) invert(1) sepia(1) saturate(2) hue-rotate(218deg) brightness(0.82)',
           }}
           unoptimized
         />
