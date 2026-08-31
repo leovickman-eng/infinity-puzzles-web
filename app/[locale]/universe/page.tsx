@@ -43,7 +43,7 @@ const NAV: {
     color: '#ae84ea',
     glow: 'rgba(174,132,234,0.55)',
     img: '/images/planeter/P1.PNG',
-    size: 115,
+    size: 128,
     offset: 0,
   },
   {
@@ -54,7 +54,7 @@ const NAV: {
     color: '#5DCCA0',
     glow: 'rgba(93,204,160,0.55)',
     img: '/images/planeter/P2.PNG',
-    size: 104,
+    size: 116,
     offset: 8,
   },
   {
@@ -65,7 +65,7 @@ const NAV: {
     color: '#FF8C42',
     glow: 'rgba(255,140,66,0.55)',
     img: '/images/planeter/P5.PNG',
-    size: 112,
+    size: 126,
     offset: 5,
   },
   {
@@ -76,7 +76,7 @@ const NAV: {
     color: '#FFD23F',
     glow: 'rgba(255,210,63,0.55)',
     img: '/images/planeter/P3.PNG',
-    size: 122,
+    size: 136,
     offset: -6,
   },
   {
@@ -87,7 +87,7 @@ const NAV: {
     color: '#F06292',
     glow: 'rgba(240,98,146,0.55)',
     img: '/images/planeter/P4.PNG',
-    size: 108,
+    size: 120,
     offset: 4,
     external: true,
   },
@@ -304,13 +304,13 @@ export default function UniversePage() {
         }}>
           WILD UNIVERSE
         </h1>
-        <div style={{ width: '48px', height: '1px', background: 'rgba(174,132,234,0.3)', margin: '20px auto 24px' }} />
+        <div style={{ width: '48px', height: '1px', background: 'rgba(174,132,234,0.3)', margin: '10px auto 10px' }} />
         {/* Logo */}
         <Image
           src="/images/SVG/infinity-puzzles-logo-200px.png"
           alt="Infinity Puzzles"
-          width={90}
-          height={30}
+          width={62}
+          height={21}
           style={{
             display: 'block',
             margin: '0 auto',
