@@ -307,7 +307,7 @@ export default function UniversePage() {
         <div style={{ width: '48px', height: '1px', background: 'rgba(174,132,234,0.3)', margin: '10px auto 10px' }} />
         {/* Logo */}
         <Image
-          src="/images/SVG/infinity-puzzles-logo-200px.png"
+          src="/images/SVG/infinity-puzzles-logo-400px (1).png"
           alt="Infinity Puzzles"
           width={62}
           height={21}
