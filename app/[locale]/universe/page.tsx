@@ -11,6 +11,18 @@ const floatKeyframes = `
 @keyframes float3 { 0%,100%{transform:translateY(0px)} 50%{transform:translateY(-9px)} }
 @keyframes float4 { 0%,100%{transform:translateY(0px)} 50%{transform:translateY(-11px)} }
 footer { display: none !important; }
+@media (max-width: 480px) {
+  .universe-header { margin-bottom: 24px !important; }
+  .universe-planets { gap: 20px !important; }
+}
+@media (max-height: 800px) {
+  .universe-header { margin-bottom: 20px !important; }
+  .universe-planets { zoom: 0.86; }
+}
+@media (max-height: 700px) {
+  .universe-header { margin-bottom: 10px !important; }
+  .universe-planets { zoom: 0.74; }
+}
 `;
 
 const FLOAT_DURATIONS = ['6s', '7.5s', '5.8s', '8.2s', '7s'];
@@ -241,7 +253,7 @@ export default function UniversePage() {
       minHeight: '100svh', background: '#0d0a12',
       display: 'flex', flexDirection: 'column',
       alignItems: 'center', justifyContent: 'center',
-      padding: '60px 24px 40px', fontFamily: "'DM Sans', sans-serif",
+      padding: 'clamp(36px,6vh,60px) 20px clamp(24px,4vh,40px)', fontFamily: "'DM Sans', sans-serif",
       overflow: 'hidden', position: 'relative',
     }}>
       <style>{floatKeyframes}</style>
@@ -283,7 +295,7 @@ export default function UniversePage() {
       }} />
 
       {/* Header */}
-      <div style={{ textAlign: 'center', marginBottom: '52px', position: 'relative', zIndex: 2 }}>
+      <div className="universe-header" style={{ textAlign: 'center', marginBottom: '52px', position: 'relative', zIndex: 2 }}>
         <h1 style={{
           fontFamily: "'eight-condensed', sans-serif",
           fontSize: 'clamp(2.8rem, 10vw, 6rem)',
@@ -309,7 +321,7 @@ export default function UniversePage() {
       </div>
 
       {/* Planets — tärning 5-layout */}
-      <div style={{ position: 'relative', zIndex: 2, maxWidth: 420, width: '100%', display: 'flex', flexDirection: 'column', gap: 40 }}>
+      <div className="universe-planets" style={{ position: 'relative', zIndex: 2, maxWidth: 420, width: '100%', display: 'flex', flexDirection: 'column', gap: 40 }}>
         {/* Rad 1: planet 0 + 1 */}
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           {NAV.slice(0, 2).map(({ key, img, size, offset, ...item }, i) => (
