@@ -199,7 +199,7 @@ export default function WaysToPlayPage() {
                 <div style={{
                   position: 'absolute', top: 10, left: 14,
                   fontSize: '10px', letterSpacing: '2px',
-                  color: 'rgba(240,234,248,0.5)',
+                  color: 'rgba(13,10,18,0.35)',
                   fontFamily: "'DM Sans', sans-serif",
                   zIndex: 1,
                 }}>
@@ -211,7 +211,7 @@ export default function WaysToPlayPage() {
                   width={1200}
                   height={800}
                   style={{ width: '100%', height: 'auto', display: 'block' }}
-                  quality={80}
+                  unoptimized
                 />
               </div>
             ))}
@@ -272,7 +272,7 @@ export default function WaysToPlayPage() {
               width={1200}
               height={800}
               style={{ width: '100%', height: 'auto', display: 'block' }}
-              quality={80}
+              unoptimized
             />
           </div>
 
