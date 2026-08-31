@@ -9,11 +9,12 @@ const floatKeyframes = `
 @keyframes float1 { 0%,100%{transform:translateY(0px)} 50%{transform:translateY(-8px)} }
 @keyframes float2 { 0%,100%{transform:translateY(0px)} 50%{transform:translateY(-12px)} }
 @keyframes float3 { 0%,100%{transform:translateY(0px)} 50%{transform:translateY(-9px)} }
+@keyframes float4 { 0%,100%{transform:translateY(0px)} 50%{transform:translateY(-11px)} }
 footer { display: none !important; }
 `;
 
-const FLOAT_DURATIONS = ['6s', '7.5s', '5.8s', '8.2s'];
-const FLOAT_DELAYS    = ['0s', '1.4s', '0.7s', '2.1s'];
+const FLOAT_DURATIONS = ['6s', '7.5s', '5.8s', '8.2s', '7s'];
+const FLOAT_DELAYS    = ['0s', '1.4s', '0.7s', '2.1s', '1.8s'];
 
 const NAV: {
   key: string;
@@ -54,6 +55,17 @@ const NAV: {
     img: '/images/planeter/P3.PNG',
     size: 122,
     offset: -6,
+  },
+  {
+    key: 'play',
+    label: { sv: 'LEKAR', en: 'WAYS TO PLAY' },
+    sub: { sv: 'The Split & Impossible Chain', en: 'The Split & Impossible Chain' },
+    href: '/universe/ways-to-play',
+    color: '#FF8C42',
+    glow: 'rgba(255,140,66,0.55)',
+    img: '/images/planeter/P5.PNG',
+    size: 112,
+    offset: 5,
   },
   {
     key: 'instagram',
@@ -296,19 +308,24 @@ export default function UniversePage() {
         />
       </div>
 
-      {/* Planets grid */}
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(2, 1fr)',
-        gap: '48px 32px',
-        position: 'relative', zIndex: 2,
-        maxWidth: 480,
-        width: '100%',
-        justifyItems: 'center',
-      }}>
-        {NAV.map(({ key, img, size, offset, ...item }, i) => (
-          <Planet key={key} locale={locale} img={img} size={size} offset={offset} floatIndex={i} {...item} />
-        ))}
+      {/* Planets grid — 2+2+1 */}
+      <div style={{ position: 'relative', zIndex: 2, maxWidth: 480, width: '100%' }}>
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(2, 1fr)',
+          gap: '48px 32px',
+          justifyItems: 'center',
+          marginBottom: '48px',
+        }}>
+          {NAV.slice(0, 4).map(({ key, img, size, offset, ...item }, i) => (
+            <Planet key={key} locale={locale} img={img} size={size} offset={offset} floatIndex={i} {...item} />
+          ))}
+        </div>
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+          {NAV.slice(4).map(({ key, img, size, offset, ...item }, i) => (
+            <Planet key={key} locale={locale} img={img} size={size} offset={offset} floatIndex={i + 4} {...item} />
+          ))}
+        </div>
       </div>
 
     </div>
