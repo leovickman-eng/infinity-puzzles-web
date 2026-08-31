@@ -207,17 +207,8 @@ function Planet({
       {/* Planet image with glow + float */}
       <div style={{
         width: size, height: size,
-        filter: `drop-shadow(0 0 18px ${glow}) drop-shadow(0 0 6px ${glow})`,
-        transition: 'filter 0.25s',
         animation: `float${floatIndex} ${FLOAT_DURATIONS[floatIndex]} ${FLOAT_DELAYS[floatIndex]} ease-in-out infinite`,
-      }}
-        onMouseEnter={e => {
-          (e.currentTarget as HTMLDivElement).style.filter = `drop-shadow(0 0 28px ${glow}) drop-shadow(0 0 12px ${glow})`;
-        }}
-        onMouseLeave={e => {
-          (e.currentTarget as HTMLDivElement).style.filter = `drop-shadow(0 0 18px ${glow}) drop-shadow(0 0 6px ${glow})`;
-        }}
-      >
+      }}>
         <Image src={img} alt={locale === 'sv' ? label.sv : label.en} width={size} height={size} style={{ width: '100%', height: '100%', objectFit: 'contain' }} unoptimized />
       </div>
 
