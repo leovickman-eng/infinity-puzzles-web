@@ -308,22 +308,24 @@ export default function UniversePage() {
         />
       </div>
 
-      {/* Planets grid — 2+2+1 */}
-      <div style={{ position: 'relative', zIndex: 2, maxWidth: 480, width: '100%' }}>
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(2, 1fr)',
-          gap: '48px 32px',
-          justifyItems: 'center',
-          marginBottom: '48px',
-        }}>
-          {NAV.slice(0, 4).map(({ key, img, size, offset, ...item }, i) => (
+      {/* Planets — tärning 5-layout */}
+      <div style={{ position: 'relative', zIndex: 2, maxWidth: 420, width: '100%', display: 'flex', flexDirection: 'column', gap: 40 }}>
+        {/* Rad 1: planet 0 + 1 */}
+        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+          {NAV.slice(0, 2).map(({ key, img, size, offset, ...item }, i) => (
             <Planet key={key} locale={locale} img={img} size={size} offset={offset} floatIndex={i} {...item} />
           ))}
         </div>
+        {/* Rad 2: planet 2 centrerad */}
         <div style={{ display: 'flex', justifyContent: 'center' }}>
-          {NAV.slice(4).map(({ key, img, size, offset, ...item }, i) => (
-            <Planet key={key} locale={locale} img={img} size={size} offset={offset} floatIndex={i + 4} {...item} />
+          {NAV.slice(2, 3).map(({ key, img, size, offset, ...item }, i) => (
+            <Planet key={key} locale={locale} img={img} size={size} offset={offset} floatIndex={i + 2} {...item} />
+          ))}
+        </div>
+        {/* Rad 3: planet 3 + 4 */}
+        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+          {NAV.slice(3).map(({ key, img, size, offset, ...item }, i) => (
+            <Planet key={key} locale={locale} img={img} size={size} offset={offset} floatIndex={i + 3} {...item} />
           ))}
         </div>
       </div>

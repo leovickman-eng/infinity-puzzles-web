@@ -4,10 +4,11 @@ import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import Image from 'next/image';
 
+const BG     = '#FFFBF5';
 const ACCENT = '#FF8C42';
-const MUTED  = 'rgba(240,234,248,0.4)';
-const DIVIDER = 'rgba(240,234,248,0.1)';
-const TEXT   = '#f0eaf8';
+const MUTED  = 'rgba(13,10,18,0.4)';
+const DIVIDER = 'rgba(13,10,18,0.1)';
+const TEXT   = '#0d0a12';
 
 const CONTENT = {
   sv: {
@@ -81,14 +82,14 @@ export default function WaysToPlayPage() {
   const c      = isSv ? CONTENT.sv : CONTENT.en;
 
   return (
-    <div style={{ minHeight: '100svh', background: '#0d0a12', color: TEXT }}>
+    <div style={{ minHeight: '100svh', background: BG, color: TEXT }}>
 
       {/* Top bar */}
       <div style={{
         position: 'fixed', top: 0, left: 0, right: 0, zIndex: 20,
         padding: '18px 24px',
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        background: 'linear-gradient(to bottom, #0d0a12f5 60%, transparent)',
+        background: `linear-gradient(to bottom, ${BG}f5 60%, transparent)`,
       }}>
         <Link href={`/${locale}/universe`} style={{
           color: MUTED, fontSize: '13px', textDecoration: 'none',
@@ -186,9 +187,9 @@ export default function WaysToPlayPage() {
           {/* Split images */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: 16, marginBottom: 32 }}>
             {[
-              { src: '/images/How to play/split_1.png', alt: isSv ? 'Alla 19 bitar blandade' : 'All 19 pieces mixed' },
-              { src: '/images/How to play/split_2.png', alt: isSv ? 'Bitarna uppdelade i två högar' : 'Pieces split into two piles' },
-              { src: '/images/How to play/split_3.png', alt: isSv ? 'Varje hög ihopsatt' : 'Each pile assembled' },
+              { src: '/images/How%20to%20play/split_1.png', alt: isSv ? 'Alla 19 bitar blandade' : 'All 19 pieces mixed' },
+              { src: '/images/How%20to%20play/split_2.png', alt: isSv ? 'Bitarna uppdelade i två högar' : 'Pieces split into two piles' },
+              { src: '/images/How%20to%20play/split_3.png', alt: isSv ? 'Varje hög ihopsatt' : 'Each pile assembled' },
             ].map((img, i) => (
               <div key={i} style={{
                 borderRadius: '14px', overflow: 'hidden',
@@ -266,7 +267,7 @@ export default function WaysToPlayPage() {
             marginBottom: 32,
           }}>
             <Image
-              src="/images/How to play/impossible_1.png"
+              src="/images/How%20to%20play/impossible_1.png"
               alt={isSv ? 'Alla 19 bitar i en kedja' : 'All 19 pieces in one chain'}
               width={1200}
               height={800}
