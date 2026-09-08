@@ -24,7 +24,27 @@
   "characters": {
     "title": "Möt karaktärerna",
     "subtitle": "19 unika bitar. 19 unika personligheter.",
-    "viewAll": "Se alla karaktärer"
+    "viewAll": "Se alla karaktärer",
+    "viewAllSub": "Alla 19 personligheter",
+    "wildNetworkSub": "Se vilka bitar som sitter ihop"
+  },
+  "insideBox": {
+    "eyebrow": "Inuti lådan",
+    "title": "Mer än ett pussel.",
+    "subtitle": "Skanna QR-koden i lådan och gå in i Wild Universe — ett digitalt lager av berättelser, kopplingar och spelsätt som hör till pusslet.",
+    "qrHint": "QR-kod medföljer i lådan → infinity-puzzle.com/universe",
+    "stories": {
+      "label": "Karaktärerna",
+      "desc": "19 bitar, 19 personligheter. Läs berättelserna bakom varje karaktär — vem är Dolores Thunder? Vad gömmer sig bakom Mambo Viento?"
+    },
+    "network": {
+      "label": "Fusk-verktyg",
+      "desc": "Wild Network är ett interaktivt nät av alla 19 bitar. Klicka på en karaktär och se exakt vilka bitar den passar ihop med. Aldrig mer fast."
+    },
+    "play": {
+      "label": "Spelsätt",
+      "desc": "The Split, The Impossible Chain och fler sätt att lägga pusslet på — regler, utmaningar och varianter för alla nivåer."
+    }
   },
   "digitalPromise": {
     "eyebrow": "Det digitala lagret",
@@ -77,7 +97,9 @@
     "year": "2024",
     "collection": "Wild-kollektionen",
     "description": "Det första kapitlet i Infinity Puzzles-universumet. 19 karaktärer, otaliga formationer, ett extraordinärt objekt.",
-    "comingSoon": "Fler kapitel kommer"
+    "comingSoon": "Fler kapitel kommer",
+    "readMore": "Läs mer",
+    "readLess": "Läs mindre"
   },
   "characters_page": {
     "title": "Alla 19 karaktärer",

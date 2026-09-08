@@ -90,7 +90,7 @@ export default function StoryTimeline() {
                     className="font-body mt-4 inline-flex items-center gap-1.5 text-foreground/40 hover:text-foreground transition-colors"
                     style={{ fontSize: '13px' }}
                   >
-                    {isOpen ? 'Read less' : 'Read more'}
+                    {isOpen ? tc('readLess') : tc('readMore')}
                     <svg
                       width="12"
                       height="12"

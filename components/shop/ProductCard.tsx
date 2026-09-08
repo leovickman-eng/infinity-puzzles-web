@@ -13,6 +13,7 @@ type Props = {
 
 export default function ProductCard({ product }: Props) {
   const t = useTranslations('shop');
+  const tc = useTranslations('catalog');
   const { addItem, isLoading } = useCart();
   const [adding, setAdding] = useState(false);
 
@@ -54,7 +55,7 @@ export default function ProductCard({ product }: Props) {
       <div className="w-full md:w-1/2 flex flex-col gap-6">
         <div>
           <p className="font-display text-sm uppercase tracking-widest text-primary mb-2">
-            Wild Collection
+            {tc('collection')}
           </p>
           <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground leading-tight">
             {product.title}
