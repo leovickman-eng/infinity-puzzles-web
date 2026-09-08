@@ -409,7 +409,7 @@ export default function SignupForm() {
                   disabled={!snapped}
                   style={{ marginTop: 3, accentColor: '#ae84ea', flexShrink: 0 }}
                 />
-                <span style={{ fontFamily: 'var(--font-trykker)', fontSize: '0.8rem', color: 'rgba(255,251,245,0.5)', lineHeight: 1.5 }}>
+                <span style={{ fontFamily: 'var(--font-trykker)', fontSize: '0.8rem', color: 'rgba(13,10,18,0.45)', lineHeight: 1.5 }}>
                   I agree to receive emails from Infinity Puzzles. You can unsubscribe at any time.
                 </span>
               </label>
