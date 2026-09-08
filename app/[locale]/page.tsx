@@ -9,6 +9,7 @@ import {
   HeroPhotoSection,
   InsideBoxSection,
   NewsletterSection,
+  TestimonialsSection,
   ProductSection,
   StoryTimeline,
   ThreeImageGrid,
@@ -111,6 +112,9 @@ export default async function HomePage() {
 
       {/* ── Inside the box ── */}
       <InsideBoxSection />
+
+      {/* ── Testimonials ── */}
+      <TestimonialsSection />
 
       {/* ── Newsletter ── */}
       <NewsletterSection />
