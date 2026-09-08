@@ -2,6 +2,8 @@
 
 import dynamic from 'next/dynamic';
 
+export { default as InsideBoxSection } from '@/components/home/InsideBoxSection';
+
 export const KarusellSection = dynamic(
   () => import('@/components/karusell/KarusellSection'),
   { ssr: false },

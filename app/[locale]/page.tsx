@@ -7,6 +7,7 @@ import {
   CharacterCarousel,
   FormationMorph,
   HeroPhotoSection,
+  InsideBoxSection,
   NewsletterSection,
   PlayModes,
   ProductSection,
@@ -113,71 +114,7 @@ export default async function HomePage() {
       </section>
 
       {/* ── Inside the box ── */}
-      <section className="py-24 px-6" style={{ background: '#0d0a12', color: '#f0eaf8' }}>
-        <style>{`
-          .ib-card { transition: border-color 0.2s; }
-          .ib-card-purple { background: rgba(174,132,234,0.08); border: 1px solid rgba(174,132,234,0.2); }
-          .ib-card-purple:hover { border-color: rgba(174,132,234,0.5); }
-          .ib-card-mint { background: rgba(93,204,160,0.08); border: 1px solid rgba(93,204,160,0.2); }
-          .ib-card-mint:hover { border-color: rgba(93,204,160,0.5); }
-          .ib-card-orange { background: rgba(255,140,66,0.08); border: 1px solid rgba(255,140,66,0.2); }
-          .ib-card-orange:hover { border-color: rgba(255,140,66,0.5); }
-        `}</style>
-        <div className="max-w-4xl mx-auto text-center">
-          <p className="font-display text-sm uppercase tracking-widest mb-3" style={{ color: '#ae84ea', letterSpacing: '0.15em' }}>
-            {t('insideBox.eyebrow')}
-          </p>
-          <h2 className="font-display text-4xl md:text-5xl font-bold mb-6 text-balance" style={{ color: '#f0eaf8' }}>
-            {t('insideBox.title')}
-          </h2>
-          <p className="font-body text-lg mb-16 max-w-xl mx-auto" style={{ color: 'rgba(240,234,248,0.6)', lineHeight: '1.7' }}>
-            {t('insideBox.subtitle')}
-          </p>
-
-          {/* Three pillars */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
-            <a href="universe/stories" style={{ textDecoration: 'none' }}>
-              <div className="ib-card ib-card-purple" style={{ borderRadius: '16px', padding: '28px 24px' }}>
-                <div className="font-display text-2xl font-bold mb-2" style={{ color: '#ae84ea' }}>SAGOR</div>
-                <div className="font-body text-sm mb-3" style={{ color: 'rgba(240,234,248,0.4)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
-                  {t('insideBox.stories.label')}
-                </div>
-                <p className="font-body" style={{ color: 'rgba(240,234,248,0.65)', fontSize: '15px', lineHeight: '1.6' }}>
-                  {t('insideBox.stories.desc')}
-                </p>
-              </div>
-            </a>
-
-            <a href="WILD_NETWORK" style={{ textDecoration: 'none' }}>
-              <div className="ib-card ib-card-mint" style={{ borderRadius: '16px', padding: '28px 24px' }}>
-                <div className="font-display text-2xl font-bold mb-2" style={{ color: '#5DCCA0' }}>WILD NETWORK</div>
-                <div className="font-body text-sm mb-3" style={{ color: 'rgba(240,234,248,0.4)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
-                  {t('insideBox.network.label')}
-                </div>
-                <p className="font-body" style={{ color: 'rgba(240,234,248,0.65)', fontSize: '15px', lineHeight: '1.6' }}>
-                  {t('insideBox.network.desc')}
-                </p>
-              </div>
-            </a>
-
-            <a href="universe/ways-to-play" style={{ textDecoration: 'none' }}>
-              <div className="ib-card ib-card-orange" style={{ borderRadius: '16px', padding: '28px 24px' }}>
-                <div className="font-display text-2xl font-bold mb-2" style={{ color: '#FF8C42' }}>LEKAR</div>
-                <div className="font-body text-sm mb-3" style={{ color: 'rgba(240,234,248,0.4)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
-                  {t('insideBox.play.label')}
-                </div>
-                <p className="font-body" style={{ color: 'rgba(240,234,248,0.65)', fontSize: '15px', lineHeight: '1.6' }}>
-                  {t('insideBox.play.desc')}
-                </p>
-              </div>
-            </a>
-          </div>
-
-          <p className="font-body mt-10 text-sm" style={{ color: 'rgba(240,234,248,0.3)', letterSpacing: '0.06em' }}>
-            {t('insideBox.qrHint')}
-          </p>
-        </div>
-      </section>
+      <InsideBoxSection />
 
       {/* ── Newsletter ── */}
       <NewsletterSection />

@@ -34,6 +34,7 @@
     "subtitle": "Skanna QR-koden i lådan och gå in i Wild Universe — ett digitalt lager av berättelser, kopplingar och spelsätt som hör till pusslet.",
     "qrHint": "QR-kod medföljer i lådan → infinity-puzzle.com/universe",
     "stories": {
+      "heading": "SAGOR",
       "label": "Karaktärerna",
       "desc": "19 bitar, 19 personligheter. Läs berättelserna bakom varje karaktär — vem är Dolores Thunder? Vad gömmer sig bakom Mambo Viento?"
     },
@@ -42,6 +43,7 @@
       "desc": "Wild Network är ett interaktivt nät av alla 19 bitar. Klicka på en karaktär och se exakt vilka bitar den passar ihop med. Aldrig mer fast."
     },
     "play": {
+      "heading": "LEKAR",
       "label": "Spelsätt",
       "desc": "The Split, The Impossible Chain och fler sätt att lägga pusslet på — regler, utmaningar och varianter för alla nivåer."
     }

@@ -34,6 +34,7 @@
     "subtitle": "Scan the QR code in the box and enter Wild Universe — a digital layer of stories, connections and ways to play that belong to the puzzle.",
     "qrHint": "QR code included → infinity-puzzle.com/universe",
     "stories": {
+      "heading": "STORIES",
       "label": "The characters",
       "desc": "19 pieces, 19 personalities. Read the stories behind each character — who is Dolores Thunder? What's hiding behind Mambo Viento?"
     },
@@ -42,6 +43,7 @@
       "desc": "Wild Network is an interactive map of all 19 pieces. Click any character to see exactly which pieces it connects with. Never get stuck again."
     },
     "play": {
+      "heading": "WAYS TO PLAY",
       "label": "Ways to play",
       "desc": "The Split, The Impossible Chain and more ways to lay the puzzle — rules, challenges and variations for every level."
     }
