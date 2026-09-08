@@ -8,12 +8,14 @@ const DESKTOP_SLIDES = [
   '/images/hero/karusell/d2.webp',
   '/images/hero/karusell/d3-c.webp',
   '/images/hero/karusell/d4-c.webp',
+  '/images/hero/karusell/d5.webp',
 ];
 
 const MOBILE_SLIDES = [
   '/images/hero/karusell/m1.webp',
   '/images/hero/karusell/m2.webp',
   '/images/hero/karusell/m3.webp',
+  '/images/hero/karusell/m5.webp',
 ];
 
 const SLIDE_MS = 5000;
