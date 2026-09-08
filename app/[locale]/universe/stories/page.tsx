@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
+import { useParams, useSearchParams } from 'next/navigation';
 import { useEffect, useRef } from 'react';
 
 /* ── Star canvas (same as universe page) ─────────────────────────────────── */
@@ -99,6 +99,8 @@ const gridCSS = `
 export default function StoriesPage() {
   const params = useParams();
   const locale = (params?.locale as string) ?? 'en';
+  const searchParams = useSearchParams();
+  const fromHome = searchParams.get('from') === 'home';
 
   return (
     <div style={{
@@ -118,7 +120,7 @@ export default function StoriesPage() {
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         background: 'linear-gradient(to bottom, rgba(13,10,18,0.98) 60%, transparent)',
       }}>
-        <Link href={`/${locale}/universe`} style={{
+        <Link href={fromHome ? `/${locale}` : `/${locale}/universe`} style={{
           color: 'rgba(240,234,248,0.4)', fontSize: '13px',
           textDecoration: 'none', fontFamily: "'DM Sans', sans-serif",
           letterSpacing: '0.06em', transition: 'color 0.15s',
@@ -126,7 +128,7 @@ export default function StoriesPage() {
           onMouseEnter={e => (e.currentTarget.style.color = '#ae84ea')}
           onMouseLeave={e => (e.currentTarget.style.color = 'rgba(240,234,248,0.4)')}
         >
-          ← Universe
+          {fromHome ? (locale === 'sv' ? '← Hem' : '← Home') : (locale === 'sv' ? '← Universum' : '← Universe')}
         </Link>
         <span style={{
           fontFamily: "'eight-condensed', sans-serif",

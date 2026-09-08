@@ -110,7 +110,7 @@ export default function InsideBoxSection() {
         {/* Three cards */}
         <div className="ib-grid">
           {/* SAGOR / STORIES */}
-          <a href="universe/stories" style={{ textDecoration: 'none' }}>
+          <a href="universe/stories?from=home" style={{ textDecoration: 'none' }}>
             <div className="ib-card">
               <div className="ib-header">
                 <Image src="/images/planeter/P2.PNG" alt="Sagor" width={72} height={72} className="ib-planet" unoptimized />
@@ -146,7 +146,7 @@ export default function InsideBoxSection() {
           </a>
 
           {/* LEKAR / WAYS TO PLAY */}
-          <a href="universe/ways-to-play" style={{ textDecoration: 'none' }}>
+          <a href="universe/ways-to-play?from=home" style={{ textDecoration: 'none' }}>
             <div className="ib-card">
               <div className="ib-header">
                 <Image src="/images/planeter/P5.PNG" alt="Lekar" width={72} height={72} className="ib-planet" unoptimized />

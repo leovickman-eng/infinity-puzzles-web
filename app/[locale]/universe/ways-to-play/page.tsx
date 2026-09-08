@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
+import { useParams, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 
 const BG     = '#FFFBF5';
@@ -80,6 +80,8 @@ export default function WaysToPlayPage() {
   const locale = (params?.locale as string) ?? 'en';
   const isSv   = locale === 'sv';
   const c      = isSv ? CONTENT.sv : CONTENT.en;
+  const searchParams = useSearchParams();
+  const fromHome = searchParams.get('from') === 'home';
 
   return (
     <div style={{ minHeight: '100svh', background: BG, color: TEXT }}>
@@ -91,14 +93,14 @@ export default function WaysToPlayPage() {
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         background: `linear-gradient(to bottom, ${BG}f5 60%, transparent)`,
       }}>
-        <Link href={`/${locale}/universe`} style={{
+        <Link href={fromHome ? `/${locale}` : `/${locale}/universe`} style={{
           color: MUTED, fontSize: '13px', textDecoration: 'none',
           fontFamily: "'DM Sans', sans-serif", letterSpacing: '0.06em', transition: 'color 0.15s',
         }}
           onMouseEnter={e => (e.currentTarget.style.color = ACCENT)}
           onMouseLeave={e => (e.currentTarget.style.color = MUTED)}
         >
-          ← {c.back}
+          ← {fromHome ? (isSv ? 'Hem' : 'Home') : c.back}
         </Link>
         <Link href={`/${isSv ? 'en' : 'sv'}/universe/ways-to-play`} style={{
           color: MUTED, fontSize: '10px', letterSpacing: '2px',
