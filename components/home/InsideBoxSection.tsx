@@ -92,14 +92,31 @@ export default function InsideBoxSection() {
           {t('subtitle')}
         </p>
 
+        <style>{`
+          .ib-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; text-align: left; }
+          .ib-card { padding: 28px 24px; height: 100%; }
+          .ib-header { display: block; }
+          .ib-planet { margin-bottom: 16px; width: 72px; height: 72px; }
+          .ib-heading { display: block; }
+          @media (max-width: 640px) {
+            .ib-grid { gap: 8px; }
+            .ib-card { padding: 14px 4px; }
+            .ib-header { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
+            .ib-planet { margin-bottom: 0; width: 44px; height: 44px; flex-shrink: 0; }
+            .ib-heading { display: block; }
+          }
+        `}</style>
+
         {/* Three cards */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '20px', textAlign: 'left' }}>
+        <div className="ib-grid">
           {/* SAGOR / STORIES */}
           <a href="universe/stories" style={{ textDecoration: 'none' }}>
-            <div style={{ padding: '28px 24px', height: '100%' }}>
-              <Image src="/images/planeter/P2.PNG" alt="Sagor" width={72} height={72} style={{ marginBottom: '16px' }} unoptimized />
-              <div style={{ fontFamily: "'eight-condensed', sans-serif", fontSize: '1.6rem', color: '#5DCCA0', marginBottom: '6px' }}>
-                {t('stories.heading')}
+            <div className="ib-card">
+              <div className="ib-header">
+                <Image src="/images/planeter/P2.PNG" alt="Sagor" width={72} height={72} className="ib-planet" unoptimized />
+                <div className="ib-heading" style={{ fontFamily: "'eight-condensed', sans-serif", fontSize: '1.6rem', color: '#5DCCA0' }}>
+                  {t('stories.heading')}
+                </div>
               </div>
               <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '11px', color: 'rgba(240,234,248,0.4)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '12px' }}>
                 {t('stories.label')}
@@ -112,10 +129,12 @@ export default function InsideBoxSection() {
 
           {/* WILD NETWORK */}
           <a href="WILD_NETWORK" style={{ textDecoration: 'none' }}>
-            <div style={{ padding: '28px 24px', height: '100%' }}>
-              <Image src="/images/planeter/P1.PNG" alt="Wild Network" width={72} height={72} style={{ marginBottom: '16px' }} unoptimized />
-              <div style={{ fontFamily: "'eight-condensed', sans-serif", fontSize: '1.6rem', color: '#ae84ea', marginBottom: '6px' }}>
-                WILD NETWORK
+            <div className="ib-card">
+              <div className="ib-header">
+                <Image src="/images/planeter/P1.PNG" alt="Wild Network" width={72} height={72} className="ib-planet" unoptimized />
+                <div className="ib-heading" style={{ fontFamily: "'eight-condensed', sans-serif", fontSize: '1.6rem', color: '#ae84ea' }}>
+                  WILD NETWORK
+                </div>
               </div>
               <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '11px', color: 'rgba(240,234,248,0.4)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '12px' }}>
                 {t('network.label')}
@@ -128,10 +147,12 @@ export default function InsideBoxSection() {
 
           {/* LEKAR / WAYS TO PLAY */}
           <a href="universe/ways-to-play" style={{ textDecoration: 'none' }}>
-            <div style={{ padding: '28px 24px', height: '100%' }}>
-              <Image src="/images/planeter/P5.PNG" alt="Lekar" width={72} height={72} style={{ marginBottom: '16px' }} unoptimized />
-              <div style={{ fontFamily: "'eight-condensed', sans-serif", fontSize: '1.6rem', color: '#FF8C42', marginBottom: '6px' }}>
-                {t('play.heading')}
+            <div className="ib-card">
+              <div className="ib-header">
+                <Image src="/images/planeter/P5.PNG" alt="Lekar" width={72} height={72} className="ib-planet" unoptimized />
+                <div className="ib-heading" style={{ fontFamily: "'eight-condensed', sans-serif", fontSize: '1.6rem', color: '#FF8C42' }}>
+                  {t('play.heading')}
+                </div>
               </div>
               <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '11px', color: 'rgba(240,234,248,0.4)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '12px' }}>
                 {t('play.label')}
