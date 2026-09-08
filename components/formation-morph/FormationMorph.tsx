@@ -10,20 +10,20 @@ const BASE        = '/formations/GASP/F1';
 const BASE_MOBILE = '/formations/GASP/F1-mobile';
 const BREAKPOINT  = 768;
 
-const PX_PER_F1    = 40;  // px stagger between each piece starting (timing)
-const F1_FADE_PX   = 75;  // px each piece takes to fully fade in (animation speed)
+const PX_PER_F1    = 36;  // px stagger between each piece starting (timing)
+const F1_FADE_PX   = 90;  // px each piece takes to fully fade in (animation speed)
 const F1_PAUSE     = 100;
 const PX_PER_F2    = 60;
 const POST_F2_HOLD = 200;
 const P0_SCROLL    = 200; // px after section enters viewport before pieces start
-const SLIDE_P0     = 250;
-const SLIDE_PX     = 80;
+const SLIDE_P0     = 100;
+const SLIDE_PX     = 36;
 
 // F1 now runs pre-sticky (triggered by viewport entry), F2 runs during sticky
 const F2_SCROLL  = 19 * PX_PER_F2;
 const TOTAL_ANIM = F2_SCROLL + POST_F2_HOLD;
 
-function easeOut(t: number) { return 1 - (1 - t) ** 2; }
+function easeOut(t: number) { return 1 - (1 - t) ** 3; }
 
 export default function FormationMorph() {
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -208,7 +208,7 @@ export default function FormationMorph() {
       frameSkipRef.current += 1;
       if (f2Changed) frameSkipRef.current = 0;
       const skipFrame = isMobileRef.current && (
-        inF2 ? frameSkipRef.current % 4 !== 0 : frameSkipRef.current % 3 !== 0
+        inF2 ? frameSkipRef.current % 2 !== 0 : frameSkipRef.current % 2 !== 0
       );
 
       if (!skipFrame) {
