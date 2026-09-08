@@ -96,7 +96,7 @@ export default function InsideBoxSection() {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '20px', textAlign: 'left' }}>
           {/* SAGOR / STORIES */}
           <a href="universe/stories" style={{ textDecoration: 'none' }}>
-            <div className="ib-card ib-card-purple" style={{ borderRadius: '16px', padding: '28px 24px', height: '100%' }}>
+            <div style={{ padding: '28px 24px', height: '100%' }}>
               <Image src="/images/planeter/P2.PNG" alt="Sagor" width={72} height={72} style={{ marginBottom: '16px' }} unoptimized />
               <div style={{ fontFamily: "'eight-condensed', sans-serif", fontSize: '1.6rem', color: '#5DCCA0', marginBottom: '6px' }}>
                 {t('stories.heading')}
@@ -112,7 +112,7 @@ export default function InsideBoxSection() {
 
           {/* WILD NETWORK */}
           <a href="WILD_NETWORK" style={{ textDecoration: 'none' }}>
-            <div className="ib-card ib-card-mint" style={{ borderRadius: '16px', padding: '28px 24px', height: '100%' }}>
+            <div style={{ padding: '28px 24px', height: '100%' }}>
               <Image src="/images/planeter/P1.PNG" alt="Wild Network" width={72} height={72} style={{ marginBottom: '16px' }} unoptimized />
               <div style={{ fontFamily: "'eight-condensed', sans-serif", fontSize: '1.6rem', color: '#ae84ea', marginBottom: '6px' }}>
                 WILD NETWORK
@@ -128,7 +128,7 @@ export default function InsideBoxSection() {
 
           {/* LEKAR / WAYS TO PLAY */}
           <a href="universe/ways-to-play" style={{ textDecoration: 'none' }}>
-            <div className="ib-card ib-card-orange" style={{ borderRadius: '16px', padding: '28px 24px', height: '100%' }}>
+            <div style={{ padding: '28px 24px', height: '100%' }}>
               <Image src="/images/planeter/P5.PNG" alt="Lekar" width={72} height={72} style={{ marginBottom: '16px' }} unoptimized />
               <div style={{ fontFamily: "'eight-condensed', sans-serif", fontSize: '1.6rem', color: '#FF8C42', marginBottom: '6px' }}>
                 {t('play.heading')}
@@ -152,15 +152,6 @@ export default function InsideBoxSection() {
         </p>
       </div>
 
-      <style>{`
-        .ib-card { transition: border-color 0.2s; }
-        .ib-card-purple { background: rgba(174,132,234,0.08); border: 1px solid rgba(174,132,234,0.2); }
-        .ib-card-purple:hover { border-color: rgba(174,132,234,0.5); }
-        .ib-card-mint { background: rgba(93,204,160,0.08); border: 1px solid rgba(93,204,160,0.2); }
-        .ib-card-mint:hover { border-color: rgba(93,204,160,0.5); }
-        .ib-card-orange { background: rgba(255,140,66,0.08); border: 1px solid rgba(255,140,66,0.2); }
-        .ib-card-orange:hover { border-color: rgba(255,140,66,0.5); }
-      `}</style>
     </section>
   );
 }

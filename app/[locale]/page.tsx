@@ -9,7 +9,6 @@ import {
   HeroPhotoSection,
   InsideBoxSection,
   NewsletterSection,
-  PlayModes,
   ProductSection,
   StoryTimeline,
   ThreeImageGrid,
@@ -68,9 +67,6 @@ export default async function HomePage() {
       <div style={{ marginTop: '-72px', position: 'relative', zIndex: 2 }}>
         <WildStats />
       </div>
-
-      {/* ── S2.6: Play modes — scroll-driven text ── */}
-      <PlayModes />
 
       {/* ── S3: The physical object — full-bleed panoramics + 3-col grid ── */}
       <section className="bg-background" style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
