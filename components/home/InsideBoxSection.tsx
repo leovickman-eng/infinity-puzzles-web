@@ -3,6 +3,8 @@
 import { useEffect, useRef } from 'react';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
+import Link from 'next/link';
+import { useParams } from 'next/navigation';
 
 /* ── Star canvas (same as universe page) ─────────────────────── */
 function rnd(min: number, max: number) { return min + Math.random() * (max - min); }
@@ -64,6 +66,8 @@ function StarCanvas() {
 export default function InsideBoxSection() {
   const t = useTranslations('insideBox');
   const tn = useTranslations('nav');
+  const params = useParams();
+  const locale = (params?.locale as string) ?? 'en';
 
   return (
     <section style={{ background: '#0d0a12', color: '#f0eaf8', position: 'relative', overflow: 'hidden', padding: '96px 24px' }}>
@@ -93,24 +97,51 @@ export default function InsideBoxSection() {
         </p>
 
         <style>{`
+          @property --neon-a {
+            syntax: '<angle>';
+            initial-value: 0deg;
+            inherits: false;
+          }
+          @keyframes neon-spin { to { --neon-a: 360deg; } }
+
           .ib-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; text-align: left; }
+          .ib-link { position: relative; border-radius: 14px; display: block; text-decoration: none; }
           .ib-card { padding: 28px 24px; height: 100%; }
           .ib-header { display: block; }
           .ib-planet { margin-bottom: 16px; width: 72px; height: 72px; }
           .ib-heading { display: block; }
+
+          .ib-ring {
+            position: absolute; inset: 0; border-radius: 14px;
+            background: conic-gradient(from var(--neon-a), transparent 75%, var(--ring-color) 83%, #fff 86%, var(--ring-color) 89%, transparent 97%);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            padding: 1.5px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s;
+            z-index: 3;
+            filter: blur(0.4px);
+          }
+          .ib-link:hover .ib-ring {
+            opacity: 1;
+            animation: neon-spin 2s linear infinite;
+          }
+
           @media (max-width: 640px) {
             .ib-grid { gap: 8px; }
             .ib-card { padding: 14px 4px; }
             .ib-header { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
             .ib-planet { margin-bottom: 0; width: 44px; height: 44px; flex-shrink: 0; }
-            .ib-heading { display: block; }
           }
         `}</style>
 
         {/* Three cards */}
         <div className="ib-grid">
           {/* SAGOR / STORIES */}
-          <a href="universe/stories?from=home" style={{ textDecoration: 'none' }}>
+          <Link href={`/${locale}/universe/stories?from=home`} className="ib-link">
+            <span className="ib-ring" style={{ '--ring-color': '#5DCCA0' } as React.CSSProperties} aria-hidden="true" />
             <div className="ib-card">
               <div className="ib-header">
                 <Image src="/images/planeter/P2.PNG" alt="Sagor" width={72} height={72} className="ib-planet" unoptimized />
@@ -125,10 +156,11 @@ export default function InsideBoxSection() {
                 {t('stories.desc')}
               </p>
             </div>
-          </a>
+          </Link>
 
           {/* WILD NETWORK */}
-          <a href="WILD_NETWORK" style={{ textDecoration: 'none' }}>
+          <Link href={`/${locale}/WILD_NETWORK`} className="ib-link">
+            <span className="ib-ring" style={{ '--ring-color': '#ae84ea' } as React.CSSProperties} aria-hidden="true" />
             <div className="ib-card">
               <div className="ib-header">
                 <Image src="/images/planeter/P1.PNG" alt="Wild Network" width={72} height={72} className="ib-planet" unoptimized />
@@ -143,10 +175,11 @@ export default function InsideBoxSection() {
                 {t('network.desc')}
               </p>
             </div>
-          </a>
+          </Link>
 
           {/* LEKAR / WAYS TO PLAY */}
-          <a href="universe/ways-to-play?from=home" style={{ textDecoration: 'none' }}>
+          <Link href={`/${locale}/universe/ways-to-play?from=home`} className="ib-link">
+            <span className="ib-ring" style={{ '--ring-color': '#FF8C42' } as React.CSSProperties} aria-hidden="true" />
             <div className="ib-card">
               <div className="ib-header">
                 <Image src="/images/planeter/P5.PNG" alt="Lekar" width={72} height={72} className="ib-planet" unoptimized />
@@ -161,7 +194,7 @@ export default function InsideBoxSection() {
                 {t('play.desc')}
               </p>
             </div>
-          </a>
+          </Link>
         </div>
 
         <p style={{
