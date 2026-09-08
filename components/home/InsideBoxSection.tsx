@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import { useTranslations } from 'next-intl';
+import Image from 'next/image';
 
 /* ── Star canvas (same as universe page) ─────────────────────── */
 function rnd(min: number, max: number) { return min + Math.random() * (max - min); }
@@ -96,7 +97,8 @@ export default function InsideBoxSection() {
           {/* SAGOR / STORIES */}
           <a href="universe/stories" style={{ textDecoration: 'none' }}>
             <div className="ib-card ib-card-purple" style={{ borderRadius: '16px', padding: '28px 24px', height: '100%' }}>
-              <div style={{ fontFamily: "'eight-condensed', sans-serif", fontSize: '1.6rem', color: '#ae84ea', marginBottom: '6px' }}>
+              <Image src="/images/planeter/P2.PNG" alt="Sagor" width={72} height={72} style={{ marginBottom: '16px' }} unoptimized />
+              <div style={{ fontFamily: "'eight-condensed', sans-serif", fontSize: '1.6rem', color: '#5DCCA0', marginBottom: '6px' }}>
                 {t('stories.heading')}
               </div>
               <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '11px', color: 'rgba(240,234,248,0.4)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '12px' }}>
@@ -111,7 +113,8 @@ export default function InsideBoxSection() {
           {/* WILD NETWORK */}
           <a href="WILD_NETWORK" style={{ textDecoration: 'none' }}>
             <div className="ib-card ib-card-mint" style={{ borderRadius: '16px', padding: '28px 24px', height: '100%' }}>
-              <div style={{ fontFamily: "'eight-condensed', sans-serif", fontSize: '1.6rem', color: '#5DCCA0', marginBottom: '6px' }}>
+              <Image src="/images/planeter/P1.PNG" alt="Wild Network" width={72} height={72} style={{ marginBottom: '16px' }} unoptimized />
+              <div style={{ fontFamily: "'eight-condensed', sans-serif", fontSize: '1.6rem', color: '#ae84ea', marginBottom: '6px' }}>
                 WILD NETWORK
               </div>
               <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '11px', color: 'rgba(240,234,248,0.4)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '12px' }}>
@@ -126,6 +129,7 @@ export default function InsideBoxSection() {
           {/* LEKAR / WAYS TO PLAY */}
           <a href="universe/ways-to-play" style={{ textDecoration: 'none' }}>
             <div className="ib-card ib-card-orange" style={{ borderRadius: '16px', padding: '28px 24px', height: '100%' }}>
+              <Image src="/images/planeter/P5.PNG" alt="Lekar" width={72} height={72} style={{ marginBottom: '16px' }} unoptimized />
               <div style={{ fontFamily: "'eight-condensed', sans-serif", fontSize: '1.6rem', color: '#FF8C42', marginBottom: '6px' }}>
                 {t('play.heading')}
               </div>
