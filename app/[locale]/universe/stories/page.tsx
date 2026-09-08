@@ -33,7 +33,7 @@ function StarCanvas() {
     window.addEventListener('resize', resize);
     function draw(ts: number) {
       animId = requestAnimationFrame(draw);
-      ctx.fillStyle = '#0d0a12';
+      ctx.fillStyle = '#242028';
       ctx.fillRect(0, 0, W, H);
       for (const s of STARS.small) {
         ctx.beginPath(); ctx.arc(s.x * W, s.y * H, s.r, 0, Math.PI * 2);
@@ -105,7 +105,7 @@ export default function StoriesPage() {
   return (
     <div style={{
       minHeight: '100svh',
-      background: '#0d0a12',
+      background: '#242028',
       color: '#f0eaf8',
       padding: '0 0 80px',
       position: 'relative',
@@ -118,7 +118,7 @@ export default function StoriesPage() {
         position: 'sticky', top: 0, zIndex: 10,
         padding: '18px 24px',
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        background: 'linear-gradient(to bottom, rgba(13,10,18,0.98) 60%, transparent)',
+        background: 'linear-gradient(to bottom, rgba(36,32,40,0.98) 60%, transparent)',
       }}>
         <Link href={fromHome ? `/${locale}` : `/${locale}/universe`} style={{
           color: 'rgba(240,234,248,0.4)', fontSize: '13px',

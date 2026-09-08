@@ -6,9 +6,9 @@ import Image from 'next/image';
 
 const BG     = '#FFFBF5';
 const ACCENT = '#FF8C42';
-const MUTED  = 'rgba(13,10,18,0.4)';
-const DIVIDER = 'rgba(13,10,18,0.1)';
-const TEXT   = '#0d0a12';
+const MUTED  = 'rgba(36,32,40,0.4)';
+const DIVIDER = 'rgba(36,32,40,0.1)';
+const TEXT   = '#242028';
 
 const CONTENT = {
   sv: {
@@ -201,7 +201,7 @@ export default function WaysToPlayPage() {
                 <div style={{
                   position: 'absolute', top: 10, left: 14,
                   fontSize: '10px', letterSpacing: '2px',
-                  color: 'rgba(13,10,18,0.35)',
+                  color: 'rgba(36,32,40,0.35)',
                   fontFamily: "'DM Sans', sans-serif",
                   zIndex: 1,
                 }}>

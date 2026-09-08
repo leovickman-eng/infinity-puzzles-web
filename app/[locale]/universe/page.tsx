@@ -151,7 +151,7 @@ function StarCanvas() {
 
     function draw(ts: number) {
       animId = requestAnimationFrame(draw);
-      ctx.fillStyle = '#0d0a12';
+      ctx.fillStyle = '#242028';
       ctx.fillRect(0, 0, W, H);
       if (nebula) ctx.drawImage(nebula, 0, 0);
 
@@ -241,7 +241,7 @@ export default function UniversePage() {
 
   return (
     <div style={{
-      minHeight: '100svh', background: '#0d0a12',
+      minHeight: '100svh', background: '#242028',
       display: 'flex', flexDirection: 'column',
       alignItems: 'center', justifyContent: 'center',
       padding: 'clamp(36px,6vh,60px) 20px clamp(24px,4vh,40px)', fontFamily: "'DM Sans', sans-serif",

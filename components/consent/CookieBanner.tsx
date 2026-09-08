@@ -48,7 +48,7 @@ export default function CookieBanner({ locale }: Props) {
         left: '50%',
         transform: 'translateX(-50%)',
         zIndex: 9999,
-        background: '#0d0a12',
+        background: '#242028',
         color: '#FFFBF5',
         borderRadius: 16,
         padding: '20px 24px',
@@ -71,7 +71,7 @@ export default function CookieBanner({ locale }: Props) {
           style={{
             flex: 1,
             background: '#ae84ea',
-            color: '#0d0a12',
+            color: '#242028',
             border: 'none',
             borderRadius: 999,
             padding: '10px 20px',

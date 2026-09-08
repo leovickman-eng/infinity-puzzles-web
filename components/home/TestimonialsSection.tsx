@@ -59,7 +59,7 @@ function GoogleBadge({ label }: { label: string }) {
       <span style={{
         fontFamily: "'DM Sans', sans-serif",
         fontSize: '11px',
-        color: 'rgba(13,10,18,0.35)',
+        color: 'rgba(36,32,40,0.35)',
         letterSpacing: '0.06em',
       }}>
         {label}
@@ -89,7 +89,7 @@ export default function TestimonialsSection() {
           <h2 style={{
             fontFamily: "'eight-condensed', sans-serif",
             fontSize: 'clamp(2rem, 5vw, 3rem)', fontWeight: 400,
-            color: '#0d0a12', margin: 0, lineHeight: 1.1,
+            color: '#242028', margin: 0, lineHeight: 1.1,
           }}>
             {c.heading}
           </h2>
@@ -107,7 +107,7 @@ export default function TestimonialsSection() {
               background: '#fff',
               borderRadius: '16px',
               padding: '28px 28px 24px',
-              boxShadow: '0 2px 16px rgba(13,10,18,0.06)',
+              boxShadow: '0 2px 16px rgba(36,32,40,0.06)',
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'space-between',
@@ -118,7 +118,7 @@ export default function TestimonialsSection() {
                   fontFamily: "'DM Sans', sans-serif",
                   fontSize: '15px',
                   lineHeight: 1.65,
-                  color: '#0d0a12',
+                  color: '#242028',
                   margin: '0 0 16px',
                 }}>
                   "{r.quote}"
@@ -127,7 +127,7 @@ export default function TestimonialsSection() {
                   fontFamily: "'DM Sans', sans-serif",
                   fontSize: '13px',
                   fontWeight: 600,
-                  color: 'rgba(13,10,18,0.6)',
+                  color: 'rgba(36,32,40,0.6)',
                   margin: 0,
                 }}>
                   {r.name}
@@ -140,7 +140,7 @@ export default function TestimonialsSection() {
 
         {/* Singapore featured quote */}
         <div style={{
-          background: '#0d0a12',
+          background: '#242028',
           borderRadius: '16px',
           padding: '40px 40px 36px',
           position: 'relative',

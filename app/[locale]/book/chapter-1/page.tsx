@@ -79,7 +79,7 @@ export default function ChapterPage() {
       data-page="book-chapter"
       style={{
         minHeight: '100vh',
-        background: '#0d0a12',
+        background: '#242028',
         color: '#f0eaf8',
         fontFamily: "'Cormorant Garamond', 'Georgia', serif",
         padding: '0 0 120px',
@@ -94,7 +94,7 @@ export default function ChapterPage() {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        background: 'linear-gradient(to bottom, rgba(13,10,18,0.98) 60%, transparent)',
+        background: 'linear-gradient(to bottom, rgba(36,32,40,0.98) 60%, transparent)',
       }}>
         <Link
           href={`/${locale}/WILD_NETWORK`}

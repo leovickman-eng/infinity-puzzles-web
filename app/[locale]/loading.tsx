@@ -4,7 +4,7 @@ export default function Loading() {
   return (
     <div style={{
       position: 'fixed', inset: 0, zIndex: 9999,
-      background: '#0d0a12',
+      background: '#242028',
       display: 'flex', alignItems: 'center', justifyContent: 'center',
     }}>
       <style>{`

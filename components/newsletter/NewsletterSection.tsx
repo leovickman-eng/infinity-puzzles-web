@@ -35,7 +35,7 @@ export default function NewsletterSection() {
       <div style={{
         maxWidth: 560,
         margin: '0 auto',
-        borderTop: '1px solid rgba(13,10,18,0.08)',
+        borderTop: '1px solid rgba(36,32,40,0.08)',
         paddingTop: 56,
         textAlign: 'center',
       }}>
@@ -43,11 +43,11 @@ export default function NewsletterSection() {
           {t('eyebrow')}
         </p>
 
-        <h2 style={{ ...fontBold, fontSize: 'clamp(28px, 5vw, 42px)', color: '#0d0a12', margin: '0 0 16px', lineHeight: 1.1 }}>
+        <h2 style={{ ...fontBold, fontSize: 'clamp(28px, 5vw, 42px)', color: '#242028', margin: '0 0 16px', lineHeight: 1.1 }}>
           {t('title')}
         </h2>
 
-        <p style={{ fontFamily: 'var(--font-trykker, Georgia, serif)', fontSize: 15, lineHeight: 1.8, color: 'rgba(13,10,18,0.55)', margin: '0 0 32px', maxWidth: 420, marginLeft: 'auto', marginRight: 'auto' }}>
+        <p style={{ fontFamily: 'var(--font-trykker, Georgia, serif)', fontSize: 15, lineHeight: 1.8, color: 'rgba(36,32,40,0.55)', margin: '0 0 32px', maxWidth: 420, marginLeft: 'auto', marginRight: 'auto' }}>
           {t('body')}
         </p>
 
@@ -73,7 +73,7 @@ export default function NewsletterSection() {
                   borderRadius: 9999,
                   border: '1.5px solid rgba(174,132,234,0.35)',
                   background: '#fff',
-                  color: '#0d0a12',
+                  color: '#242028',
                   outline: 'none',
                   transition: 'border-color 0.2s',
                 }}
@@ -113,7 +113,7 @@ export default function NewsletterSection() {
                 onChange={e => setConsent(e.target.checked)}
                 style={{ marginTop: 3, accentColor: '#ae84ea', flexShrink: 0 }}
               />
-              <span style={{ fontFamily: 'var(--font-trykker, Georgia, serif)', fontSize: 12, color: 'rgba(13,10,18,0.45)', lineHeight: 1.5, textAlign: 'left' }}>
+              <span style={{ fontFamily: 'var(--font-trykker, Georgia, serif)', fontSize: 12, color: 'rgba(36,32,40,0.45)', lineHeight: 1.5, textAlign: 'left' }}>
                 {t('consentLabel')}
               </span>
             </label>

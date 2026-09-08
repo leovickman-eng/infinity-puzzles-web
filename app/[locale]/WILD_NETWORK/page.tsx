@@ -6,7 +6,7 @@ export default function WildNetworkPage() {
   const router = useRouter();
 
   return (
-    <div style={{ position: 'fixed', inset: 0, zIndex: 100, background: '#0d0a12' }}>
+    <div style={{ position: 'fixed', inset: 0, zIndex: 100, background: '#242028' }}>
       <iframe
         src="https://leovickman-eng.github.io/WILD_NETWORK/"
         allow="fullscreen"

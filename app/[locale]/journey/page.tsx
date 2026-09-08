@@ -72,10 +72,10 @@ export default function JourneyPage() {
           <p style={{ ...font, fontSize: 11, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#ae84ea', margin: '0 0 14px' }}>
             {isSv ? 'Berättelsen' : 'The Story'}
           </p>
-          <h1 style={{ ...fontBold, fontSize: 'clamp(34px, 7vw, 68px)', color: '#0d0a12', lineHeight: 1.0, margin: 0 }}>
+          <h1 style={{ ...fontBold, fontSize: 'clamp(34px, 7vw, 68px)', color: '#242028', lineHeight: 1.0, margin: 0 }}>
             {isSv ? '9 År som\nPusselmakare' : '9 Years\nPuzzlemaking'}
           </h1>
-          <div style={{ marginTop: 32, height: 1, background: 'rgba(13,10,18,0.08)' }} />
+          <div style={{ marginTop: 32, height: 1, background: 'rgba(36,32,40,0.08)' }} />
         </div>
       </section>
 
@@ -121,7 +121,7 @@ export default function JourneyPage() {
                 </p>
 
                 {/* Image */}
-                <div style={{ position: 'relative', width: '100%', aspectRatio: '16/9', borderRadius: 16, overflow: 'hidden', marginBottom: 20, boxShadow: '0 4px 28px rgba(13,10,18,0.09)' }}>
+                <div style={{ position: 'relative', width: '100%', aspectRatio: '16/9', borderRadius: 16, overflow: 'hidden', marginBottom: 20, boxShadow: '0 4px 28px rgba(36,32,40,0.09)' }}>
                   <Image
                     src={ch.image}
                     alt={ch.title}
@@ -138,12 +138,12 @@ export default function JourneyPage() {
                 </p>
 
                 {/* Title */}
-                <h2 style={{ ...fontBold, fontSize: 'clamp(22px, 3.5vw, 30px)', color: '#0d0a12', margin: '0 0 14px', lineHeight: 1.15 }}>
+                <h2 style={{ ...fontBold, fontSize: 'clamp(22px, 3.5vw, 30px)', color: '#242028', margin: '0 0 14px', lineHeight: 1.15 }}>
                   {ch.title}
                 </h2>
 
                 {/* Body */}
-                <p style={{ fontFamily: 'var(--font-trykker, Georgia, serif)', fontSize: 15, lineHeight: 1.85, color: 'rgba(13,10,18,0.62)', margin: 0 }}>
+                <p style={{ fontFamily: 'var(--font-trykker, Georgia, serif)', fontSize: 15, lineHeight: 1.85, color: 'rgba(36,32,40,0.62)', margin: 0 }}>
                   {isOpen ? ch.text : teaser}
                 </p>
 
@@ -152,13 +152,13 @@ export default function JourneyPage() {
                   onClick={() => toggle(i)}
                   style={{
                     ...font, fontSize: 13, letterSpacing: '0.04em',
-                    color: 'rgba(13,10,18,0.32)', background: 'none',
+                    color: 'rgba(36,32,40,0.32)', background: 'none',
                     border: 'none', cursor: 'pointer', marginTop: 12,
                     display: 'inline-flex', alignItems: 'center', gap: 6, padding: 0,
                     transition: 'color 0.15s',
                   }}
                   onMouseEnter={e => (e.currentTarget.style.color = '#ae84ea')}
-                  onMouseLeave={e => (e.currentTarget.style.color = 'rgba(13,10,18,0.32)')}
+                  onMouseLeave={e => (e.currentTarget.style.color = 'rgba(36,32,40,0.32)')}
                 >
                   {isOpen
                     ? (isSv ? 'Läs mindre' : 'Read less')
@@ -178,17 +178,17 @@ export default function JourneyPage() {
 
       {/* ── Back link ── */}
       <section style={{ paddingBottom: 64, paddingLeft: 24, paddingRight: 24 }}>
-        <div style={{ maxWidth: 680, margin: '0 auto', borderTop: '1px solid rgba(13,10,18,0.08)', paddingTop: 32 }}>
+        <div style={{ maxWidth: 680, margin: '0 auto', borderTop: '1px solid rgba(36,32,40,0.08)', paddingTop: 32 }}>
           <Link
             href={`/${locale}`}
             style={{
               ...font, fontSize: 12, letterSpacing: '0.12em', textTransform: 'uppercase',
-              color: 'rgba(13,10,18,0.32)', textDecoration: 'none',
+              color: 'rgba(36,32,40,0.32)', textDecoration: 'none',
               display: 'inline-flex', alignItems: 'center', gap: 8,
               transition: 'color 0.15s',
             }}
             onMouseEnter={e => (e.currentTarget.style.color = '#ae84ea')}
-            onMouseLeave={e => (e.currentTarget.style.color = 'rgba(13,10,18,0.32)')}
+            onMouseLeave={e => (e.currentTarget.style.color = 'rgba(36,32,40,0.32)')}
           >
             <svg width="14" height="10" viewBox="0 0 14 10" fill="none">
               <path d="M13 5H1M1 5l4-4M1 5l4 4" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />

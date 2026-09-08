@@ -124,7 +124,7 @@ export default function CharacterCarousel() {
                     left:       0,
                     right:      0,
                     padding:    '40px 14px 14px',
-                    background: 'linear-gradient(to top, rgba(13,10,18,0.88) 0%, transparent 100%)',
+                    background: 'linear-gradient(to top, rgba(36,32,40,0.88) 0%, transparent 100%)',
                     opacity:    hovered ? 1 : 0,
                     transition: 'opacity 0.22s ease',
                   }}>

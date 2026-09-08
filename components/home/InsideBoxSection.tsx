@@ -35,7 +35,7 @@ function StarCanvas() {
     window.addEventListener('resize', resize);
     function draw(ts: number) {
       animId = requestAnimationFrame(draw);
-      ctx.fillStyle = '#0d0a12';
+      ctx.fillStyle = '#242028';
       ctx.fillRect(0, 0, W, H);
       for (const s of STARS.small) {
         ctx.beginPath(); ctx.arc(s.x * W, s.y * H, s.r, 0, Math.PI * 2);
@@ -70,7 +70,7 @@ export default function InsideBoxSection() {
   const locale = (params?.locale as string) ?? 'en';
 
   return (
-    <section style={{ background: '#0d0a12', color: '#f0eaf8', position: 'relative', overflow: 'hidden', padding: '96px 24px' }}>
+    <section style={{ background: '#242028', color: '#f0eaf8', position: 'relative', overflow: 'hidden', padding: '96px 24px' }}>
       <StarCanvas />
 
       <div style={{ position: 'relative', zIndex: 1, maxWidth: '896px', margin: '0 auto', textAlign: 'center' }}>

@@ -13,7 +13,7 @@ export default function NavigationLoader() {
   const prevPathRef = useRef(pathname);
 
   const isUniverse = destHref.includes('/universe');
-  const bg         = isUniverse ? '#0d0a12' : '#FFFBF5';
+  const bg         = isUniverse ? '#242028' : '#FFFBF5';
 
   // Pathname ändrades → fade-out och dölj
   useEffect(() => {

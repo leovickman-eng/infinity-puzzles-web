@@ -155,7 +155,7 @@ export default function CharactersClient({ title, subtitle }: { title: string; s
   const locale  = (params?.locale as string) ?? 'en';
 
   return (
-    <div style={{ minHeight: '100vh', background: '#0d0a12', color: '#f0eaf8', padding: '0 0 120px' }}>
+    <div style={{ minHeight: '100vh', background: '#242028', color: '#f0eaf8', padding: '0 0 120px' }}>
 
       {/* Header */}
       <div style={{ textAlign: 'center', padding: '120px 24px 72px', maxWidth: '680px', margin: '0 auto' }}>

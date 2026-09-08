@@ -38,7 +38,7 @@ export default function KarusellSection() {
   }, [images.length]);
 
   return (
-    <section aria-label="Photo showcase" style={{ position: 'relative', width: '100%', background: '#0d0a12', overflow: 'hidden' }}>
+    <section aria-label="Photo showcase" style={{ position: 'relative', width: '100%', background: '#242028', overflow: 'hidden' }}>
       <style>{`
         /* Ken Burns zoom/pan variants */
         @keyframes kb-zoom-in    { from { transform: scale(1)    translate(0,0);       } to { transform: scale(1.08) translate(0,0);       } }

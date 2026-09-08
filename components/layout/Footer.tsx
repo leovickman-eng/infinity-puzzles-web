@@ -5,7 +5,7 @@ export default function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer style={{ background: '#0d0a12', borderTop: '1px solid rgba(255,255,255,0.08)' }} className="px-6 py-12">
+    <footer style={{ background: '#242028', borderTop: '1px solid rgba(255,255,255,0.08)' }} className="px-6 py-12">
       <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
         <div>
           <img src="/images/SVG/infinity-puzzles-logo (1).svg" alt="Infinity Puzzles" style={{ width: '120px', height: 'auto', filter: 'brightness(0) invert(1)' }} />

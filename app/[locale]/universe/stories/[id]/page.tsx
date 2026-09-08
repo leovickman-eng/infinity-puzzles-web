@@ -233,7 +233,7 @@ export default function CharacterPage() {
   const data    = getCharacterData(id);
   const audios  = AUDIO_MAP[id] ?? [];
   const chapter = CHAPTER_MAP[id];
-  const bg      = BG[id] ?? '#0d0a12';
+  const bg      = BG[id] ?? '#242028';
   const light   = isLight(bg);
 
   const textColor   = light ? '#1C1917'            : '#f0eaf8';
@@ -242,7 +242,7 @@ export default function CharacterPage() {
   const dividerColor = light ? 'rgba(28,25,23,0.1)' : 'rgba(240,234,248,0.1)';
 
   if (!ch || !data) return (
-    <div style={{ minHeight: '100svh', background: '#0d0a12', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#f0eaf8' }}>
+    <div style={{ minHeight: '100svh', background: '#242028', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#f0eaf8' }}>
       Karaktär hittades inte.
     </div>
   );
