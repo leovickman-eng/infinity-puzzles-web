@@ -127,9 +127,6 @@ export default async function LocaleLayout({ children, params }: Props) {
         `}
       </Script>
       <GoogleTagManager gtmId="GTM-T5MWRQBH" />
-      <head>
-        <link rel="stylesheet" href="https://use.typekit.net/mnz1cmc.css" />
-      </head>
       <body className="bg-background text-foreground antialiased">
         <NextIntlClientProvider messages={messages}>
           <CartProvider>
