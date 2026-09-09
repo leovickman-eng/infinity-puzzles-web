@@ -59,7 +59,7 @@ export default function WildStats() {
 
               <div style={{
                 fontFamily: 'carrotflower, sans-serif',
-                fontWeight: 700,
+                fontWeight: 400,
                 fontSize: 'clamp(1rem, 2vw, 1.4rem)',
                 letterSpacing: '0.03em',
                 color: '#5B4A8A',
@@ -72,7 +72,7 @@ export default function WildStats() {
               {card.label && (
                 <div style={{
                   fontFamily: 'carrotflower, sans-serif',
-                  fontWeight: 700,
+                  fontWeight: 400,
                   fontSize: 'clamp(0.85rem, 1.6vw, 1.05rem)',
                   letterSpacing: '0.04em',
                   color: '#5B4A8A',
