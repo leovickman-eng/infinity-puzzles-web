@@ -106,12 +106,20 @@ function SphereCanvas() {
   );
 }
 
-// ─── Character reel (card 2) — swishes through all 19 characters ─────
+// ─── Character reel (card 2) — TV frame + swishing character PNGs ────
 
-const CHAR_SRCS = Array.from({ length: 19 }, (_, i) =>
-  `/images/characters/WILD_characters-${String(i + 1).padStart(2, '0')}.webp`
+const CHAR_PNG_SRCS = Array.from({ length: 19 }, (_, i) =>
+  `/images/character-png/${i + 1}.webp`
 );
 const REEL_DURATION = 1000; // ms per character
+
+// TV.png is 209×209. Screen (white area) sits at approx:
+// left 13%, top 17%, width 74%, height 58% of the TV size.
+const TV_SIZE   = 90;
+const SCR_LEFT  = '13%';
+const SCR_TOP   = '17%';
+const SCR_W     = '74%';
+const SCR_H     = '58%';
 
 function CharacterReel() {
   const [idx, setIdx] = useState(0);
@@ -124,36 +132,63 @@ function CharacterReel() {
   return (
     <>
       <style>{`
-        @keyframes char-swish {
-          0%   { transform: translateX(108%); opacity: 0; }
-          8%   { transform: translateX(0%);   opacity: 1; }
-          88%  { transform: translateX(0%);   opacity: 1; }
-          100% { transform: translateX(-108%); opacity: 0; }
+        @keyframes tv-char-swish {
+          0%   { transform: translateX(110%); }
+          10%  { transform: translateX(0%);   }
+          85%  { transform: translateX(0%);   }
+          100% { transform: translateX(-110%); }
         }
-        .char-swish-img {
-          animation: char-swish ${REEL_DURATION}ms cubic-bezier(0.25,0.1,0.25,1) 1 forwards;
+        .tv-char-wrap {
+          animation: tv-char-swish ${REEL_DURATION}ms cubic-bezier(0.4,0,0.2,1) 1 forwards;
         }
       `}</style>
       <div style={{
-        width: 48, height: 66,
-        borderRadius: 9,
-        overflow: 'hidden',
-        border: '1.5px solid rgba(91,74,138,0.4)',
-        background: '#150f28',
         position: 'relative',
+        width: TV_SIZE,
+        height: TV_SIZE,
         flexShrink: 0,
-        boxShadow: 'inset 0 0 8px rgba(91,74,138,0.25)',
       }}>
+        {/* Screen area — clip + slide characters here */}
+        <div style={{
+          position: 'absolute',
+          left: SCR_LEFT, top: SCR_TOP,
+          width: SCR_W, height: SCR_H,
+          overflow: 'hidden',
+          borderRadius: 3,
+          background: '#f5f0f8',
+        }}>
+          <div
+            key={idx}
+            className="tv-char-wrap"
+            style={{
+              position: 'absolute', inset: 0,
+              display: 'flex',
+              alignItems: 'flex-end',
+              justifyContent: 'center',
+            }}
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={CHAR_PNG_SRCS[idx]}
+              alt=""
+              style={{
+                height: '92%',
+                width: 'auto',
+                objectFit: 'contain',
+              }}
+            />
+          </div>
+        </div>
+
+        {/* TV frame overlay — sits on top of the character */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          key={idx}
-          src={CHAR_SRCS[idx]}
+          src="/images/stats_illustrations/TV.png"
           alt=""
-          className="char-swish-img"
           style={{
             position: 'absolute', inset: 0,
             width: '100%', height: '100%',
-            objectFit: 'cover',
-            objectPosition: 'center top',
+            pointerEvents: 'none',
           }}
         />
       </div>
