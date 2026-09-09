@@ -45,12 +45,12 @@ export default function WildStats() {
                 padding: 'clamp(12px, 2vw, 20px) clamp(10px, 2vw, 24px) clamp(16px, 2.5vw, 28px)',
               }}
             >
-              <div style={{ height: 135, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <div style={{ height: 175, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <Image
                   src={card.img}
                   alt=""
-                  width={152}
-                  height={135}
+                  width={198}
+                  height={175}
                   unoptimized
                   style={{ objectFit: 'contain', width: 'auto', height: `${card.scale * 100}%` }}
                   aria-hidden="true"
