@@ -10,19 +10,23 @@ export default function WildStats() {
     {
       img:   '/images/stats_illustrations/infinite_formations.png',
       value: t('formations'),
+      scale: 1,
     },
     {
       img:   '/images/stats_illustrations/19_characters.png',
       value: t('characters'),
+      scale: 1.2,
     },
     {
       img:   '/images/stats_illustrations/diameter.png',
       value: '30 cm diameter',
+      scale: 1,
     },
     {
       img:   '/images/stats_illustrations/made_in_swden.png',
       value: t('sweden'),
       label: t('wood'),
+      scale: 1,
     },
   ];
 
@@ -48,7 +52,7 @@ export default function WildStats() {
                   width={152}
                   height={135}
                   unoptimized
-                  style={{ objectFit: 'contain', width: 'auto', height: '100%' }}
+                  style={{ objectFit: 'contain', width: 'auto', height: `${card.scale * 100}%` }}
                   aria-hidden="true"
                 />
               </div>
