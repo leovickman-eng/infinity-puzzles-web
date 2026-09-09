@@ -41,12 +41,12 @@ export default function WildStats() {
                 padding: 'clamp(12px, 2vw, 20px) clamp(10px, 2vw, 24px) clamp(16px, 2.5vw, 28px)',
               }}
             >
-              <div style={{ height: 104, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <div style={{ height: 135, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <Image
                   src={card.img}
                   alt=""
-                  width={117}
-                  height={104}
+                  width={152}
+                  height={135}
                   unoptimized
                   style={{ objectFit: 'contain', width: 'auto', height: '100%' }}
                   aria-hidden="true"
@@ -54,7 +54,7 @@ export default function WildStats() {
               </div>
 
               <div style={{
-                fontFamily: 'counterpress, sans-serif',
+                fontFamily: 'carrotflower, sans-serif',
                 fontWeight: 700,
                 fontSize: 'clamp(1rem, 2vw, 1.4rem)',
                 letterSpacing: '0.03em',
@@ -67,7 +67,7 @@ export default function WildStats() {
 
               {card.label && (
                 <div style={{
-                  fontFamily: 'counterpress, sans-serif',
+                  fontFamily: 'carrotflower, sans-serif',
                   fontWeight: 700,
                   fontSize: 'clamp(0.85rem, 1.6vw, 1.05rem)',
                   letterSpacing: '0.04em',
