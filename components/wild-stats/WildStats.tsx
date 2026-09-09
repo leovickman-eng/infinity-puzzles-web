@@ -4,105 +4,42 @@ import { useEffect, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 
-// Slow blink: golden-angle stagger → bara 1-2 prickar dimmar åt gången
+
+// Slow blink for DiameterIcon dots
 const GOLDEN_S = 2.399963;
-const BLINK_W  = 1.38; // ~0.22 Hz → period ≈ 4.5 s per pricka
+const BLINK_W  = 1.38;
 function blinkAlpha(now: number, i: number): number {
   const narrow = Math.pow(Math.max(0, Math.sin(now * BLINK_W + i * GOLDEN_S)), 8);
   return 0.9 - 0.75 * narrow;
 }
 
-// ─── Fibonacci sphere (card 1) ────────────────────────────────────────
+// ─── Endless formations reel (card 1) ────────────────────────────────
 
-function fibonacciSphere(n: number): [number, number, number][] {
-  const phi = Math.PI * (3 - Math.sqrt(5));
-  return Array.from({ length: n }, (_, i) => {
-    const y = 1 - (i / (n - 1)) * 2;
-    const r = Math.sqrt(Math.max(0, 1 - y * y));
-    const θ = phi * i;
-    return [Math.cos(θ) * r, y, Math.sin(θ) * r];
-  });
-}
+const ENDLESS_SRCS = [
+  '/images/stats_illustrations/1_endless.png',
+  '/images/stats_illustrations/2_endless.png',
+  '/images/stats_illustrations/3_endless.png',
+  '/images/stats_illustrations/4_endless.png',
+];
+const ENDLESS_DURATION = 300; // ms per frame
 
-const SPHERE_PTS = fibonacciSphere(19);
-
-function buildEdges(pts: [number, number, number][], k: number): [number, number][] {
-  const edges: [number, number][] = [];
-  for (let i = 0; i < pts.length; i++) {
-    pts
-      .map((p, j) => ({ j, d: Math.hypot(p[0]-pts[i][0], p[1]-pts[i][1], p[2]-pts[i][2]) }))
-      .filter(x => x.j !== i)
-      .sort((a, b) => a.d - b.d)
-      .slice(0, k)
-      .forEach(({ j }) => { if (j > i) edges.push([i, j]); });
-  }
-  return edges;
-}
-
-const SPHERE_EDGES = buildEdges(SPHERE_PTS, 3);
-
-function SphereCanvas() {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const rafRef    = useRef<number>(0);
-  const angleRef  = useRef(0);
+function EndlessReel() {
+  const [idx, setIdx] = useState(0);
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d')!;
-    const W = 60, cx = 30, cy = 30, R = 22;
-
-    const draw = () => {
-      ctx.clearRect(0, 0, W, W);
-      const a = angleRef.current;
-      const cosA = Math.cos(a), sinA = Math.sin(a);
-
-      const proj = SPHERE_PTS.map(([x, y, z]) => {
-        const rx = x * cosA - z * sinA;
-        const rz = x * sinA + z * cosA;
-        const fov = 2.5, s = fov / (fov + rz);
-        return { sx: cx + rx * R * s, sy: cy - y * R * s, z: rz };
-      });
-
-      for (const [i, j] of SPHERE_EDGES) {
-        const avgZ = (proj[i].z + proj[j].z) / 2;
-        const alpha = Math.max(0.05, 0.07 + ((avgZ + 1) / 2) * 0.25);
-        ctx.save();
-        ctx.globalAlpha = alpha;
-        ctx.strokeStyle = '#5B4A8A';
-        ctx.lineWidth = 0.7;
-        ctx.beginPath();
-        ctx.moveTo(proj[i].sx, proj[i].sy);
-        ctx.lineTo(proj[j].sx, proj[j].sy);
-        ctx.stroke();
-        ctx.restore();
-      }
-
-      [...proj]
-        .map((p, idx) => ({ ...p, idx }))
-        .sort((a, b) => a.z - b.z)
-        .forEach(({ sx, sy, z }) => {
-          const alpha = Math.min(1, 0.3 + ((z + 1) / 2) * 0.7);
-          const r     = Math.max(0.8, 1.0 + ((z + 1) / 2) * 1.8);
-          ctx.save();
-          ctx.globalAlpha = alpha;
-          ctx.fillStyle = '#5B4A8A';
-          ctx.beginPath();
-          ctx.arc(sx, sy, r, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.restore();
-        });
-
-      angleRef.current += 0.005;
-      rafRef.current = requestAnimationFrame(draw);
-    };
-
-    draw();
-    return () => cancelAnimationFrame(rafRef.current);
+    const id = setInterval(() => setIdx(i => (i + 1) % 4), ENDLESS_DURATION);
+    return () => clearInterval(id);
   }, []);
 
   return (
-    <canvas ref={canvasRef} width={60} height={60} aria-hidden="true" style={{ display: 'block' }} />
+    <div style={{ position: 'relative', width: 68, height: 68, flexShrink: 0 }}>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={ENDLESS_SRCS[idx]}
+        alt=""
+        style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }}
+      />
+    </div>
   );
 }
 
@@ -111,11 +48,11 @@ function SphereCanvas() {
 const CHAR_PNG_SRCS = Array.from({ length: 19 }, (_, i) =>
   `/images/character-png/${i + 1}.webp`
 );
-const REEL_DURATION = 1000; // ms per character
+const REEL_DURATION = 1600; // ms per character
 
 // TV.png is 209×209. Screen (white area) sits at approx:
 // left 13%, top 17%, width 74%, height 58% of the TV size.
-const TV_SIZE   = 90;
+const TV_SIZE   = 135;
 const SCR_LEFT  = '13%';
 const SCR_TOP   = '17%';
 const SCR_W     = '74%';
@@ -134,8 +71,8 @@ function CharacterReel() {
       <style>{`
         @keyframes tv-char-swish {
           0%   { transform: translateX(110%); }
-          10%  { transform: translateX(0%);   }
-          85%  { transform: translateX(0%);   }
+          12%  { transform: translateX(0%);   }
+          82%  { transform: translateX(0%);   }
           100% { transform: translateX(-110%); }
         }
         .tv-char-wrap {
@@ -155,7 +92,7 @@ function CharacterReel() {
           width: SCR_W, height: SCR_H,
           overflow: 'hidden',
           borderRadius: 3,
-          background: '#f5f0f8',
+          background: '#544550',
         }}>
           <div
             key={idx}
@@ -271,7 +208,7 @@ export default function WildStats() {
 
   const cards = [
     {
-      icon:         <SphereCanvas />,
+      icon:         <EndlessReel />,
       value:        t('formations'),
       valueColor:   '#5B4A8A',
       label:        null as string | null,
