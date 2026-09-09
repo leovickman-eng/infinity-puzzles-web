@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 
@@ -106,37 +106,59 @@ function SphereCanvas() {
   );
 }
 
-// ─── 19 dot grid (card 2) — animated slow blink ──────────────────────
+// ─── Character reel (card 2) — swishes through all 19 characters ─────
 
-function DotGrid() {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const rafRef    = useRef<number>(0);
-  const pts: [number, number][] = [
-    [18,18],[18,9],[9,18],[27,18],[18,27],
-    [9,9],[27,9],[9,27],[27,27],[0,18],
-    [36,18],[18,0],[18,36],[0,9],[36,9],
-    [0,27],[36,27],[9,0],[27,0],
-  ];
-  const W = 48, H = 48;
+const CHAR_SRCS = Array.from({ length: 19 }, (_, i) =>
+  `/images/characters/WILD_characters-${String(i + 1).padStart(2, '0')}.webp`
+);
+const REEL_DURATION = 1000; // ms per character
+
+function CharacterReel() {
+  const [idx, setIdx] = useState(0);
 
   useEffect(() => {
-    const cv = canvasRef.current; if (!cv) return;
-    const ctx = cv.getContext('2d')!;
-    const draw = () => {
-      ctx.clearRect(0, 0, W, H);
-      const now = performance.now() / 1000;
-      pts.forEach(([x, y], i) => {
-        const alpha = blinkAlpha(now, i);
-        ctx.fillStyle = `rgba(91,74,138,${alpha.toFixed(2)})`;
-        ctx.beginPath(); ctx.arc(x + 6, y + 6, 2.5, 0, Math.PI * 2); ctx.fill();
-      });
-      rafRef.current = requestAnimationFrame(draw);
-    };
-    draw();
-    return () => cancelAnimationFrame(rafRef.current);
+    const id = setInterval(() => setIdx(i => (i + 1) % 19), REEL_DURATION);
+    return () => clearInterval(id);
   }, []);
 
-  return <canvas ref={canvasRef} width={W} height={H} aria-hidden="true" style={{ display: 'block' }} />;
+  return (
+    <>
+      <style>{`
+        @keyframes char-swish {
+          0%   { transform: translateX(108%); opacity: 0; }
+          8%   { transform: translateX(0%);   opacity: 1; }
+          88%  { transform: translateX(0%);   opacity: 1; }
+          100% { transform: translateX(-108%); opacity: 0; }
+        }
+        .char-swish-img {
+          animation: char-swish ${REEL_DURATION}ms cubic-bezier(0.25,0.1,0.25,1) 1 forwards;
+        }
+      `}</style>
+      <div style={{
+        width: 48, height: 66,
+        borderRadius: 9,
+        overflow: 'hidden',
+        border: '1.5px solid rgba(91,74,138,0.4)',
+        background: '#150f28',
+        position: 'relative',
+        flexShrink: 0,
+        boxShadow: 'inset 0 0 8px rgba(91,74,138,0.25)',
+      }}>
+        <img
+          key={idx}
+          src={CHAR_SRCS[idx]}
+          alt=""
+          className="char-swish-img"
+          style={{
+            position: 'absolute', inset: 0,
+            width: '100%', height: '100%',
+            objectFit: 'cover',
+            objectPosition: 'center top',
+          }}
+        />
+      </div>
+    </>
+  );
 }
 
 // ─── Diameter circle (card 3) — thick ring + dot row ─────────────────
@@ -222,7 +244,7 @@ export default function WildStats() {
       labelDisplay: false,
     },
     {
-      icon:         <DotGrid />,
+      icon:         <CharacterReel />,
       value:        t('characters'),
       valueColor:   '#5B4A8A',
       label:        null as string | null,
