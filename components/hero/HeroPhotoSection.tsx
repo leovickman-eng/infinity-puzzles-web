@@ -19,7 +19,7 @@ const MOBILE_SLIDES = [
 ];
 
 const SLIDE_MS = 5000;
-const FADE_MS  = 1000;
+const FADE_MS  = 900;
 
 export default function HeroPhotoSection() {
   const params  = useParams();
