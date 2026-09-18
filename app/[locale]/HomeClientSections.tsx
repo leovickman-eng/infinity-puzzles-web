@@ -60,6 +60,11 @@ export const NewsletterSection = dynamic(
   { ssr: false },
 );
 
+export const WildNetworkSection = dynamic(
+  () => import('@/components/wild-network/WildNetworkSection'),
+  { ssr: false },
+);
+
 export function BuyButton({ label, small }: { label: string; small?: boolean }) {
   const scrollToShop = () => {
     const el = document.getElementById('shop');
