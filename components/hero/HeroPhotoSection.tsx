@@ -1,7 +1,7 @@
 'use client';
 
 import { useParams } from 'next/navigation';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 
 const DESKTOP_SLIDES = [
   '/images/hero/karusell/d1.webp',
@@ -28,6 +28,8 @@ export default function HeroPhotoSection() {
 
   const [isMobile, setIsMobile] = useState(false);
   const [current, setCurrent]   = useState(0);
+  const touchStartX  = useRef<number | null>(null);
+  const intervalRef  = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
     const mq = window.matchMedia('(max-width: 767px)');
@@ -39,10 +41,35 @@ export default function HeroPhotoSection() {
 
   const slides = isMobile ? MOBILE_SLIDES : DESKTOP_SLIDES;
 
-  useEffect(() => {
-    const id = setInterval(() => setCurrent(c => (c + 1) % slides.length), SLIDE_MS);
-    return () => clearInterval(id);
+  const startAutoPlay = useCallback(() => {
+    if (intervalRef.current) clearInterval(intervalRef.current);
+    intervalRef.current = setInterval(
+      () => setCurrent(c => (c + 1) % slides.length),
+      SLIDE_MS,
+    );
   }, [slides.length]);
+
+  useEffect(() => {
+    startAutoPlay();
+    return () => { if (intervalRef.current) clearInterval(intervalRef.current); };
+  }, [startAutoPlay]);
+
+  const goTo = useCallback((index: number) => {
+    setCurrent((index + slides.length) % slides.length);
+    startAutoPlay(); // reset timer on manual nav
+  }, [slides.length, startAutoPlay]);
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX.current === null) return;
+    const delta = e.changedTouches[0].clientX - touchStartX.current;
+    touchStartX.current = null;
+    if (Math.abs(delta) < 40) return; // ignore tiny taps
+    goTo(current + (delta < 0 ? 1 : -1));
+  };
 
   const scrollToShop = () => {
     const el = document.getElementById('shop');
@@ -126,7 +153,11 @@ export default function HeroPhotoSection() {
 
       {/* ── S1: Hero karusell ── */}
       <section style={{ position: 'relative', width: '100%', background: '#1a1208', lineHeight: 0 }}>
-        <div className="hero-wrap">
+        <div
+          className="hero-wrap"
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+        >
 
           {/* Slides */}
           {slides.map((src, i) => (
@@ -171,6 +202,31 @@ export default function HeroPhotoSection() {
             >
               {isSv ? 'KÖP DITT' : 'GET YOURS'}
             </button>
+          </div>
+
+          {/* Dot indicators */}
+          <div style={{
+            position: 'absolute', bottom: 18, left: '50%',
+            transform: 'translateX(-50%)',
+            display: 'flex', gap: 7, zIndex: 6,
+          }}>
+            {slides.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => goTo(i)}
+                aria-label={`Slide ${i + 1}`}
+                style={{
+                  width: i === current ? 22 : 7,
+                  height: 7,
+                  borderRadius: 999,
+                  background: i === current ? '#ae84ea' : 'rgba(255,251,245,0.45)',
+                  border: 'none',
+                  padding: 0,
+                  cursor: 'pointer',
+                  transition: 'width 0.3s, background 0.3s',
+                }}
+              />
+            ))}
           </div>
 
           {/* Logo — bottom of hero */}
