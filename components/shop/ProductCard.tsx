@@ -58,7 +58,7 @@ export default function ProductCard({ product }: Props) {
             {tc('collection')}
           </p>
           <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground leading-tight">
-            {product.title}
+            {tc('title')}
           </h2>
         </div>
 
@@ -69,7 +69,7 @@ export default function ProductCard({ product }: Props) {
         )}
 
         <p className="font-body text-foreground/60 leading-relaxed">
-          {product.description}
+          {tc('description')}
         </p>
 
         <button
