@@ -32,6 +32,7 @@ export default function WildNetworkPage() {
     }
 
     function applyTransform() {
+      if (!iframe) return;
       iframe.style.transformOrigin = '0 0';
       iframe.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
     }
