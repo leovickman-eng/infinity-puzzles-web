@@ -207,13 +207,14 @@ export default function InsideBoxSection() {
       </div>
 
       {/* ── Wild Network live preview ── */}
-      <div style={{ width: '100%', marginTop: '72px', position: 'relative' }}>
-        {/* Iframe */}
+      <div style={{ margin: '72px -24px 0', position: 'relative' }}>
+        {/* Iframe — full bleed (breaks out of section padding) */}
         <div style={{
           width: '100%',
           height: 'clamp(420px, 65vh, 680px)',
           position: 'relative',
           overflow: 'hidden',
+          background: '#242028',
         }}>
           <iframe
             src="https://leovickman-eng.github.io/WILD_NETWORK/"
@@ -236,7 +237,7 @@ export default function InsideBoxSection() {
             style={{
               position: 'absolute',
               bottom: 20,
-              right: 20,
+              right: 44,
               background: 'rgba(255,251,245,0.1)',
               backdropFilter: 'blur(8px)',
               WebkitBackdropFilter: 'blur(8px)',
