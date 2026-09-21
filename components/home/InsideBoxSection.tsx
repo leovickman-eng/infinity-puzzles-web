@@ -219,47 +219,29 @@ export default function InsideBoxSection() {
           <iframe
             src="https://leovickman-eng.github.io/WILD_NETWORK/"
             allow="fullscreen"
-            allowTransparency={true}
             style={{
               position: 'absolute',
               inset: 0,
               width: '100%',
               height: '100%',
               border: 'none',
-              background: 'transparent',
             }}
             title="Wild Network"
           />
 
-          {/* Fullscreen link — bottom right */}
-          <Link
-            href={`/${locale}/WILD_NETWORK`}
-            style={{
-              position: 'absolute',
-              bottom: 20,
-              right: 44,
-              background: 'rgba(255,251,245,0.1)',
-              backdropFilter: 'blur(8px)',
-              WebkitBackdropFilter: 'blur(8px)',
-              border: '1px solid rgba(255,255,255,0.12)',
-              borderRadius: 999,
-              padding: '8px 18px',
-              color: 'rgba(255,251,245,0.85)',
-              fontFamily: 'inherit',
-              fontSize: '0.8rem',
-              letterSpacing: '0.08em',
-              textDecoration: 'none',
-              display: 'flex',
-              alignItems: 'center',
-              gap: 6,
-              zIndex: 2,
-            }}
-          >
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-              <path d="M5 2H2v10h10V9M9 2h3v3M8.5 5.5 12 2" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-            Fullscreen
-          </Link>
+          {/* Top fade — blends into section above */}
+          <div style={{
+            position: 'absolute', top: 0, left: 0, right: 0,
+            height: 80, pointerEvents: 'none', zIndex: 2,
+            background: 'linear-gradient(to bottom, #242028 0%, transparent 100%)',
+          }} />
+
+          {/* Bottom fade — blends into section below */}
+          <div style={{
+            position: 'absolute', bottom: 0, left: 0, right: 0,
+            height: 80, pointerEvents: 'none', zIndex: 2,
+            background: 'linear-gradient(to top, #242028 0%, transparent 100%)',
+          }} />
         </div>
       </div>
 
