@@ -14,7 +14,6 @@ import {
   StoryTimeline,
   ThreeImageGrid,
   WildStats,
-  WildNetworkSection,
 } from './HomeClientSections';
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -111,10 +110,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ── Wild Network ── */}
-      <WildNetworkSection />
-
-      {/* ── Inside the box ── */}
+      {/* ── Inside the box (includes Wild Network live preview) ── */}
       <InsideBoxSection />
 
       {/* ── Testimonials ── */}
