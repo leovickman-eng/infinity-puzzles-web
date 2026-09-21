@@ -8,6 +8,7 @@ import { GoogleTagManager } from '@next/third-parties/google';
 import { routing } from '@/i18n/routing';
 import { CartProvider } from '@/components/shop/CartContext';
 import Header from '@/components/layout/HeaderClient';
+import PromoBanner from '@/components/layout/PromoBanner';
 import Footer from '@/components/layout/Footer';
 import CartDrawer from '@/components/shop/CartDrawer';
 import NavigationLoader from '@/components/layout/NavigationLoader';
@@ -132,6 +133,7 @@ export default async function LocaleLayout({ children, params }: Props) {
           <CartProvider>
             <NavigationLoader />
             <Header locale={locale} />
+            <PromoBanner />
             <main>{children}</main>
             <Footer />
             <CartDrawer />

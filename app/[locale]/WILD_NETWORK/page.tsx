@@ -32,9 +32,8 @@ export default function WildNetworkPage() {
     }
 
     function applyTransform() {
-      if (!iframe) return;
-      iframe.style.transformOrigin = '0 0';
-      iframe.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+      iframe!.style.transformOrigin = '0 0';
+      iframe!.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
     }
 
     function clamp(val: number, min: number, max: number) {
@@ -44,7 +43,7 @@ export default function WildNetworkPage() {
     function onTouchStart(e: TouchEvent) {
       if (e.touches.length === 2) {
         // Block iframe interaction during pinch
-        overlay.style.pointerEvents = 'all';
+        overlay!.style.pointerEvents = 'all';
         initialDist = dist(e.touches);
         initialMidX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
         initialMidY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
@@ -71,8 +70,8 @@ export default function WildNetworkPage() {
       let newY = midY - scaleRatio * (initialMidY - baseTranslateY);
 
       // Clamp so we don't pan past edges
-      const w = container.clientWidth;
-      const h = container.clientHeight;
+      const w = container!.clientWidth;
+      const h = container!.clientHeight;
       newX = clamp(newX, w * (1 - newScale), 0);
       newY = clamp(newY, h * (1 - newScale), 0);
 
@@ -85,7 +84,7 @@ export default function WildNetworkPage() {
     function onTouchEnd(e: TouchEvent) {
       if (e.touches.length < 2) {
         // Re-enable iframe interaction
-        overlay.style.pointerEvents = 'none';
+        overlay!.style.pointerEvents = 'none';
 
         // Snap back if nearly at 1x
         if (scale < 1.1) {
