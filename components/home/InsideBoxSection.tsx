@@ -105,6 +105,7 @@ export default function InsideBoxSection() {
           @keyframes neon-spin { to { --neon-a: 360deg; } }
 
           .ib-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; text-align: left; }
+          @media (max-width: 767px) { .wn-mobile-overlay { display: block !important; } }
           .ib-link { position: relative; border-radius: 14px; display: block; text-decoration: none; }
           .ib-card { padding: 28px 24px; height: 100%; }
           .ib-header { display: block; }
@@ -242,6 +243,18 @@ export default function InsideBoxSection() {
             height: 80, pointerEvents: 'none', zIndex: 2,
             background: 'linear-gradient(to top, #242028 0%, transparent 100%)',
           }} />
+
+          {/* Mobile overlay — blocks iframe scroll trap, tap goes to fullscreen */}
+          <Link
+            href={`/${locale}/WILD_NETWORK`}
+            style={{
+              position: 'absolute', inset: 0,
+              zIndex: 3,
+              display: 'none',
+            }}
+            className="wn-mobile-overlay"
+            aria-label="Explore Wild Network fullscreen"
+          />
         </div>
       </div>
 
