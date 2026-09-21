@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import type { ShopifyProduct } from '@/lib/shopify/types';
 import ProductCard from './ProductCard';
 import { useTranslations } from 'next-intl';
+import { useParams } from 'next/navigation';
 
 // Placeholder product shown when Shopify is not yet configured
 const PLACEHOLDER_PRODUCT: ShopifyProduct = {
@@ -37,16 +38,19 @@ const PLACEHOLDER_PRODUCT: ShopifyProduct = {
 
 export default function ProductSection() {
   const t = useTranslations('shop');
+  const params = useParams();
+  const locale = (params?.locale as string) ?? 'sv';
+  const lang = locale.toUpperCase(); // 'SV' or 'EN'
   const [product, setProduct] = useState<ShopifyProduct | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('/api/products?handle=infinity-puzzles-wild-19-characters-infinite-formations')
+    fetch(`/api/products?handle=infinity-puzzles-wild-19-characters-infinite-formations&lang=${lang}`)
       .then((r) => r.json())
       .then((data) => setProduct(data.product ?? PLACEHOLDER_PRODUCT))
       .catch(() => setProduct(PLACEHOLDER_PRODUCT))
       .finally(() => setLoading(false));
-  }, []);
+  }, [lang]);
 
   if (loading) {
     return (

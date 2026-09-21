@@ -13,7 +13,6 @@ type Props = {
 
 export default function ProductCard({ product }: Props) {
   const t = useTranslations('shop');
-  const tc = useTranslations('catalog');
   const { addItem, isLoading } = useCart();
   const [adding, setAdding] = useState(false);
 
@@ -58,7 +57,7 @@ export default function ProductCard({ product }: Props) {
             {tc('collection')}
           </p>
           <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground leading-tight">
-            {tc('title')}
+            {product.title}
           </h2>
         </div>
 
@@ -69,7 +68,7 @@ export default function ProductCard({ product }: Props) {
         )}
 
         <p className="font-body text-foreground/60 leading-relaxed">
-          {tc('description')}
+          {product.description}
         </p>
 
         <button

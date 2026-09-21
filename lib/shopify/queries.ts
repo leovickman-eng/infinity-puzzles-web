@@ -27,14 +27,14 @@ export const PRODUCT_FRAGMENT = `
 
 export const GET_PRODUCT_BY_HANDLE = `
   ${PRODUCT_FRAGMENT}
-  query GetProductByHandle($handle: String!) {
+  query GetProductByHandle($handle: String!, $language: LanguageCode!) @inContext(language: $language) {
     product(handle: $handle) { ...ProductFields }
   }
 `;
 
 export const GET_ALL_PRODUCTS = `
   ${PRODUCT_FRAGMENT}
-  query GetAllProducts($first: Int!) {
+  query GetAllProducts($first: Int!, $language: LanguageCode!) @inContext(language: $language) {
     products(first: $first) {
       nodes { ...ProductFields }
     }

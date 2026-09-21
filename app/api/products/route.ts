@@ -9,14 +9,16 @@ export async function GET(req: NextRequest) {
 console.log('[/api/products] token present:', !!process.env.SHOPIFY_STOREFRONT_TOKEN);
   console.log('[/api/products] handle:', handle);
 
+  const lang = (searchParams.get('lang') ?? 'SV').toUpperCase();
+
   try {
     if (handle) {
-      const product = await getProductByHandle(handle);
+      const product = await getProductByHandle(handle, lang);
       console.log('[/api/products] product:', product ? product.title : null);
       return NextResponse.json({ product });
     }
 
-    const products = await getAllProducts(20);
+    const products = await getAllProducts(20, lang);
     console.log('[/api/products] products count:', products.length);
     return NextResponse.json({ products });
   } catch (err) {

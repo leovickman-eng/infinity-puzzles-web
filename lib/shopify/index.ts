@@ -40,18 +40,18 @@ async function storefront<T>(
   return json.data as T;
 }
 
-export async function getProductByHandle(handle: string): Promise<ShopifyProduct | null> {
+export async function getProductByHandle(handle: string, language = 'SV'): Promise<ShopifyProduct | null> {
   const data = await storefront<{ product: ShopifyProduct | null }>(
     GET_PRODUCT_BY_HANDLE,
-    { handle }
+    { handle, language }
   );
   return data.product;
 }
 
-export async function getAllProducts(first = 20): Promise<ShopifyProduct[]> {
+export async function getAllProducts(first = 20, language = 'SV'): Promise<ShopifyProduct[]> {
   const data = await storefront<{ products: { nodes: ShopifyProduct[] } }>(
     GET_ALL_PRODUCTS,
-    { first }
+    { first, language }
   );
   return data.products.nodes;
 }
