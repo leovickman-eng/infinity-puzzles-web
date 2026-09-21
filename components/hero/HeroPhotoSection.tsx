@@ -149,6 +149,30 @@ export default function HeroPhotoSection() {
         .hero-slide[data-kb="1"].active img { animation-name: kb-pan-right; }
         .hero-slide[data-kb="2"].active img { animation-name: kb-zoom-out;  }
         .hero-slide[data-kb="3"].active img { animation-name: kb-pan-left;  }
+
+        @keyframes marquee-rtl {
+          from { transform: translateX(0); }
+          to   { transform: translateX(-50%); }
+        }
+        .hero-ticker-track {
+          display: flex;
+          width: max-content;
+          animation: marquee-rtl 28s linear infinite;
+        }
+        .hero-ticker-seg {
+          display: flex;
+          align-items: center;
+          white-space: nowrap;
+          padding: 0 5em;
+          font-family: 'cc-pixel-arcade-display', sans-serif;
+          font-weight: 400;
+          font-style: normal;
+          font-size: 11px;
+          letter-spacing: 0.12em;
+          color: #F8F060;
+          user-select: none;
+        }
+        .hero-ticker-seg .pink { color: #f6b8bd; }
       `}</style>
 
       {/* ── S1: Hero karusell ── */}
@@ -158,6 +182,29 @@ export default function HeroPhotoSection() {
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
         >
+
+          {/* Promo ticker — sits over hero images, scrolls away with section */}
+          <div style={{
+            position: 'absolute',
+            top: 68,
+            left: 0, right: 0,
+            height: 30,
+            zIndex: 3,
+            overflow: 'hidden',
+            background: 'rgba(84, 69, 80, 0.5)',
+            backdropFilter: 'blur(6px)',
+            WebkitBackdropFilter: 'blur(6px)',
+            display: 'flex',
+            alignItems: 'center',
+          }}>
+            <div className="hero-ticker-track">
+              {Array.from({ length: 16 }).map((_, i) => (
+                <span key={i} className="hero-ticker-seg">
+                  BUY 3 PUZZLES GET <span className="pink">&nbsp;10%&nbsp;</span> OFF
+                </span>
+              ))}
+            </div>
+          </div>
 
           {/* Slides */}
           {slides.map((src, i) => (
