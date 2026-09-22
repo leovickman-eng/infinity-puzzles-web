@@ -1,8 +1,13 @@
+'use client';
+
 import { useTranslations } from 'next-intl';
+import { useParams } from 'next/navigation';
 
 export default function Footer() {
   const t = useTranslations('footer');
   const year = new Date().getFullYear();
+  const params = useParams();
+  const locale = (params?.locale as string) ?? 'en';
 
   return (
     <footer style={{ background: '#242028', borderTop: '1px solid rgba(255,255,255,0.08)' }} className="px-6 py-12">
@@ -13,10 +18,10 @@ export default function Footer() {
         </div>
 
         <nav className="flex items-center gap-6">
-          <a href="#" className="font-body text-sm transition-colors" style={{ color: 'rgba(255,255,255,0.35)' }}>
+          <a href={`/${locale}/privacy`} className="font-body text-sm transition-colors" style={{ color: 'rgba(255,255,255,0.35)' }}>
             {t('links.privacy')}
           </a>
-          <a href="#" className="font-body text-sm transition-colors" style={{ color: 'rgba(255,255,255,0.35)' }}>
+          <a href={`/${locale}/terms`} className="font-body text-sm transition-colors" style={{ color: 'rgba(255,255,255,0.35)' }}>
             {t('links.terms')}
           </a>
           <a href="mailto:hello@infinity-puzzle.com" className="font-body text-sm transition-colors" style={{ color: 'rgba(255,255,255,0.35)' }}>

@@ -126,8 +126,8 @@ export default function HeroPhotoSection() {
         .hero-arrow:nth-child(2) { animation-delay: 0.18s; }
         .hero-arrow:nth-child(3) { animation-delay: 0.36s; }
 
-        .hero-wrap { position: relative; width: 100%; height: 85vh; overflow: hidden; }
-        @media (max-width: 767px) { .hero-wrap { height: 90svh; } }
+        .hero-wrap { position: relative; width: 100%; height: 100vh; overflow: hidden; }
+        @media (max-width: 767px) { .hero-wrap { height: 100svh; } }
 
         .hero-slide {
           position: absolute; inset: 0;
