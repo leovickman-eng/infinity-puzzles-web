@@ -68,7 +68,7 @@ export const metadata: Metadata = {
     shortcut: '/icon.png',
   },
   description: 'Infinity Puzzle Wild — 19 handcrafted wooden characters with endless formations. No right answer. Just creativity, flow, and play.',
-  metadataBase: new URL('https://infinity-puzzle.com'),
+  metadataBase: new URL('https://www.infinity-puzzle.com'),
   openGraph: {
     siteName: 'Infinity Puzzles',
     type: 'website',
@@ -82,10 +82,10 @@ export const metadata: Metadata = {
     ],
   },
   alternates: {
-    canonical: 'https://infinity-puzzle.com/en',
+    canonical: 'https://www.infinity-puzzle.com/en',
     languages: {
-      'en': 'https://infinity-puzzle.com/en',
-      'sv': 'https://infinity-puzzle.com/sv',
+      'en': 'https://www.infinity-puzzle.com/en',
+      'sv': 'https://www.infinity-puzzle.com/sv',
     },
   },
 };

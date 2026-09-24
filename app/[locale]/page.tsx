@@ -40,7 +40,7 @@ export default async function HomePage() {
             name: 'Infinity Puzzle Wild',
             description: '19 handcrafted wooden characters with endless formations. No right answer. Just creativity, flow, and play.',
             brand: { '@type': 'Brand', name: 'Infinity Puzzles' },
-            image: 'https://infinity-puzzle.com/images/hero/og-image.png',
+            image: 'https://www.infinity-puzzle.com/images/hero/og-image.png',
             offers: {
               '@type': 'Offer',
               availability: 'https://schema.org/InStock',
