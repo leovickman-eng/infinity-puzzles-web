@@ -16,6 +16,8 @@ import {
   WildStats,
 } from './HomeClientSections';
 
+type Props = { params: Promise<{ locale: string }> };
+
 export async function generateMetadata(): Promise<Metadata> {
   return {
     title: 'Infinity Puzzle Wild | Wooden Puzzle with 19 Characters',
@@ -24,7 +26,8 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 
-export default async function HomePage() {
+export default async function HomePage({ params }: Props) {
+  const { locale } = await params;
   const t = await getTranslations();
 
   return (
@@ -46,7 +49,7 @@ export default async function HomePage() {
               availability: 'https://schema.org/InStock',
               price: '495',
               priceCurrency: 'SEK',
-              url: 'https://www.infinity-puzzle.com/en',
+              url: `https://www.infinity-puzzle.com/${locale}`,
               shippingDetails: {
                 '@type': 'OfferShippingDetails',
                 shippingRate: {
