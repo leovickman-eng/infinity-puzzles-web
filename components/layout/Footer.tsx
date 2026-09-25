@@ -17,13 +17,20 @@ export default function Footer() {
           <p className="font-body text-sm mt-1" style={{ color: 'rgba(255,255,255,0.35)' }}>{t('tagline')}</p>
         </div>
 
-        <nav className="flex items-center gap-6">
+        <nav className="flex items-center gap-6 flex-wrap justify-center">
           <a href={`/${locale}/privacy`} className="font-body text-sm transition-colors" style={{ color: 'rgba(255,255,255,0.35)' }}>
             {t('links.privacy')}
           </a>
           <a href={`/${locale}/terms`} className="font-body text-sm transition-colors" style={{ color: 'rgba(255,255,255,0.35)' }}>
             {t('links.terms')}
           </a>
+          <button
+            onClick={() => window.dispatchEvent(new Event('open-cookie-settings'))}
+            className="font-body text-sm transition-colors bg-transparent border-none p-0 cursor-pointer"
+            style={{ color: 'rgba(255,255,255,0.35)' }}
+          >
+            {t('links.cookies')}
+          </button>
           <a href="mailto:hello@infinity-puzzle.com" className="font-body text-sm transition-colors" style={{ color: 'rgba(255,255,255,0.35)' }}>
             {t('links.contact')}
           </a>
