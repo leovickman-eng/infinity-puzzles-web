@@ -3,7 +3,6 @@ import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { Syne, DM_Sans, Playfair_Display, Trykker, Bebas_Neue, Cormorant_Garamond } from 'next/font/google';
 import type { Metadata } from 'next';
-import Script from 'next/script';
 import { GoogleTagManager } from '@next/third-parties/google';
 import { routing } from '@/i18n/routing';
 import { CartProvider } from '@/components/shop/CartContext';
@@ -110,9 +109,10 @@ export default async function LocaleLayout({ children, params }: Props) {
 
   return (
     <html lang={locale} className={`${syne.variable} ${dmSans.variable} ${playfair.variable} ${trykker.variable} ${bebasNeue.variable} ${cormorant.variable}`}>
-      {/* Consent Mode v2 — must run BEFORE GTM */}
-      <Script id="consent-default" strategy="beforeInteractive">
-        {`
+      <head>
+        {/* Consent Mode v2 — must run BEFORE GTM. beforeInteractive only works in
+            root layout, so we use a plain <script> in <head> instead. */}
+        <script dangerouslySetInnerHTML={{ __html: `
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
           gtag('consent', 'default', {
@@ -124,8 +124,8 @@ export default async function LocaleLayout({ children, params }: Props) {
             security_storage: 'granted',
             wait_for_update: 500
           });
-        `}
-      </Script>
+        ` }} />
+      </head>
       <GoogleTagManager gtmId="GTM-T5MWRQBH" />
       <body className="bg-background text-foreground antialiased">
         <NextIntlClientProvider messages={messages}>
