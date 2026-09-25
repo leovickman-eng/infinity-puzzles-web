@@ -21,8 +21,10 @@ function sendConsentUpdate(granted: boolean) {
     personalization_storage: state,
   };
   // Push as Arguments object — not an array
-  (function gtag() { dl.push(arguments); })('consent', 'update', params);
-  (function gtag() { dl.push(arguments); })({ event: 'consent_updated', consent_choice: state });
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  (function gtag(..._args: any[]) { dl.push(arguments); })('consent', 'update', params);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  (function gtag(..._args: any[]) { dl.push(arguments); })({ event: 'consent_updated', consent_choice: state });
 }
 /* eslint-enable prefer-rest-params, @typescript-eslint/no-explicit-any */
 
