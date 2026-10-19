@@ -18,10 +18,16 @@ import {
 
 type Props = { params: Promise<{ locale: string }> };
 
-export async function generateMetadata(): Promise<Metadata> {
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale } = await params;
+  const isSv = locale === 'sv';
   return {
-    title: 'Infinity Puzzle Wild | Wooden Puzzle with 19 Characters',
-    description: 'Infinity Puzzle Wild — 19 handcrafted wooden characters with endless formations. No right answer. Just creativity, flow, and play. Order now.',
+    title: isSv
+      ? 'Infinity Puzzle Wild | Träpussel med 19 karaktärer'
+      : 'Infinity Puzzle Wild | Wooden Puzzle with 19 Characters',
+    description: isSv
+      ? 'Infinity Puzzle Wild — 19 handgjorda träkaraktärer, oändliga formationer. Inget rätt svar. Det perfekta träpusslet för vuxna och barn. Beställ nu.'
+      : 'Infinity Puzzle Wild — 19 handcrafted wooden puzzle pieces with endless formations. No right answer. Just creativity, flow, and play. Order now.',
   };
 }
 
@@ -47,7 +53,7 @@ export default async function HomePage({ params }: Props) {
             offers: {
               '@type': 'Offer',
               availability: 'https://schema.org/InStock',
-              price: '495',
+              price: '449',
               priceCurrency: 'SEK',
               url: `https://www.infinity-puzzle.com/${locale}`,
               shippingDetails: {
