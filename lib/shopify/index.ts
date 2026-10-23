@@ -40,28 +40,30 @@ async function storefront<T>(
   return json.data as T;
 }
 
-export async function getProductByHandle(handle: string, language = 'SV'): Promise<ShopifyProduct | null> {
+export async function getProductByHandle(handle: string, language = 'SV', country = 'SE'): Promise<ShopifyProduct | null> {
   const data = await storefront<{ product: ShopifyProduct | null }>(
     GET_PRODUCT_BY_HANDLE,
-    { handle, language }
+    { handle, language, country }
   );
   return data.product;
 }
 
-export async function getAllProducts(first = 20, language = 'SV'): Promise<ShopifyProduct[]> {
+export async function getAllProducts(first = 20, language = 'SV', country = 'SE'): Promise<ShopifyProduct[]> {
   const data = await storefront<{ products: { nodes: ShopifyProduct[] } }>(
     GET_ALL_PRODUCTS,
-    { first, language }
+    { first, language, country }
   );
   return data.products.nodes;
 }
 
 export async function createCart(
   variantId: string,
-  quantity = 1
+  quantity = 1,
+  country = 'SE'
 ): Promise<ShopifyCart> {
   const data = await storefront<{ cartCreate: { cart: ShopifyCart } }>(CREATE_CART, {
     lines: [{ merchandiseId: variantId, quantity }],
+    country,
   });
   return data.cartCreate.cart;
 }
