@@ -127,13 +127,11 @@ export default function HeroPhotoSection() {
           width: max-content;
           max-width: 90vw;
           padding: clamp(14px, 2.5vh, 24px) clamp(20px, 4vw, 40px);
-          background: radial-gradient(ellipse at center, rgba(255,251,245,0.22) 40%, rgba(255,251,245,0) 100%);
+          background: rgba(255, 251, 245, 0.15);
           backdrop-filter: blur(6px);
           -webkit-backdrop-filter: blur(6px);
           border-radius: 20px;
-          border: none;
-          -webkit-mask-image: radial-gradient(ellipse at center, black 40%, transparent 100%);
-          mask-image: radial-gradient(ellipse at center, black 40%, transparent 100%);
+          border: 1px solid rgba(255,255,255,0.2);
         }
         .hero-tagline {
           font-family: 'tumb', serif;
@@ -357,7 +355,7 @@ export default function HeroPhotoSection() {
               style={{
                 width: 'clamp(110px, 26vw, 160px)',
                 display: 'block',
-                filter: 'drop-shadow(0 0 10px rgba(0,0,0,0.85)) drop-shadow(0 2px 4px rgba(0,0,0,0.7))',
+                filter: 'none',
               }}
             />
           </div>
