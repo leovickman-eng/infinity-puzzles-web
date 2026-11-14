@@ -127,17 +127,19 @@ export default function HeroPhotoSection() {
           width: max-content;
           max-width: 90vw;
           padding: clamp(14px, 2.5vh, 24px) clamp(20px, 4vw, 40px);
-          background: rgba(255, 251, 245, 0.18);
-          backdrop-filter: blur(14px);
-          -webkit-backdrop-filter: blur(14px);
+          background: radial-gradient(ellipse at center, rgba(255,251,245,0.22) 40%, rgba(255,251,245,0) 100%);
+          backdrop-filter: blur(6px);
+          -webkit-backdrop-filter: blur(6px);
           border-radius: 20px;
-          border: 1px solid rgba(255, 255, 255, 0.25);
+          border: none;
+          -webkit-mask-image: radial-gradient(ellipse at center, black 40%, transparent 100%);
+          mask-image: radial-gradient(ellipse at center, black 40%, transparent 100%);
         }
         .hero-tagline {
           font-family: 'tumb', serif;
           font-size: clamp(0.55rem, 1.5vw, 0.95rem);
           letter-spacing: 0.08em;
-          color: #ae84ea;
+          color: #7ed6cd;
           text-align: center;
           line-height: 1.3;
           white-space: nowrap;
@@ -154,11 +156,13 @@ export default function HeroPhotoSection() {
           animation: hero-bounce-in-logo 0.8s ease-out 0.8s both;
           z-index: 5;
           padding: clamp(8px, 1.5vh, 14px) clamp(14px, 3vw, 28px);
-          background: rgba(255, 251, 245, 0.18);
-          backdrop-filter: blur(14px);
-          -webkit-backdrop-filter: blur(14px);
+          background: radial-gradient(ellipse at center, rgba(255,251,245,0.22) 40%, rgba(255,251,245,0) 100%);
+          backdrop-filter: blur(6px);
+          -webkit-backdrop-filter: blur(6px);
           border-radius: 14px;
-          border: 1px solid rgba(255, 255, 255, 0.25);
+          border: none;
+          -webkit-mask-image: radial-gradient(ellipse at center, black 40%, transparent 100%);
+          mask-image: radial-gradient(ellipse at center, black 40%, transparent 100%);
         }
         @media (max-width: 767px) {
           .hero-center-block { top: 40%; gap: clamp(5px, 1.2vh, 10px); }
