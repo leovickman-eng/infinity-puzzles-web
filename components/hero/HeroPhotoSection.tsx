@@ -127,11 +127,14 @@ export default function HeroPhotoSection() {
           width: max-content;
           max-width: 90vw;
           padding: clamp(14px, 2.5vh, 24px) clamp(20px, 4vw, 40px);
-          background: rgba(255, 251, 245, 0.15);
-          backdrop-filter: blur(6px);
-          -webkit-backdrop-filter: blur(6px);
-          border-radius: 20px;
-          border: 1px solid rgba(255,255,255,0.2);
+          background: #f9ece4;
+          backdrop-filter: none;
+          -webkit-backdrop-filter: none;
+          border-radius: 4px;
+          border: 1.5px solid rgba(91,74,138,0.25);
+          outline: 1px solid rgba(91,74,138,0.1);
+          outline-offset: 3px;
+          box-shadow: 0 2px 12px rgba(0,0,0,0.18), inset 0 0 0 1px rgba(255,255,255,0.6);
         }
         .hero-tagline {
           font-family: 'tumb', serif;
