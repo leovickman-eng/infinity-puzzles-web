@@ -3,6 +3,11 @@
 import { useParams } from 'next/navigation';
 import { useState, useEffect, useRef, useCallback } from 'react';
 
+const WILD_FRAMES = Array.from({ length: 13 }, (_, i) =>
+  `/WILD_logo_Frames_HERO/PNGSet/PNG_${String(i + 1).padStart(4, '0')}.png`
+);
+const WILD_FPS = 10; // frames per second
+
 const DESKTOP_SLIDES = [
   '/images/hero/karusell/d1.webp',
   '/images/hero/karusell/d5.webp',
@@ -26,10 +31,12 @@ export default function HeroPhotoSection() {
   const locale  = (params?.locale as string) ?? 'en';
   const isSv    = locale === 'sv';
 
-  const [isMobile, setIsMobile] = useState(false);
-  const [current, setCurrent]   = useState(0);
+  const [isMobile, setIsMobile]     = useState(false);
+  const [current, setCurrent]       = useState(0);
+  const [wildFrame, setWildFrame]   = useState(0);
   const touchStartX  = useRef<number | null>(null);
   const intervalRef  = useRef<ReturnType<typeof setInterval> | null>(null);
+  const wildRef      = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
     const mq = window.matchMedia('(max-width: 767px)');
@@ -53,6 +60,15 @@ export default function HeroPhotoSection() {
     startAutoPlay();
     return () => { if (intervalRef.current) clearInterval(intervalRef.current); };
   }, [startAutoPlay]);
+
+  // WILD logo frame animation
+  useEffect(() => {
+    wildRef.current = setInterval(
+      () => setWildFrame(f => (f + 1) % WILD_FRAMES.length),
+      1000 / WILD_FPS,
+    );
+    return () => { if (wildRef.current) clearInterval(wildRef.current); };
+  }, []);
 
   const goTo = useCallback((index: number) => {
     setCurrent((index + slides.length) % slides.length);
@@ -97,16 +113,36 @@ export default function HeroPhotoSection() {
           transform: translateY(-2px) scale(1.04);
           box-shadow: 0 6px 28px rgba(174,132,234,0.55) !important;
         }
-        @keyframes hero-bounce-in {
-          0%   { opacity: 0; transform: translateX(-50%) translateY(calc(-50% + 16px)); }
-          60%  { opacity: 1; transform: translateX(-50%) translateY(calc(-50% - 4px)); }
+        @keyframes hero-center-in {
+          0%   { opacity: 0; transform: translateX(-50%) translateY(calc(-50% + 20px)); }
           100% { opacity: 1; transform: translateX(-50%) translateY(-50%); }
         }
-        .hero-btn-wrap {
-          position: absolute; top: 45%; left: 50%;
+        .hero-center-block {
+          position: absolute; top: 50%; left: 50%;
           transform: translateX(-50%) translateY(-50%);
-          animation: hero-bounce-in 0.7s cubic-bezier(0.34,1.56,0.64,1) 0.5s both;
+          animation: hero-center-in 0.9s ease-out 0.4s both;
           z-index: 5;
+          display: flex; flex-direction: column; align-items: center;
+          gap: clamp(10px, 2vh, 18px);
+          width: max-content;
+          max-width: 90vw;
+        }
+        .hero-tagline {
+          font-family: 'tumb', serif;
+          font-size: clamp(1.05rem, 3.2vw, 2rem);
+          letter-spacing: 0.06em;
+          color: #dac1ff;
+          text-align: center;
+          line-height: 1.25;
+          text-shadow:
+            0 0 18px rgba(0,0,0,0.9),
+            0 0 6px  rgba(0,0,0,0.85),
+            0 2px 8px rgba(0,0,0,0.7);
+          white-space: nowrap;
+        }
+        @media (max-width: 767px) {
+          .hero-center-block { top: 52%; gap: clamp(8px, 1.8vh, 14px); }
+          .hero-tagline { font-size: clamp(1rem, 5.5vw, 1.4rem); white-space: normal; text-align: center; max-width: 78vw; }
         }
         @keyframes hero-bounce-in-logo {
           0%   { opacity: 0; transform: translateX(-50%) translateY(12px); }
@@ -228,8 +264,27 @@ export default function HeroPhotoSection() {
             background: 'linear-gradient(to bottom, rgba(0,0,0,0.15) 0%, transparent 20%, transparent 65%, rgba(0,0,0,0.25) 100%)',
           }} />
 
-          {/* Buy button — centered */}
-          <div className="hero-btn-wrap">
+          {/* Center block: WILD logo + tagline + buy button */}
+          <div className="hero-center-block">
+            {/* WILD animated logo */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={WILD_FRAMES[wildFrame]}
+              alt="WILD"
+              style={{
+                width: 'clamp(160px, 32vw, 420px)',
+                height: 'auto',
+                display: 'block',
+                filter: 'drop-shadow(0 0 18px rgba(0,0,0,0.6))',
+              }}
+            />
+
+            {/* Tagline */}
+            <p className="hero-tagline">
+              {isSv ? 'Ett träpussel utan slut' : 'A wooden puzzle without end'}
+            </p>
+
+            {/* Buy button */}
             <button
               className="hero-buy-btn"
               onClick={scrollToShop}
