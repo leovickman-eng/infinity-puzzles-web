@@ -32,7 +32,6 @@ const playfair = Playfair_Display({
   variable: '--font-playfair',
   display: 'swap',
   weight: ['400', '500', '600', '700'],
-  style: ['normal', 'italic'],
 });
 
 const trykker = Trykker({
@@ -54,7 +53,6 @@ const cormorant = Cormorant_Garamond({
   variable: '--font-cormorant',
   display: 'swap',
   weight: ['300', '400', '500', '600', '700'],
-  style: ['normal', 'italic'],
 });
 
 export const metadata: Metadata = {
