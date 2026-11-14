@@ -137,15 +137,15 @@ export default function HeroPhotoSection() {
         }
         .hero-tagline {
           font-family: 'tumb', serif;
-          font-size: clamp(0.55rem, 1.5vw, 0.95rem);
+          font-size: clamp(0.75rem, 2vw, 1.25rem);
           letter-spacing: 0.08em;
-          color: #7ed6cd;
+          color: #5B4A8A;
           text-align: center;
           line-height: 1.3;
           white-space: nowrap;
         }
         .hero-btn-mid {
-          position: absolute; bottom: 18%; left: 50%;
+          position: absolute; bottom: 24%; left: 50%;
           transform: translateX(-50%);
           animation: hero-center-in 0.9s ease-out 0.6s both;
           z-index: 5;
@@ -155,18 +155,10 @@ export default function HeroPhotoSection() {
           transform: translateX(-50%);
           animation: hero-bounce-in-logo 0.8s ease-out 0.8s both;
           z-index: 5;
-          padding: clamp(8px, 1.5vh, 14px) clamp(14px, 3vw, 28px);
-          background: radial-gradient(ellipse at center, rgba(255,251,245,0.22) 40%, rgba(255,251,245,0) 100%);
-          backdrop-filter: blur(6px);
-          -webkit-backdrop-filter: blur(6px);
-          border-radius: 14px;
-          border: none;
-          -webkit-mask-image: radial-gradient(ellipse at center, black 40%, transparent 100%);
-          mask-image: radial-gradient(ellipse at center, black 40%, transparent 100%);
         }
         @media (max-width: 767px) {
           .hero-center-block { top: 40%; gap: clamp(5px, 1.2vh, 10px); }
-          .hero-tagline { font-size: clamp(0.69rem, 3.45vw, 0.98rem); white-space: normal; text-align: center; max-width: 60vw; }
+          .hero-tagline { font-size: clamp(0.9rem, 4vw, 1.3rem); white-space: normal; text-align: center; max-width: 60vw; }
           .hero-btn-mid { bottom: 16%; }
           .hero-wild-logo { width: clamp(640px, 128vw, 1680px) !important; }
         }
