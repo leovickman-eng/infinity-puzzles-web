@@ -117,7 +117,6 @@ export default function HeroPhotoSection() {
           0%   { opacity: 0; transform: translateX(-50%) translateY(calc(-50% + 20px)); }
           100% { opacity: 1; transform: translateX(-50%) translateY(-50%); }
         }
-        /* Top label — wraps WILD logo + tagline */
         .hero-center-block {
           position: absolute; top: 42%; left: 50%;
           transform: translateX(-50%) translateY(-50%);
@@ -127,9 +126,6 @@ export default function HeroPhotoSection() {
           gap: clamp(6px, 1.4vh, 12px);
           width: max-content;
           max-width: 90vw;
-          background: rgba(255,255,255,0.6);
-          border-radius: 18px;
-          padding: clamp(14px, 2.5vh, 28px) clamp(20px, 3vw, 40px);
         }
         .hero-tagline {
           font-family: 'tumb', serif;
@@ -139,26 +135,26 @@ export default function HeroPhotoSection() {
           text-align: center;
           line-height: 1.3;
           white-space: nowrap;
+          text-shadow:
+            0 0 24px rgba(0,0,0,1),
+            0 0 10px rgba(0,0,0,1),
+            0 2px 6px rgba(0,0,0,0.9),
+            1px 1px 0 rgba(0,0,0,0.6);
         }
-        /* Buy button — between center block and bottom logo */
         .hero-btn-mid {
           position: absolute; bottom: 18%; left: 50%;
           transform: translateX(-50%);
           animation: hero-center-in 0.9s ease-out 0.6s both;
           z-index: 5;
         }
-        /* Bottom logo label */
         .hero-logo-wrap {
           position: absolute; bottom: 6%; left: 50%;
           transform: translateX(-50%);
           animation: hero-bounce-in-logo 0.8s ease-out 0.8s both;
           z-index: 5;
-          background: rgba(255,255,255,0.6);
-          border-radius: 12px;
-          padding: clamp(8px, 1.2vh, 14px) clamp(14px, 2vw, 24px);
         }
         @media (max-width: 767px) {
-          .hero-center-block { top: 40%; gap: clamp(5px, 1.2vh, 10px); padding: clamp(10px, 2vh, 20px) clamp(14px, 4vw, 28px); }
+          .hero-center-block { top: 40%; gap: clamp(5px, 1.2vh, 10px); }
           .hero-tagline { font-size: clamp(0.69rem, 3.45vw, 0.98rem); white-space: normal; text-align: center; max-width: 60vw; }
           .hero-btn-mid { bottom: 16%; }
           .hero-wild-logo { width: clamp(640px, 128vw, 1680px) !important; }
@@ -291,6 +287,7 @@ export default function HeroPhotoSection() {
                 width: 'clamp(160px, 32vw, 420px)',
                 height: 'auto',
                 display: 'block',
+                filter: 'drop-shadow(0 0 12px rgba(0,0,0,0.9)) drop-shadow(0 2px 4px rgba(0,0,0,0.8))',
               }}
             />
 
@@ -356,9 +353,8 @@ export default function HeroPhotoSection() {
               alt="Infinity Puzzles"
               style={{
                 width: 'clamp(110px, 26vw, 160px)',
-                opacity: 0.88,
-                mixBlendMode: 'multiply',
                 display: 'block',
+                filter: 'drop-shadow(0 0 10px rgba(0,0,0,0.85)) drop-shadow(0 2px 4px rgba(0,0,0,0.7))',
               }}
             />
           </div>
