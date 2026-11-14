@@ -24,7 +24,7 @@ const dmSans = DM_Sans({
   subsets: ['latin'],
   variable: '--font-dm-sans',
   display: 'swap',
-  weight: '100 900', // variable font range — avoids Turbopack multi-query bug
+  weight: 'variable',
 });
 
 const playfair = Playfair_Display({
