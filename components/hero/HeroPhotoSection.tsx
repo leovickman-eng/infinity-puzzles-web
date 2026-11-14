@@ -113,36 +113,55 @@ export default function HeroPhotoSection() {
           transform: translateY(-2px) scale(1.04);
           box-shadow: 0 6px 28px rgba(174,132,234,0.55) !important;
         }
+        /* Vertical dark backdrop strip */
+        .hero-backdrop {
+          position: absolute;
+          top: 0; bottom: 0;
+          left: 50%; transform: translateX(-50%);
+          width: clamp(220px, 38vw, 480px);
+          background: rgba(0,0,0,0.42);
+          z-index: 3;
+          pointer-events: none;
+        }
+        @media (max-width: 767px) {
+          .hero-backdrop { width: clamp(200px, 72vw, 320px); }
+        }
+
         @keyframes hero-center-in {
           0%   { opacity: 0; transform: translateX(-50%) translateY(calc(-50% + 20px)); }
           100% { opacity: 1; transform: translateX(-50%) translateY(-50%); }
         }
         .hero-center-block {
-          position: absolute; top: 50%; left: 50%;
+          position: absolute; top: 42%; left: 50%;
           transform: translateX(-50%) translateY(-50%);
           animation: hero-center-in 0.9s ease-out 0.4s both;
           z-index: 5;
           display: flex; flex-direction: column; align-items: center;
-          gap: clamp(10px, 2vh, 18px);
+          gap: clamp(6px, 1.4vh, 12px);
           width: max-content;
           max-width: 90vw;
         }
         .hero-tagline {
           font-family: 'tumb', serif;
-          font-size: clamp(1.05rem, 3.2vw, 2rem);
-          letter-spacing: 0.06em;
-          color: #dac1ff;
+          font-size: clamp(0.55rem, 1.5vw, 0.95rem);
+          letter-spacing: 0.08em;
+          color: #ae84ea;
           text-align: center;
-          line-height: 1.25;
-          text-shadow:
-            0 0 18px rgba(0,0,0,0.9),
-            0 0 6px  rgba(0,0,0,0.85),
-            0 2px 8px rgba(0,0,0,0.7);
+          line-height: 1.3;
           white-space: nowrap;
         }
+        /* Buy button — between center block and bottom logo */
+        .hero-btn-mid {
+          position: absolute; bottom: 18%; left: 50%;
+          transform: translateX(-50%);
+          animation: hero-center-in 0.9s ease-out 0.6s both;
+          z-index: 5;
+        }
         @media (max-width: 767px) {
-          .hero-center-block { top: 52%; gap: clamp(8px, 1.8vh, 14px); }
-          .hero-tagline { font-size: clamp(1rem, 5.5vw, 1.4rem); white-space: normal; text-align: center; max-width: 78vw; }
+          .hero-center-block { top: 40%; gap: clamp(5px, 1.2vh, 10px); }
+          .hero-tagline { font-size: clamp(0.6rem, 3vw, 0.85rem); white-space: normal; text-align: center; max-width: 60vw; }
+          .hero-btn-mid { bottom: 16%; }
+          .hero-wild-logo { width: clamp(640px, 128vw, 1680px) !important; }
         }
         @keyframes hero-bounce-in-logo {
           0%   { opacity: 0; transform: translateX(-50%) translateY(12px); }
@@ -264,18 +283,22 @@ export default function HeroPhotoSection() {
             background: 'linear-gradient(to bottom, rgba(0,0,0,0.15) 0%, transparent 20%, transparent 65%, rgba(0,0,0,0.25) 100%)',
           }} />
 
-          {/* Center block: WILD logo + tagline + buy button */}
+          {/* Vertical dark backdrop strip */}
+          <div className="hero-backdrop" />
+
+          {/* Center block: WILD logo + tagline */}
           <div className="hero-center-block">
             {/* WILD animated logo */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={WILD_FRAMES[wildFrame]}
               alt="WILD"
+              className="hero-wild-logo"
               style={{
                 width: 'clamp(160px, 32vw, 420px)',
                 height: 'auto',
                 display: 'block',
-                filter: 'drop-shadow(0 0 18px rgba(0,0,0,0.6))',
               }}
             />
 
@@ -283,8 +306,10 @@ export default function HeroPhotoSection() {
             <p className="hero-tagline">
               {isSv ? 'Ett träpussel utan slut' : 'A wooden puzzle without end'}
             </p>
+          </div>
 
-            {/* Buy button */}
+          {/* Buy button — between center block and bottom logo */}
+          <div className="hero-btn-mid">
             <button
               className="hero-buy-btn"
               onClick={scrollToShop}
