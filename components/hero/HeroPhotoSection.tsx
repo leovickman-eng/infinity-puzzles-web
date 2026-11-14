@@ -113,24 +113,11 @@ export default function HeroPhotoSection() {
           transform: translateY(-2px) scale(1.04);
           box-shadow: 0 6px 28px rgba(174,132,234,0.55) !important;
         }
-        /* Vertical dark backdrop strip */
-        .hero-backdrop {
-          position: absolute;
-          top: 0; bottom: 0;
-          left: 50%; transform: translateX(-50%);
-          width: clamp(220px, 38vw, 480px);
-          background: rgba(0,0,0,0.42);
-          z-index: 3;
-          pointer-events: none;
-        }
-        @media (max-width: 767px) {
-          .hero-backdrop { width: clamp(200px, 72vw, 320px); }
-        }
-
         @keyframes hero-center-in {
           0%   { opacity: 0; transform: translateX(-50%) translateY(calc(-50% + 20px)); }
           100% { opacity: 1; transform: translateX(-50%) translateY(-50%); }
         }
+        /* Top label — wraps WILD logo + tagline */
         .hero-center-block {
           position: absolute; top: 42%; left: 50%;
           transform: translateX(-50%) translateY(-50%);
@@ -140,6 +127,9 @@ export default function HeroPhotoSection() {
           gap: clamp(6px, 1.4vh, 12px);
           width: max-content;
           max-width: 90vw;
+          background: rgba(255,255,255,0.6);
+          border-radius: 18px;
+          padding: clamp(14px, 2.5vh, 28px) clamp(20px, 3vw, 40px);
         }
         .hero-tagline {
           font-family: 'tumb', serif;
@@ -157,21 +147,25 @@ export default function HeroPhotoSection() {
           animation: hero-center-in 0.9s ease-out 0.6s both;
           z-index: 5;
         }
-        @media (max-width: 767px) {
-          .hero-center-block { top: 40%; gap: clamp(5px, 1.2vh, 10px); }
-          .hero-tagline { font-size: clamp(0.6rem, 3vw, 0.85rem); white-space: normal; text-align: center; max-width: 60vw; }
-          .hero-btn-mid { bottom: 16%; }
-          .hero-wild-logo { width: clamp(640px, 128vw, 1680px) !important; }
-        }
-        @keyframes hero-bounce-in-logo {
-          0%   { opacity: 0; transform: translateX(-50%) translateY(12px); }
-          100% { opacity: 0.88; transform: translateX(-50%) translateY(0); }
-        }
+        /* Bottom logo label */
         .hero-logo-wrap {
           position: absolute; bottom: 6%; left: 50%;
           transform: translateX(-50%);
           animation: hero-bounce-in-logo 0.8s ease-out 0.8s both;
           z-index: 5;
+          background: rgba(255,255,255,0.6);
+          border-radius: 12px;
+          padding: clamp(8px, 1.2vh, 14px) clamp(14px, 2vw, 24px);
+        }
+        @media (max-width: 767px) {
+          .hero-center-block { top: 40%; gap: clamp(5px, 1.2vh, 10px); padding: clamp(10px, 2vh, 20px) clamp(14px, 4vw, 28px); }
+          .hero-tagline { font-size: clamp(0.69rem, 3.45vw, 0.98rem); white-space: normal; text-align: center; max-width: 60vw; }
+          .hero-btn-mid { bottom: 16%; }
+          .hero-wild-logo { width: clamp(640px, 128vw, 1680px) !important; }
+        }
+        @keyframes hero-bounce-in-logo {
+          0%   { opacity: 0; transform: translateX(-50%) translateY(12px); }
+          100% { opacity: 1; transform: translateX(-50%) translateY(0); }
         }
         @keyframes hero-scroll-bounce {
           0%, 100% { transform: translateY(0); opacity: 0.45; }
@@ -283,8 +277,6 @@ export default function HeroPhotoSection() {
             background: 'linear-gradient(to bottom, rgba(0,0,0,0.15) 0%, transparent 20%, transparent 65%, rgba(0,0,0,0.25) 100%)',
           }} />
 
-          {/* Vertical dark backdrop strip */}
-          <div className="hero-backdrop" />
 
           {/* Center block: WILD logo + tagline */}
           <div className="hero-center-block">
