@@ -7,13 +7,13 @@ import { CHARACTERS } from '../page';
 import { getCharacterData } from '@/lib/characters-data';
 
 const AUDIO_MAP: Record<number, { url: string; label: string }[]> = {
-  8: [{ url: 'https://res.cloudinary.com/dk3ftfygx/video/upload/v1795031150/Dali_kreativ_utsva%CC%88gning_ptmcx8.wav', label: 'Det är jag som är konstnären Dali, med trollstaven som skär genom rummet.' }],
+  8: [{ url: 'https://res.cloudinary.com/dk3ftfygx/video/upload/v1795031150/Dali_kreativ_utsva%CC%88gning_ptmcx8.wav', label: 'Det är jag som är konstnären Dali, med trollstaven som skär genom rummet. · Swedish' }],
 };
 
 interface CreatorInfo {
   name: string;
   location: string;
-  bio: string;
+  bio: { sv: string; en: string };
   photo: string;
   role: { sv: string; en: string };
 }
@@ -22,7 +22,10 @@ const CREATOR_MAP: Record<number, CreatorInfo> = {
   8: {
     name: 'Jonathan Kärre',
     location: 'Stockholm',
-    bio: 'Jonathan är en ordkonstnär av rang. Han utmanar språket och normerna har vigt sitt liv till dom livliga meningarnas land. Och på sistonde även vikt sitt liv åt sina fantastiska barn.',
+    bio: {
+      sv: 'Jonathan är en ordkonstnär av rang. Han utmanar språket och normerna, och har vigt sitt liv till dom livliga meningarnas land. Och på sistonde även vikt sitt liv åt sina fantastiska barn.',
+      en: 'Jonathan is a wordsmith of the highest order. He challenges language and norms, and has devoted his life to the land of vivid sentences — and lately also to his wonderful children.',
+    },
     photo: 'https://res.cloudinary.com/dk3ftfygx/image/upload/v1795032549/Ska%CC%88rmavbild_2026-11-18_kl._21.08.46_lofbxt.png',
     role: { sv: 'Konstnären bakom Dali', en: 'The artist behind Dali' },
   },
@@ -364,7 +367,7 @@ export default function CharacterPage() {
               fontFamily: "'DM Sans', sans-serif",
               margin: 0,
             }}>
-              {creator.bio}
+              {isSv ? creator.bio.sv : creator.bio.en}
             </p>
           </div>
         )}
