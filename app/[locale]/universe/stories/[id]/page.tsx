@@ -26,6 +26,7 @@ export async function generateMetadata(
     openGraph: {
       title,
       description,
+      url: `https://www.infinity-puzzle.com/${locale}/universe/stories/${id}`,
       images: [{ url: imageUrl, width: 800, height: 800, alt: name }],
       type: 'website',
     },

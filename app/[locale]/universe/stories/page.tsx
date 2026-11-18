@@ -61,26 +61,29 @@ function StarCanvas() {
 }
 
 /* ── Character data ───────────────────────────────────────────────────────── */
+// Characters with a full story + audio on their individual page
+const HAS_STORY = new Set([3, 8, 10]);
+
 export const CHARACTERS = [
-  { id: 1,  name: 'Dolores',       animal: 'Narval',     audio: false },
-  { id: 2,  name: 'Zuki',          animal: 'Rådjur',     audio: false },
-  { id: 3,  name: 'Mani',          animal: 'Tukan',      audio: false },
-  { id: 4,  name: 'Ziggy-Lou',     animal: 'Räv',        audio: true  },
-  { id: 5,  name: 'Lana',          animal: 'Lama',       audio: true  },
-  { id: 6,  name: 'Tanya',         animal: 'Tiger',      audio: false },
-  { id: 7,  name: 'Mambo Viento',  animal: 'Drake',      audio: true  },
-  { id: 8,  name: 'Dali',          animal: 'Kamelont',   audio: true  },
-  { id: 9,  name: 'Pinto',         animal: 'Leopard',    audio: true  },
-  { id: 10, name: 'Sixten',        animal: 'Katt',       audio: false },
-  { id: 11, name: 'Coco',          animal: 'Fågel',      audio: false },
-  { id: 12, name: 'Mona Moon',     animal: 'Ko',         audio: false },
-  { id: 13, name: 'Borro',         animal: 'Noshörning', audio: true  },
-  { id: 14, name: 'Pepe',          animal: 'Pingvin',    audio: false },
-  { id: 15, name: 'Ronda',         animal: 'Krokodil',   audio: true  },
-  { id: 16, name: 'Rumi',          animal: 'Papegoja',   audio: true  },
-  { id: 17, name: 'Daffy Giraffy', animal: 'Giraff',     audio: false },
-  { id: 18, name: 'Jerry',         animal: 'Hund',       audio: false },
-  { id: 19, name: 'Mira',          animal: 'Kamel',      audio: false },
+  { id: 1,  name: 'Dolores',       animal: 'Narval'     },
+  { id: 2,  name: 'Zuki',          animal: 'Rådjur'     },
+  { id: 3,  name: 'Mani',          animal: 'Tukan'      },
+  { id: 4,  name: 'Ziggy-Lou',     animal: 'Räv'        },
+  { id: 5,  name: 'Lana',          animal: 'Lama'       },
+  { id: 6,  name: 'Tanya',         animal: 'Tiger'      },
+  { id: 7,  name: 'Mambo Viento',  animal: 'Drake'      },
+  { id: 8,  name: 'Dali',          animal: 'Kamelont'   },
+  { id: 9,  name: 'Pinto',         animal: 'Leopard'    },
+  { id: 10, name: 'Sixten',        animal: 'Katt'       },
+  { id: 11, name: 'Coco',          animal: 'Fågel'      },
+  { id: 12, name: 'Mona Moon',     animal: 'Ko'         },
+  { id: 13, name: 'Borro',         animal: 'Noshörning' },
+  { id: 14, name: 'Pepe',          animal: 'Pingvin'    },
+  { id: 15, name: 'Ronda',         animal: 'Krokodil'   },
+  { id: 16, name: 'Rumi',          animal: 'Papegoja'   },
+  { id: 17, name: 'Daffy Giraffy', animal: 'Giraff'     },
+  { id: 18, name: 'Jerry',         animal: 'Hund'       },
+  { id: 19, name: 'Mira',          animal: 'Kamel'      },
 ];
 
 const gridCSS = `
@@ -92,6 +95,10 @@ const gridCSS = `
   }
   @media (min-width: 680px) {
     .stories-grid { grid-template-columns: repeat(6, 1fr); }
+  }
+  @keyframes glowSpin {
+    from { transform: translate(-50%, -50%) rotate(0deg); }
+    to   { transform: translate(-50%, -50%) rotate(360deg); }
   }
 `;
 
@@ -154,14 +161,35 @@ export default function StoriesPage() {
           <Link
             key={ch.id}
             href={`/${locale}/universe/stories/${ch.id}`}
-            style={{ textDecoration: 'none', display: 'block', position: 'relative' }}
+            style={{ textDecoration: 'none', display: 'block', position: 'relative', borderRadius: '16px' }}
           >
+            {/* Glowing border for story characters */}
+            {HAS_STORY.has(ch.id) && (
+              <div style={{
+                position: 'absolute', inset: 0,
+                borderRadius: '16px',
+                overflow: 'hidden',
+                pointerEvents: 'none',
+                zIndex: 1,
+              }}>
+                <div style={{
+                  position: 'absolute',
+                  top: '50%', left: '50%',
+                  width: '250%', height: '250%',
+                  background: 'conic-gradient(from 0deg, transparent 0%, #ae84ea 12%, #dcc8f0 18%, transparent 32%)',
+                  animation: 'glowSpin 3s linear infinite',
+                }} />
+              </div>
+            )}
+
             <div style={{
               position: 'relative',
               overflow: 'hidden',
               aspectRatio: '3/4',
               background: '#1a1530',
               borderRadius: '14px',
+              margin: HAS_STORY.has(ch.id) ? '2px' : '0',
+              zIndex: 2,
             }}>
               <img
                 src={`/images/posters/poster_${String(ch.id).padStart(2, '0')}.webp`}
@@ -174,16 +202,6 @@ export default function StoriesPage() {
                 onMouseEnter={e => (e.currentTarget.style.transform = 'scale(1.06)')}
                 onMouseLeave={e => (e.currentTarget.style.transform = 'scale(1)')}
               />
-
-              {/* Audio dot */}
-              {ch.audio && (
-                <div style={{
-                  position: 'absolute', top: '8px', right: '8px',
-                  width: '8px', height: '8px',
-                  background: '#ae84ea',
-                  borderRadius: '50%',
-                }} />
-              )}
             </div>
           </Link>
         ))}
