@@ -150,15 +150,15 @@ export default function StoriesPage() {
         <h1 style={{
           fontFamily: "'eight-condensed', sans-serif",
           fontSize: 'clamp(3rem, 10vw, 5.5rem)',
-          fontWeight: 400, color: '#f0eaf8',
+          fontWeight: 400, color: '#5DCCA0',
           margin: '0 0 14px', letterSpacing: '0.03em', lineHeight: 1,
         }}>
           {locale === 'sv' ? 'Sagor' : 'Stories'}
         </h1>
         <p style={{
-          fontFamily: "'Cormorant Garamond', Georgia, serif",
-          fontSize: '1rem', color: 'rgba(240,234,248,0.45)',
-          lineHeight: 1.7, margin: 0,
+          fontFamily: "var(--font-syne), 'DM Sans', sans-serif",
+          fontSize: '1.1rem', fontWeight: 700, color: 'rgba(240,234,248,0.75)',
+          lineHeight: 1.6, margin: 0, letterSpacing: '0.01em',
         }}>
           {locale === 'sv'
             ? 'Ett galleri av riktiga människor och deras lekfulla tolkningar av WILD-karaktärerna.'
@@ -182,13 +182,13 @@ export default function StoriesPage() {
           <Link
             key={ch.id}
             href={`/${locale}/universe/stories/${ch.id}`}
-            style={{ textDecoration: 'none', display: 'block', position: 'relative', borderRadius: '16px' }}
+            style={{ textDecoration: 'none', display: 'block', position: 'relative', borderRadius: '15px' }}
           >
             {/* Glowing border for story characters */}
             {HAS_STORY.has(ch.id) && (
               <div style={{
                 position: 'absolute', inset: 0,
-                borderRadius: '16px',
+                borderRadius: '15px',
                 overflow: 'hidden',
                 pointerEvents: 'none',
                 zIndex: 1,
@@ -209,7 +209,7 @@ export default function StoriesPage() {
               aspectRatio: '3/4',
               background: '#1a1530',
               borderRadius: '14px',
-              margin: HAS_STORY.has(ch.id) ? '2px' : '0',
+              margin: HAS_STORY.has(ch.id) ? '1px' : '0',
               zIndex: 2,
             }}>
               <img
