@@ -7,17 +7,25 @@ import { CHARACTERS } from '../page';
 import { getCharacterData } from '@/lib/characters-data';
 
 const AUDIO_MAP: Record<number, { url: string; label: string }[]> = {
-  4:  [{ url: 'https://res.cloudinary.com/dk3ftfygx/video/upload/q_auto/f_auto/v1779967173/Ziggue_Lou_01_zvkgdw.mp3', label: 'Ziggy-Lou' }],
-  5:  [{ url: 'https://res.cloudinary.com/dk3ftfygx/video/upload/q_auto/f_auto/v1779967172/Lana_01_xn4st0.mp3',        label: 'Lana' }],
-  7:  [{ url: 'https://res.cloudinary.com/dk3ftfygx/video/upload/q_auto/f_auto/v1779967176/Mamo_viento_01_chcngh.mp3', label: 'Mambo Viento' }],
-  8:  [{ url: 'https://res.cloudinary.com/dk3ftfygx/video/upload/q_auto/f_auto/v1779967173/Salvador_01_mgx68f.mp3',    label: 'Dali' }],
-  9:  [{ url: 'https://res.cloudinary.com/dk3ftfygx/video/upload/q_auto/f_auto/v1779967171/Pinto_01_jx1xyz.mp3',       label: 'Pinto' }],
-  13: [{ url: 'https://res.cloudinary.com/dk3ftfygx/video/upload/q_auto/f_auto/v1779967171/Borro_01_qhfkbi.mp3',       label: 'Borro' }],
-  15: [{ url: 'https://res.cloudinary.com/dk3ftfygx/video/upload/q_auto/f_auto/v1779967172/Ronda_01_jzed46.mp3',       label: 'Ronda' }],
-  16: [
-    { url: 'https://res.cloudinary.com/dk3ftfygx/video/upload/q_auto/f_auto/v1779967174/Rumi_01_tcwd2u.mp3',                              label: 'Rumi' },
-    { url: 'https://res.cloudinary.com/dk3ftfygx/video/upload/q_auto/f_auto/v1781285810/Rumi_F%C3%B6rklarar_pusslet_uzhfgv.wav',          label: 'Rumi förklarar pusslet' },
-  ],
+  8: [{ url: 'https://res.cloudinary.com/dk3ftfygx/video/upload/v1795031150/Dali_kreativ_utsva%CC%88gning_ptmcx8.wav', label: 'Det är jag som är konstnären Dali, med trollstaven som skär genom rummet.' }],
+};
+
+interface CreatorInfo {
+  name: string;
+  location: string;
+  bio: string;
+  photo: string;
+  role: { sv: string; en: string };
+}
+
+const CREATOR_MAP: Record<number, CreatorInfo> = {
+  8: {
+    name: 'Jonathan Kärre',
+    location: 'Stockholm',
+    bio: 'Jonathan är en ordkonstnär av rang. Han utmanar språket och normerna har vigt sitt liv till dom livliga meningarnas land. Och på sistonde även vikt sitt liv åt sina fantastiska barn.',
+    photo: 'https://res.cloudinary.com/dk3ftfygx/image/upload/v1795032549/Ska%CC%88rmavbild_2026-11-18_kl._21.08.46_lofbxt.png',
+    role: { sv: 'Konstnären bakom Dali', en: 'The artist behind Dali' },
+  },
 };
 
 const CHAPTER_MAP: Record<number, string> = {
@@ -233,6 +241,7 @@ export default function CharacterPage() {
   const data    = getCharacterData(id);
   const audios  = AUDIO_MAP[id] ?? [];
   const chapter = CHAPTER_MAP[id];
+  const creator = CREATOR_MAP[id] ?? null;
   const bg      = BG[id] ?? '#242028';
   const light   = isLight(bg);
 
@@ -276,24 +285,89 @@ export default function CharacterPage() {
         </span>
       </div>
 
-      {/* Character image — centered, no background */}
+      {/* Character image + optional creator card */}
       <div style={{
         paddingTop: '72px',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'flex-end',
+        gap: '32px',
+        flexWrap: 'wrap',
+        maxWidth: '860px',
+        margin: '0 auto',
+        padding: '72px 24px 0',
       }}>
         <img
           src={`/images/character-png/${id}.webp`}
           alt={ch.name}
           style={{
-            width: 'min(72vw, 320px)',
+            width: 'min(72vw, 300px)',
             height: 'auto',
             display: 'block',
             objectFit: 'contain',
             filter: 'drop-shadow(0 8px 32px rgba(0,0,0,0.22))',
+            flexShrink: 0,
           }}
         />
+
+        {creator && (
+          <div style={{
+            flex: '1 1 240px',
+            maxWidth: '300px',
+            padding: '20px',
+            background: light ? 'rgba(0,0,0,0.07)' : 'rgba(255,255,255,0.08)',
+            border: `1px solid ${light ? 'rgba(0,0,0,0.12)' : 'rgba(255,255,255,0.14)'}`,
+            borderRadius: '16px',
+            alignSelf: 'center',
+          }}>
+            <div style={{
+              fontSize: '9px', letterSpacing: '2.5px', textTransform: 'uppercase',
+              color: accentColor, fontFamily: "'DM Sans', sans-serif",
+              marginBottom: '14px', opacity: 0.8,
+            }}>
+              {isSv ? creator.role.sv : creator.role.en}
+            </div>
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '14px' }}>
+              <img
+                src={creator.photo}
+                alt={creator.name}
+                style={{
+                  width: '52px', height: '52px',
+                  borderRadius: '50%',
+                  objectFit: 'cover',
+                  flexShrink: 0,
+                  border: `2px solid ${accentColor}40`,
+                }}
+              />
+              <div>
+                <div style={{
+                  fontSize: '15px', fontWeight: 600,
+                  fontFamily: "'DM Sans', sans-serif",
+                  color: textColor, lineHeight: 1.2,
+                }}>
+                  {creator.name}
+                </div>
+                <div style={{
+                  fontSize: '11px', color: mutedColor,
+                  fontFamily: "'DM Sans', sans-serif",
+                  marginTop: '3px',
+                }}>
+                  {creator.location}
+                </div>
+              </div>
+            </div>
+
+            <p style={{
+              fontSize: '13px', lineHeight: 1.65,
+              color: textColor, opacity: 0.75,
+              fontFamily: "'DM Sans', sans-serif",
+              margin: 0,
+            }}>
+              {creator.bio}
+            </p>
+          </div>
+        )}
       </div>
 
       {/* Content */}
