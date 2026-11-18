@@ -339,8 +339,8 @@ export default function CharacterPage() {
             flex: '1 1 240px',
             maxWidth: '300px',
             padding: '20px',
-            background: light ? 'rgba(0,0,0,0.07)' : 'rgba(255,255,255,0.08)',
-            border: `1px solid ${light ? 'rgba(0,0,0,0.12)' : 'rgba(255,255,255,0.14)'}`,
+            background: '#FFFBF5',
+            border: '1px solid rgba(0,0,0,0.08)',
             borderRadius: '16px',
             alignSelf: 'center',
           }}>
@@ -357,7 +357,7 @@ export default function CharacterPage() {
                 src={creator.photo}
                 alt={creator.name}
                 style={{
-                  width: '52px', height: '52px',
+                  width: '72px', height: '72px',
                   borderRadius: '50%',
                   objectFit: 'cover',
                   flexShrink: 0,
@@ -368,13 +368,13 @@ export default function CharacterPage() {
                 <div style={{
                   fontSize: '15px', fontWeight: 600,
                   fontFamily: "'DM Sans', sans-serif",
-                  color: textColor, lineHeight: 1.2,
+                  color: '#1C1917', lineHeight: 1.2,
                 }}>
                   {creator.name}
                 </div>
                 {creator.location && (
                   <div style={{
-                    fontSize: '11px', color: mutedColor,
+                    fontSize: '11px', color: 'rgba(28,25,23,0.5)',
                     fontFamily: "'DM Sans', sans-serif",
                     marginTop: '3px',
                   }}>
@@ -386,7 +386,7 @@ export default function CharacterPage() {
 
             <p style={{
               fontSize: '13px', lineHeight: 1.65,
-              color: textColor, opacity: 0.75,
+              color: '#1C1917', opacity: 0.75,
               fontFamily: "'DM Sans', sans-serif",
               margin: 0,
             }}>
@@ -423,8 +423,8 @@ export default function CharacterPage() {
         {audios.length > 0 && (
           <div style={{
             padding: '20px',
-            background: light ? 'rgba(0,0,0,0.06)' : 'rgba(255,255,255,0.08)',
-            border: `1px solid ${light ? 'rgba(0,0,0,0.1)' : 'rgba(255,255,255,0.12)'}`,
+            background: '#FFFBF5',
+            border: '1px solid rgba(0,0,0,0.08)',
             borderRadius: '14px',
             marginBottom: '28px',
           }}>
