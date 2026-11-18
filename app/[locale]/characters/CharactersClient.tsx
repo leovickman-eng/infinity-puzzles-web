@@ -4,6 +4,9 @@ import { useRef, useState } from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 
+// Characters that have audio stories on their individual page
+const HAS_STORY = new Set([3, 8, 10]);
+
 const CHARACTERS = [
   { id: 1,  name: 'Dolores',       animal: 'Narval',     desc: 'Rör sig utan förklaring. Har alltid vetat vart hon ska — frågan är om du håller tempot.',                                                                  audio: null,                                                                                                                    chapterLink: null },
   { id: 2,  name: 'Zuki',          animal: 'Rådjur',     desc: 'Tvivlar på sin plats men är den första alla söker upp. Hennes närvaro är ett faktum världen anpassar sig efter.',                                          audio: null,                                                                                                                    chapterLink: null },
@@ -156,6 +159,12 @@ export default function CharactersClient({ title, subtitle }: { title: string; s
 
   return (
     <div style={{ minHeight: '100vh', background: '#242028', color: '#f0eaf8', padding: '0 0 120px' }}>
+      <style>{`
+        @keyframes glowSpin {
+          from { transform: rotate(0deg); }
+          to   { transform: rotate(360deg); }
+        }
+      `}</style>
 
       {/* Header */}
       <div style={{ textAlign: 'center', padding: '120px 24px 72px', maxWidth: '680px', margin: '0 auto' }}>
@@ -180,17 +189,40 @@ export default function CharactersClient({ title, subtitle }: { title: string; s
         gap: '24px',
       }}>
         {CHARACTERS.map(ch => (
+          <div key={ch.id} style={{ position: 'relative', borderRadius: '18px' }}>
+
+            {/* Glowing rotating border for story characters */}
+            {HAS_STORY.has(ch.id) && (
+              <div style={{
+                position: 'absolute', inset: 0,
+                borderRadius: '18px',
+                overflow: 'hidden',
+                pointerEvents: 'none',
+                zIndex: 0,
+              }}>
+                <div style={{
+                  position: 'absolute',
+                  top: '50%', left: '50%',
+                  width: '200%', height: '200%',
+                  transform: 'translate(-50%, -50%)',
+                  background: 'conic-gradient(from 0deg, transparent 0%, #ae84ea 12%, #dcc8f0 18%, transparent 32%)',
+                  animation: 'glowSpin 3s linear infinite',
+                }} />
+              </div>
+            )}
+
           <div
-            key={ch.id}
             style={{
+              position: 'relative', zIndex: 1,
+              margin: HAS_STORY.has(ch.id) ? '2px' : '0',
               background: 'rgba(255,255,255,0.03)',
-              border: '1px solid rgba(255,255,255,0.07)',
+              border: HAS_STORY.has(ch.id) ? 'none' : '1px solid rgba(255,255,255,0.07)',
               borderRadius: '16px',
               overflow: 'hidden',
-              transition: 'border-color 0.2s',
+              transition: 'background 0.2s',
             }}
-            onMouseEnter={e => ((e.currentTarget as HTMLDivElement).style.borderColor = 'rgba(174,132,234,0.3)')}
-            onMouseLeave={e => ((e.currentTarget as HTMLDivElement).style.borderColor = 'rgba(255,255,255,0.07)')}
+            onMouseEnter={e => ((e.currentTarget as HTMLDivElement).style.background = 'rgba(255,255,255,0.06)')}
+            onMouseLeave={e => ((e.currentTarget as HTMLDivElement).style.background = 'rgba(255,255,255,0.03)')}
           >
             {/* Image */}
             <img
@@ -248,6 +280,7 @@ export default function CharactersClient({ title, subtitle }: { title: string; s
                 </Link>
               )}
             </div>
+          </div>
           </div>
         ))}
       </div>
