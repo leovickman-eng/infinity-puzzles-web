@@ -7,18 +7,39 @@ import { CHARACTERS } from '../page';
 import { getCharacterData } from '@/lib/characters-data';
 
 const AUDIO_MAP: Record<number, { url: string; label: string }[]> = {
+  3:  [{ url: 'https://res.cloudinary.com/dk3ftfygx/video/upload/v1795033689/200524-203425_vsgikk.wav', label: 'Mani läser framtiden i stjärnorna. · Swedish' }],
+  10: [{ url: 'https://res.cloudinary.com/dk3ftfygx/video/upload/v1795034504/200524-201827_tsxat8.wav', label: 'Sixten är ute i svängen. · Swedish' }],
   8: [{ url: 'https://res.cloudinary.com/dk3ftfygx/video/upload/v1795031150/Dali_kreativ_utsva%CC%88gning_ptmcx8.wav', label: 'Det är jag som är konstnären Dali, med trollstaven som skär genom rummet. · Swedish' }],
 };
 
 interface CreatorInfo {
   name: string;
-  location: string;
+  location?: string;
   bio: { sv: string; en: string };
   photo: string;
   role: { sv: string; en: string };
 }
 
 const CREATOR_MAP: Record<number, CreatorInfo> = {
+  10: {
+    name: 'Erik Nylander',
+    bio: {
+      sv: 'En otrolig konstnär och connector. Eriks superkraft är hans outtömliga nyfikenhet. Han glider genom livet och plockar upp trådar av intresse i allt från skeva trösklar till stormiga bergtoppar.',
+      en: 'An incredible artist and connector. Erik\'s superpower is his inexhaustible curiosity. He glides through life picking up threads of interest in everything from crooked doorsteps to stormy mountaintops.',
+    },
+    photo: 'https://res.cloudinary.com/dk3ftfygx/image/upload/v1795034870/Ska%CC%88rmavbild_2026-11-18_kl._21.47.32_jthivl.png',
+    role: { sv: 'Konstnären bakom Sixten', en: 'The artist behind Sixten' },
+  },
+  3: {
+    name: 'Beatrice Holmberg',
+    location: 'Umeå',
+    bio: {
+      sv: 'Bea smakar på universum med sin vishet. Hon har alltid en djup insikt om livets gåtor på tungan.',
+      en: 'Bea tastes the universe with her wisdom. She always carries a profound insight into the mysteries of life on the tip of her tongue.',
+    },
+    photo: 'https://res.cloudinary.com/dk3ftfygx/image/upload/v1795034231/Ska%CC%88rmavbild_2026-11-18_kl._21.36.51_sp6uzr.png',
+    role: { sv: 'Konstnären bakom Mani', en: 'The artist behind Mani' },
+  },
   8: {
     name: 'Jonathan Kärre',
     location: 'Stockholm',
@@ -351,13 +372,15 @@ export default function CharacterPage() {
                 }}>
                   {creator.name}
                 </div>
-                <div style={{
-                  fontSize: '11px', color: mutedColor,
-                  fontFamily: "'DM Sans', sans-serif",
-                  marginTop: '3px',
-                }}>
-                  {creator.location}
-                </div>
+                {creator.location && (
+                  <div style={{
+                    fontSize: '11px', color: mutedColor,
+                    fontFamily: "'DM Sans', sans-serif",
+                    marginTop: '3px',
+                  }}>
+                    {creator.location}
+                  </div>
+                )}
               </div>
             </div>
 
