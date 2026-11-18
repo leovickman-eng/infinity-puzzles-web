@@ -145,6 +145,27 @@ export default function StoriesPage() {
         </span>
       </div>
 
+      {/* Header */}
+      <div style={{ textAlign: 'center', padding: '48px 24px 40px', maxWidth: '560px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
+        <h1 style={{
+          fontFamily: "'eight-condensed', sans-serif",
+          fontSize: 'clamp(3rem, 10vw, 5.5rem)',
+          fontWeight: 400, color: '#f0eaf8',
+          margin: '0 0 14px', letterSpacing: '0.03em', lineHeight: 1,
+        }}>
+          {locale === 'sv' ? 'Sagor' : 'Stories'}
+        </h1>
+        <p style={{
+          fontFamily: "'Cormorant Garamond', Georgia, serif",
+          fontSize: '1rem', color: 'rgba(240,234,248,0.45)',
+          lineHeight: 1.7, margin: 0,
+        }}>
+          {locale === 'sv'
+            ? 'Ett galleri av riktiga människor och deras lekfulla tolkningar av WILD-karaktärerna.'
+            : 'A gallery of real people and their playful interpretations of the WILD characters.'}
+        </p>
+      </div>
+
       {/* Grid */}
       <div
         className="stories-grid"

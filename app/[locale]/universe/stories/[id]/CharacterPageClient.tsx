@@ -7,7 +7,7 @@ import { CHARACTERS } from '../page';
 import { getCharacterData } from '@/lib/characters-data';
 
 const AUDIO_MAP: Record<number, { url: string; label: string }[]> = {
-  3:  [{ url: 'https://res.cloudinary.com/dk3ftfygx/video/upload/v1795033689/200524-203425_vsgikk.wav', label: 'Mani läser framtiden i stjärnorna. · Swedish' }],
+  3:  [{ url: 'https://res.cloudinary.com/dk3ftfygx/video/upload/v1795037288/200524-203425_bqrk8p.wav', label: 'Mani läser framtiden i stjärnorna. · Swedish' }],
   10: [{ url: 'https://res.cloudinary.com/dk3ftfygx/video/upload/v1795034504/200524-201827_tsxat8.wav', label: 'Sixten är ute i svängen. · Swedish' }],
   8: [{ url: 'https://res.cloudinary.com/dk3ftfygx/video/upload/v1795031150/Dali_kreativ_utsva%CC%88gning_ptmcx8.wav', label: 'Det är jag som är konstnären Dali, med trollstaven som skär genom rummet. · Swedish' }],
 };
