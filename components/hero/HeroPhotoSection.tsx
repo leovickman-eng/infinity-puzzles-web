@@ -106,13 +106,33 @@ export default function HeroPhotoSection() {
           60%  { box-shadow: 0 0 0 28px rgba(174,132,234,0),   0 4px 20px rgba(174,132,234,0.35); }
           100% { box-shadow: 0 0 0 0   rgba(174,132,234,0),    0 4px 20px rgba(174,132,234,0.35); }
         }
-        .hero-buy-btn { animation: hero-pulse 2.2s ease-out infinite; }
+        @keyframes hero-pulse-2 {
+          0%   { box-shadow: 0 0 0 0    rgba(220,193,255,0.6); }
+          60%  { box-shadow: 0 0 0 28px rgba(220,193,255,0); }
+          100% { box-shadow: 0 0 0 0    rgba(220,193,255,0); }
+        }
+        @keyframes hero-pulse-3 {
+          0%   { box-shadow: 0 0 0 0    rgba(91,74,138,0.6); }
+          60%  { box-shadow: 0 0 0 28px rgba(91,74,138,0); }
+          100% { box-shadow: 0 0 0 0    rgba(91,74,138,0); }
+        }
+        .hero-buy-btn { animation: hero-pulse 2.2s ease-out infinite; position: relative; }
+        .hero-buy-btn::before, .hero-buy-btn::after {
+          content: '';
+          position: absolute;
+          inset: 0;
+          border-radius: inherit;
+          pointer-events: none;
+        }
+        .hero-buy-btn::before { animation: hero-pulse-2 2.2s ease-out 0.7s infinite; }
+        .hero-buy-btn::after  { animation: hero-pulse-3 2.2s ease-out 1.4s infinite; }
         .hero-buy-btn:hover {
           animation: none;
           background: #c09ef0 !important;
           transform: translateY(-2px) scale(1.04);
           box-shadow: 0 6px 28px rgba(174,132,234,0.55) !important;
         }
+        .hero-buy-btn:hover::before, .hero-buy-btn:hover::after { animation: none; }
         @keyframes hero-center-in {
           0%   { opacity: 0; transform: translateX(-50%) translateY(calc(-50% + 20px)); }
           100% { opacity: 1; transform: translateX(-50%) translateY(-50%); }
@@ -137,7 +157,8 @@ export default function HeroPhotoSection() {
           font-family: 'tumb', serif;
           font-size: clamp(0.75rem, 2vw, 1.25rem);
           letter-spacing: 0.08em;
-          color: #F8F060;
+          color: #ae84ea;
+          text-shadow: 0 2px 8px rgba(0,0,0,0.5);
           text-align: center;
           line-height: 1.3;
           white-space: nowrap;
