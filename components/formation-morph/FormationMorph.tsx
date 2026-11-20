@@ -40,6 +40,8 @@ export default function FormationMorph() {
   const f2ClaimedF1     = useRef<Set<number>>(new Set());
   const frameSkipRef    = useRef(0);
   const prevTranslateY  = useRef<number | null>(null);
+  const f1PrevOp        = useRef<number[]>(Array(19).fill(-1));
+  const f1PrevTy        = useRef<number[]>(Array(19).fill(-999));
   const bgCanvasRef     = useRef<HTMLCanvasElement>(null);
   const [scale, setScale] = useState(1);
   const [isMobile, setIsMobile] = useState(
@@ -203,16 +205,12 @@ export default function FormationMorph() {
         }
       }
 
-      const inF1Anim  = !inF2;
       const f2Changed = f2Step !== prevF2.current;
       frameSkipRef.current += 1;
       if (f2Changed) frameSkipRef.current = 0;
-      const skipFrame = isMobileRef.current && (
-        inF2 ? frameSkipRef.current % 2 !== 0 : frameSkipRef.current % 2 !== 0
-      );
 
-      if (!skipFrame) {
-        // F1: always update pieces not yet claimed by F2
+      // F1: only run during F1 phase — in F2 all unclaimed pieces are already at opacity 1
+      if (!inF2) {
         for (let i = 0; i < 19; i++) {
           if (f2ClaimedF1.current.has(i)) continue;
           const el = f1ImgRefs.current[i];
@@ -220,11 +218,18 @@ export default function FormationMorph() {
           const raw   = f1Progresses[i] ?? 0;
           const e     = easeOut(Math.max(0, Math.min(1, raw)));
           const slide = i === 0 ? SLIDE_P0 : SLIDE_PX;
-          el.style.opacity   = raw <= 0 ? '0' : String(e);
-          el.style.transform = raw >= 1 ? 'translateY(0px)' : `translateY(${(1 - e) * slide}px)`;
+          const newOp = raw <= 0 ? 0 : e;
+          const newTy = raw >= 1 ? 0 : (1 - e) * slide;
+          if (Math.abs(newOp - f1PrevOp.current[i]) > 0.004 || Math.abs(newTy - f1PrevTy.current[i]) > 0.3) {
+            el.style.opacity   = raw <= 0 ? '0' : String(e);
+            el.style.transform = `translateY(${newTy}px)`;
+            f1PrevOp.current[i] = newOp;
+            f1PrevTy.current[i] = newTy;
+          }
         }
+      }
 
-        if (f2Changed) {
+      if (f2Changed) {
           prevF2.current = f2Step;
           for (let i = 0; i < 19; i++) {
             const done  = i <= f2Step;
@@ -241,6 +246,7 @@ export default function FormationMorph() {
                   f1El.style.opacity    = '0';
                 } else {
                   f2ClaimedF1.current.delete(removeIdx);
+                  f1PrevOp.current[removeIdx] = -1;  // force F1 to redraw on next frame
                   f1El.style.transition = '';
                   // Let F1 set correct opacity on next frame — don't force '1' here
                   // (forcing '1' causes a flash if F1 hasn't started this piece yet)
@@ -249,7 +255,6 @@ export default function FormationMorph() {
             }
           }
         }
-      }
     };
 
     const onScroll = () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(update); };
