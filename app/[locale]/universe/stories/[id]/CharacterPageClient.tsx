@@ -28,7 +28,7 @@ const CREATOR_MAP: Record<number, CreatorInfo> = {
       en: 'An incredible artist and connector. Erik\'s superpower is his inexhaustible curiosity. He glides through life picking up threads of interest in everything from crooked doorsteps to stormy mountaintops.',
     },
     photo: 'https://res.cloudinary.com/dk3ftfygx/image/upload/v1795034870/Ska%CC%88rmavbild_2026-11-18_kl._21.47.32_jthivl.png',
-    role: { sv: 'Konstnären bakom Sixten', en: 'The artist behind Sixten' },
+    role: { sv: 'Rösten bakom Sixten', en: 'The voice behind Sixten' },
   },
   3: {
     name: 'Beatrice Holmberg',
@@ -38,7 +38,7 @@ const CREATOR_MAP: Record<number, CreatorInfo> = {
       en: 'Bea tastes the universe with her wisdom. She always carries a profound insight into the mysteries of life on the tip of her tongue.',
     },
     photo: 'https://res.cloudinary.com/dk3ftfygx/image/upload/v1795034231/Ska%CC%88rmavbild_2026-11-18_kl._21.36.51_sp6uzr.png',
-    role: { sv: 'Konstnären bakom Mani', en: 'The artist behind Mani' },
+    role: { sv: 'Rösten bakom Mani', en: 'The voice behind Mani' },
   },
   8: {
     name: 'Jonathan Kärre',
@@ -48,7 +48,7 @@ const CREATOR_MAP: Record<number, CreatorInfo> = {
       en: 'Jonathan is a wordsmith of the highest order. He challenges language and norms, and has devoted his life to the land of vivid sentences — and lately also to his wonderful children.',
     },
     photo: 'https://res.cloudinary.com/dk3ftfygx/image/upload/v1795032549/Ska%CC%88rmavbild_2026-11-18_kl._21.08.46_lofbxt.png',
-    role: { sv: 'Konstnären bakom Dali', en: 'The artist behind Dali' },
+    role: { sv: 'Rösten bakom Dali', en: 'The voice behind Dali' },
   },
 };
 
@@ -293,13 +293,10 @@ export default function CharacterPageClient() {
         </span>
       </div>
 
-      {/* Character image + optional creator card */}
+      {/* Character image */}
       <div style={{
         display: 'flex',
         justifyContent: 'center',
-        alignItems: 'flex-end',
-        gap: '32px',
-        flexWrap: 'wrap',
         maxWidth: '860px',
         margin: '0 auto',
         padding: '72px 24px 0',
@@ -316,67 +313,6 @@ export default function CharacterPageClient() {
             flexShrink: 0,
           }}
         />
-
-        {creator && (
-          <div style={{
-            flex: '1 1 240px',
-            maxWidth: '300px',
-            padding: '20px',
-            background: '#FFFBF5',
-            border: '1px solid rgba(0,0,0,0.08)',
-            borderRadius: '16px',
-            alignSelf: 'center',
-          }}>
-            <div style={{
-              fontSize: '9px', letterSpacing: '2.5px', textTransform: 'uppercase',
-              color: accentColor, fontFamily: "'DM Sans', sans-serif",
-              marginBottom: '14px', opacity: 0.8,
-            }}>
-              {isSv ? creator.role.sv : creator.role.en}
-            </div>
-
-            <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '14px' }}>
-              <img
-                src={creator.photo}
-                alt={creator.name}
-                style={{
-                  width: '72px', height: '72px',
-                  borderRadius: '50%',
-                  objectFit: 'cover',
-                  flexShrink: 0,
-                  border: `2px solid ${accentColor}40`,
-                }}
-              />
-              <div>
-                <div style={{
-                  fontSize: '15px', fontWeight: 600,
-                  fontFamily: "'DM Sans', sans-serif",
-                  color: '#1C1917', lineHeight: 1.2,
-                }}>
-                  {creator.name}
-                </div>
-                {creator.location && (
-                  <div style={{
-                    fontSize: '11px', color: 'rgba(28,25,23,0.5)',
-                    fontFamily: "'DM Sans', sans-serif",
-                    marginTop: '3px',
-                  }}>
-                    {creator.location}
-                  </div>
-                )}
-              </div>
-            </div>
-
-            <p style={{
-              fontSize: '13px', lineHeight: 1.65,
-              color: '#1C1917', opacity: 0.75,
-              fontFamily: "'DM Sans', sans-serif",
-              margin: 0,
-            }}>
-              {isSv ? creator.bio.sv : creator.bio.en}
-            </p>
-          </div>
-        )}
       </div>
 
       {/* Content */}
@@ -555,6 +491,68 @@ export default function CharacterPageClient() {
             >
               📖 {isSv ? 'Läs kapitel 1' : 'Read chapter 1'}
             </Link>
+          </>
+        )}
+
+        {/* Creator card */}
+        {creator && (
+          <>
+            <div style={{ height: '1px', background: dividerColor, margin: '28px 0' }} />
+            <div style={{
+              padding: '20px',
+              background: '#FFFBF5',
+              border: '1px solid rgba(0,0,0,0.08)',
+              borderRadius: '16px',
+            }}>
+              <div style={{
+                fontSize: '9px', letterSpacing: '2.5px', textTransform: 'uppercase',
+                color: accentColor, fontFamily: "'DM Sans', sans-serif",
+                marginBottom: '14px', opacity: 0.8,
+              }}>
+                {isSv ? creator.role.sv : creator.role.en}
+              </div>
+
+              <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '14px' }}>
+                <img
+                  src={creator.photo}
+                  alt={creator.name}
+                  style={{
+                    width: '72px', height: '72px',
+                    borderRadius: '50%',
+                    objectFit: 'cover',
+                    flexShrink: 0,
+                    border: `2px solid ${accentColor}40`,
+                  }}
+                />
+                <div>
+                  <div style={{
+                    fontSize: '15px', fontWeight: 600,
+                    fontFamily: "'DM Sans', sans-serif",
+                    color: '#1C1917', lineHeight: 1.2,
+                  }}>
+                    {creator.name}
+                  </div>
+                  {creator.location && (
+                    <div style={{
+                      fontSize: '11px', color: 'rgba(28,25,23,0.5)',
+                      fontFamily: "'DM Sans', sans-serif",
+                      marginTop: '3px',
+                    }}>
+                      {creator.location}
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <p style={{
+                fontSize: '13px', lineHeight: 1.65,
+                color: '#1C1917', opacity: 0.75,
+                fontFamily: "'DM Sans', sans-serif",
+                margin: 0,
+              }}>
+                {isSv ? creator.bio.sv : creator.bio.en}
+              </p>
+            </div>
           </>
         )}
       </div>
