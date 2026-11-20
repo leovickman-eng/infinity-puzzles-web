@@ -198,17 +198,10 @@ export default function InsideBoxSection() {
           </Link>
         </div>
 
-        <p style={{
-          fontFamily: "'DM Sans', sans-serif",
-          marginTop: '40px', fontSize: '12px',
-          color: 'rgba(240,234,248,0.3)', letterSpacing: '0.06em',
-        }}>
-          {t('qrHint')}
-        </p>
       </div>
 
       {/* ── Wild Network live preview ── */}
-      <div style={{ margin: '72px -24px 0', position: 'relative' }}>
+      <div style={{ margin: '32px -24px 0', position: 'relative' }}>
         {/* Iframe — full bleed (breaks out of section padding) */}
         <div style={{
           width: '100%',
