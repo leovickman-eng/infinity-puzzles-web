@@ -187,8 +187,8 @@ export default function StoriesPage() {
             {/* Glowing border for story characters */}
             {HAS_STORY.has(ch.id) && (
               <div style={{
-                position: 'absolute', inset: 0,
-                borderRadius: '15px',
+                position: 'absolute', inset: '-4px',
+                borderRadius: '19px',
                 overflow: 'hidden',
                 pointerEvents: 'none',
                 zIndex: 1,
@@ -209,7 +209,7 @@ export default function StoriesPage() {
               aspectRatio: '3/4',
               background: '#1a1530',
               borderRadius: '14px',
-              margin: HAS_STORY.has(ch.id) ? '1px' : '0',
+              margin: '0',
               zIndex: 2,
             }}>
               <img
