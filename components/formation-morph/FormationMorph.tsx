@@ -246,10 +246,10 @@ export default function FormationMorph() {
                   f1El.style.opacity    = '0';
                 } else {
                   f2ClaimedF1.current.delete(removeIdx);
-                  f1PrevOp.current[removeIdx] = -1;  // force F1 to redraw on next frame
-                  f1El.style.transition = '';
-                  // Let F1 set correct opacity on next frame — don't force '1' here
-                  // (forcing '1' causes a flash if F1 hasn't started this piece yet)
+                  f1PrevOp.current[removeIdx] = 1;
+                  f1El.style.transition = 'opacity 0.25s ease';
+                  f1El.style.opacity    = '1';        // restore immediately — F1 loop is skipped in F2
+                  f1El.style.transform  = 'translateY(0px)';
                 }
               }
             }

@@ -154,25 +154,6 @@ export default async function HomePage({ params }: Props) {
       {/* ── Newsletter ── */}
       <NewsletterSection />
 
-      {/* ── S4: Characters ── */}
-      <section className="py-24 px-6 bg-background">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <p className="font-display text-sm uppercase tracking-widest text-primary mb-3">
-              The Cast
-            </p>
-            <h2 className="font-display text-4xl md:text-5xl font-bold text-foreground text-balance">
-              {t('characters.title')}
-            </h2>
-            <p className="font-body text-lg text-foreground/75 mt-4 max-w-xl mx-auto">
-              {t('characters.subtitle')}
-            </p>
-          </div>
-
-          <CharacterCarousel />
-        </div>
-      </section>
-
       {/* ── S7: Story timeline ── */}
       <div id="story"><StoryTimeline /></div>
     </>
