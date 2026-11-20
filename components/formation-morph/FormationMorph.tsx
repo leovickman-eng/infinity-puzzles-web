@@ -38,7 +38,9 @@ export default function FormationMorph() {
   const innerHeightRef  = useRef(0);
   const prevF2          = useRef(-1);
   const f2ClaimedF1     = useRef<Set<number>>(new Set());
-  const frameSkipRef    = useRef(0);
+  const f1DoneSet       = useRef<Set<number>>(new Set());   // pieces settled at opacity 1
+  const f1PrevOp        = useRef<number[]>(Array(19).fill(-1));
+  const f1PrevTy        = useRef<number[]>(Array(19).fill(-999));
   const prevTranslateY  = useRef<number | null>(null);
   const bgCanvasRef     = useRef<HTMLCanvasElement>(null);
   const [scale, setScale] = useState(1);
@@ -203,48 +205,49 @@ export default function FormationMorph() {
         }
       }
 
-      const inF1Anim  = !inF2;
       const f2Changed = f2Step !== prevF2.current;
-      frameSkipRef.current += 1;
-      if (f2Changed) frameSkipRef.current = 0;
-      const skipFrame = isMobileRef.current && (
-        inF2 ? frameSkipRef.current % 2 !== 0 : frameSkipRef.current % 2 !== 0
-      );
 
-      if (!skipFrame) {
-        // F1: always update pieces not yet claimed by F2
-        for (let i = 0; i < 19; i++) {
-          if (f2ClaimedF1.current.has(i)) continue;
-          const el = f1ImgRefs.current[i];
-          if (!el) continue;
-          const raw   = f1Progresses[i] ?? 0;
-          const e     = easeOut(Math.max(0, Math.min(1, raw)));
-          const slide = i === 0 ? SLIDE_P0 : SLIDE_PX;
+      // F1: update pieces not yet claimed by F2, skip if already settled (no DOM write needed)
+      for (let i = 0; i < 19; i++) {
+        if (f2ClaimedF1.current.has(i)) continue;
+        if (f1DoneSet.current.has(i)) continue;        // settled at opacity 1 — nothing to do
+        const el = f1ImgRefs.current[i];
+        if (!el) continue;
+        const raw   = f1Progresses[i] ?? 0;
+        const e     = easeOut(Math.max(0, Math.min(1, raw)));
+        const slide = i === 0 ? SLIDE_P0 : SLIDE_PX;
+        const newOp = raw <= 0 ? 0 : e;
+        const newTy = raw >= 1 ? 0 : (1 - e) * slide;
+        // Skip write if values haven't meaningfully changed
+        if (Math.abs(newOp - f1PrevOp.current[i]) > 0.004 || Math.abs(newTy - f1PrevTy.current[i]) > 0.4) {
           el.style.opacity   = raw <= 0 ? '0' : String(e);
-          el.style.transform = raw >= 1 ? 'translateY(0px)' : `translateY(${(1 - e) * slide}px)`;
+          el.style.transform = `translateY(${newTy}px)`;
+          f1PrevOp.current[i] = newOp;
+          f1PrevTy.current[i] = newTy;
         }
+        if (raw >= 1) f1DoneSet.current.add(i);       // mark settled — won't touch again until F2 claims
+      }
 
-        if (f2Changed) {
-          prevF2.current = f2Step;
-          for (let i = 0; i < 19; i++) {
-            const done  = i <= f2Step;
-            const f2Img = f2ImgRefs.current[i];
-            if (f2Img) f2Img.style.opacity = done ? '1' : '0';
+      if (f2Changed) {
+        prevF2.current = f2Step;
+        for (let i = 0; i < 19; i++) {
+          const done  = i <= f2Step;
+          const f2Img = f2ImgRefs.current[i];
+          if (f2Img) f2Img.style.opacity = done ? '1' : '0';
 
-            const removeIdx = f1Idx.get(f2Seq[i].remove);
-            if (removeIdx !== undefined) {
-              const f1El = f1ImgRefs.current[removeIdx];
-              if (f1El) {
-                if (done) {
-                  f2ClaimedF1.current.add(removeIdx);
-                  f1El.style.transition = 'opacity 0.3s ease';
-                  f1El.style.opacity    = '0';
-                } else {
-                  f2ClaimedF1.current.delete(removeIdx);
-                  f1El.style.transition = '';
-                  // Let F1 set correct opacity on next frame — don't force '1' here
-                  // (forcing '1' causes a flash if F1 hasn't started this piece yet)
-                }
+          const removeIdx = f1Idx.get(f2Seq[i].remove);
+          if (removeIdx !== undefined) {
+            const f1El = f1ImgRefs.current[removeIdx];
+            if (f1El) {
+              if (done) {
+                f2ClaimedF1.current.add(removeIdx);
+                f1El.style.transition = 'opacity 0.3s ease';
+                f1El.style.opacity    = '0';
+              } else {
+                f2ClaimedF1.current.delete(removeIdx);
+                f1DoneSet.current.delete(removeIdx);  // let F1 recalculate on next frame
+                f1PrevOp.current[removeIdx] = -1;     // force redraw
+                f1El.style.transition = '';
               }
             }
           }
@@ -267,6 +270,7 @@ export default function FormationMorph() {
     display: 'block',
     opacity: 0,
     pointerEvents: 'none',
+    willChange: 'transform, opacity',  // promotes to GPU layer — compositor-only changes
   };
 
   return (
