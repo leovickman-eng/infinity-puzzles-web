@@ -8,6 +8,21 @@ import type { ShopifyCartLine } from '@/lib/shopify/types';
 import { trackStartedCheckout } from '@/lib/omnisend';
 import { sendGTMEvent } from '@next/third-parties/google';
 
+function appendTrackingParams(url: string): string {
+  try {
+    const stored = sessionStorage.getItem('ip_tracking');
+    if (!stored) return url;
+    const params = JSON.parse(stored) as Record<string, string>;
+    const u = new URL(url);
+    for (const [k, v] of Object.entries(params)) {
+      u.searchParams.set(k, v);
+    }
+    return u.toString();
+  } catch {
+    return url;
+  }
+}
+
 export default function CartDrawer() {
   const t = useTranslations('shop');
   const { cart, isOpen, isLoading, closeCart, updateItem, removeItem } = useCart();
@@ -105,7 +120,7 @@ export default function CartDrawer() {
               </span>
             </div>
             <a
-              href={cart.checkoutUrl}
+              href={appendTrackingParams(cart.checkoutUrl)}
               onClick={() => {
                 const items = cart.lines.nodes.map((line: ShopifyCartLine) => ({
                   productID: line.merchandise.id,

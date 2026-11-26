@@ -11,6 +11,7 @@ import Footer from '@/components/layout/Footer';
 import CartDrawer from '@/components/shop/CartDrawer';
 import NavigationLoader from '@/components/layout/NavigationLoader';
 import CookieBanner from '@/components/consent/CookieBanner';
+import TrackingCapture from '@/components/tracking/TrackingCapture';
 import '@/app/globals.css';
 
 const syne = Syne({
@@ -129,6 +130,7 @@ export default async function LocaleLayout({ children, params }: Props) {
         <NextIntlClientProvider messages={messages}>
           <CartProvider>
             <NavigationLoader />
+            <TrackingCapture />
             <Header locale={locale} />
             <main>{children}</main>
             <Footer />
