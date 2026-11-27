@@ -4,60 +4,21 @@ import { useEffect, useState, useCallback } from 'react';
 
 const CONSENT_KEY = 'ip_cookie_consent';
 
-// Shopify Customer Privacy API — needed to set _tracking_consent cookie on
-// .infinity-puzzle.com so checkout.infinity-puzzle.com can read it.
-const SHOPIFY_CONSENT_SCRIPT = 'https://cdn.shopify.com/shopifycloud/consent-tracking-api/v0.1/consent-tracking-api.js';
+/**
+ * Sets Shopify's _tracking_consent cookie via our server-side API route.
+ * The route sets the cookie on .infinity-puzzle.com so checkout.infinity-puzzle.com
+ * can read it and fire the Meta custom pixel.
+ */
+function setShopifyConsent(granted: boolean) {
+  fetch('/api/consent', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ granted }),
+    keepalive: true,
+  }).catch(() => {/* fail silently — GTM still works */});
+}
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
-
-/** Load Shopify's consent-tracking script once, return a promise that resolves
- *  when window.Shopify.customerPrivacy is available. */
-function loadShopifyConsentScript(): Promise<void> {
-  return new Promise((resolve) => {
-    if ((window as any).Shopify?.customerPrivacy) {
-      resolve();
-      return;
-    }
-    if (document.querySelector(`script[src="${SHOPIFY_CONSENT_SCRIPT}"]`)) {
-      // Already loading — wait for it
-      const check = setInterval(() => {
-        if ((window as any).Shopify?.customerPrivacy) {
-          clearInterval(check);
-          resolve();
-        }
-      }, 50);
-      return;
-    }
-    const s = document.createElement('script');
-    s.src = SHOPIFY_CONSENT_SCRIPT;
-    s.async = true;
-    s.onload = () => resolve();
-    s.onerror = () => resolve(); // fail silently — GTM still works
-    document.head.appendChild(s);
-  });
-}
-
-/** Tell Shopify's Customer Privacy API about the visitor's choice.
- *  This sets the _tracking_consent cookie on .infinity-puzzle.com so
- *  checkout.infinity-puzzle.com can read it and fire its Meta pixel. */
-function setShopifyConsent(granted: boolean) {
-  const cp = (window as any).Shopify?.customerPrivacy;
-  if (!cp?.setTrackingConsent) return;
-
-  cp.setTrackingConsent(
-    {
-      headlessStorefront:   true,
-      checkoutRootDomain:   'checkout.infinity-puzzle.com',
-      storefrontRootDomain: 'infinity-puzzle.com',
-      storefrontAccessToken: process.env.NEXT_PUBLIC_SHOPIFY_STOREFRONT_TOKEN,
-      analytics:   granted,
-      marketing:   granted,
-      preferences: granted,
-    },
-    // Callback (optional) — fires after cookie is written
-    () => {},
-  );
-}
 
 /* ── GTM / Google Consent Mode v2 ─────────────────────────────────────────
    MUST push the *arguments* object (not an array) so GTM/GA reads it right.
@@ -96,19 +57,17 @@ export default function CookieBanner({ locale }: Props) {
   const isSv = locale === 'sv';
   const [visible, setVisible] = useState(false);
 
-  // On mount: load Shopify consent script, then replay saved choice.
+  // On mount: replay saved consent choice or show the banner.
   useEffect(() => {
-    loadShopifyConsentScript().then(() => {
-      const saved = tryGet();
-      if (saved === 'granted' || saved === 'denied') {
-        sendConsentUpdate(saved === 'granted');
-        setShopifyConsent(saved === 'granted');   // <-- sets _tracking_consent cookie
-      } else {
-        // Small delay so the hero/buy button renders first
-        const t = setTimeout(() => setVisible(true), 800);
-        return () => clearTimeout(t);
-      }
-    });
+    const saved = tryGet();
+    if (saved === 'granted' || saved === 'denied') {
+      sendConsentUpdate(saved === 'granted');
+      setShopifyConsent(saved === 'granted'); // refresh _tracking_consent cookie
+    } else {
+      // Small delay so the hero/buy button renders first
+      const t = setTimeout(() => setVisible(true), 800);
+      return () => clearTimeout(t);
+    }
   }, []);
 
   // Re-open via window.dispatchEvent(new Event('open-cookie-settings'))
@@ -121,8 +80,7 @@ export default function CookieBanner({ locale }: Props) {
   const handleChoice = useCallback((granted: boolean) => {
     trySave(granted ? 'granted' : 'denied');
     sendConsentUpdate(granted);
-    // Also set Shopify's _tracking_consent cookie so checkout pixel fires
-    loadShopifyConsentScript().then(() => setShopifyConsent(granted));
+    setShopifyConsent(granted); // sets _tracking_consent cookie so checkout pixel fires
     setVisible(false);
   }, []);
 
